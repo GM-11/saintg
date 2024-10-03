@@ -39,11 +39,12 @@ function index() {
       icon: require("../../../../assets/images/account/heart.png"),
       uri: "/(tabs)/wishlist",
     },
-    // {
-    //   title: "Wallet",
-    //   icon: require("../../../../assets/images/account/heart.png"),
-    //   uri: "/(app)/wallet",
-    // },
+    {
+      title: "Contact",
+      icon: require("../../../../assets/images/account/heart.png"),
+      uri: "/(app)/(tabs)/account/contact",
+    },
+
     {
       title: "Manage Addresses",
       icon: require("../../../../assets/images/account/person.png"),
@@ -70,9 +71,9 @@ function index() {
       uri: "/(tabs)/account/changePassword",
     },
     {
-      title: "Privacy",
+      title: "Story",
       icon: require("../../../../assets/images/account/logout.png"),
-      uri: "/(tabs)/account/manageAccount",
+      uri: "/(app)/(tabs)/account/story",
     },
     {
       title: "Delete Account",

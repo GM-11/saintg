@@ -39,8 +39,8 @@ function story() {
 
       <Image
         ///@ts-ignore
-        style={{width: 400, marginVertical: 40 }}
-        source={require("../../../assets/images/our-story.png")}
+        style={{ width: 400, marginVertical: 40 }}
+        source={require("../../../../assets/images/our-story.png")}
       />
 
       <Pressable>

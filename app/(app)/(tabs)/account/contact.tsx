@@ -30,7 +30,7 @@ function story() {
 
         <Image
           style={{ marginBottom: 20 }}
-          source={require("../../../assets/images/story/chatmessage.png")}
+          source={require("../../../../assets/images/story/chatmessage.png")}
         />
 
         <Text
@@ -68,7 +68,7 @@ function story() {
         </Pressable>
         <Image
           style={{ marginBottom: 20, marginTop: 40 }}
-          source={require("../../../assets/images/story/addmessage.png")}
+          source={require("../../../../assets/images/story/addmessage.png")}
         />
 
         <Text
@@ -109,7 +109,7 @@ function story() {
         </Pressable>
         <Image
           style={{ marginBottom: 20, marginTop: 40 }}
-          source={require("../../../assets/images/story/twitter.png")}
+          source={require("../../../../assets/images/story/twitter.png")}
         />
 
         <Text
