@@ -83,6 +83,14 @@ function _layout() {
         }}
       />
       <Stack.Screen
+        name="addresses"
+        options={{
+          header(props) {
+            return _h("ADD NEW ADDRESS");
+          },
+        }}
+      />
+      <Stack.Screen
         name="orderSummary"
         options={{
           header(props) {

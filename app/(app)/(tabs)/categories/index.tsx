@@ -35,6 +35,21 @@ const data = [
       "https://www.pngall.com/wp-content/uploads/13/Nike-Shoes-Jordan-PNG-Pic.png",
     title: "Shoes",
   },
+  {
+    image:
+      "https://www.pngall.com/wp-content/uploads/13/Nike-Shoes-Jordan-PNG-Pic.png",
+    title: "Shoes",
+  },
+  {
+    image:
+      "https://www.pngall.com/wp-content/uploads/13/Nike-Shoes-Jordan-PNG-Pic.png",
+    title: "Shoes",
+  },
+  {
+    image:
+      "https://www.pngall.com/wp-content/uploads/13/Nike-Shoes-Jordan-PNG-Pic.png",
+    title: "Shoes",
+  },
 ];
 
 const summmerStyles = [

@@ -31,7 +31,7 @@ function orders() {
 
     try {
       const response = await fetch(
-        `${BASE_URL}/unicommerce/orders?emailOrPhone=${user.email}`,
+        `${BASE_URL}/order/user/orders`,
         {
           method: "GET",
           headers: {

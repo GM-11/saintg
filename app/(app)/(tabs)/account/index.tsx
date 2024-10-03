@@ -39,15 +39,15 @@ function index() {
       icon: require("../../../../assets/images/account/heart.png"),
       uri: "/(tabs)/wishlist",
     },
-    {
-      title: "Wallet",
-      icon: require("../../../../assets/images/account/heart.png"),
-      uri: "/(app)/wallet",
-    },
+    // {
+    //   title: "Wallet",
+    //   icon: require("../../../../assets/images/account/heart.png"),
+    //   uri: "/(app)/wallet",
+    // },
     {
       title: "Manage Addresses",
       icon: require("../../../../assets/images/account/person.png"),
-      uri: "/(tabs)/account/manageAccount",
+      uri: "/(app)/(tabs)/account/addresses",
     },
     {
       title: "Coupons",

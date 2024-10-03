@@ -22,7 +22,7 @@ type item = {
 
 const data = [
   {
-    image: "https://picsum.photos/200/300",
+    image: "https://www.istockphoto.com/photos/converse-sneakers",
     title: "Title",
     subtitle: "Subtitle",
     price: 100,

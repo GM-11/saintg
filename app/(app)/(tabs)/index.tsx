@@ -15,10 +15,6 @@ import React from "react";
 import { StyleSheet, ScrollView, FlatList, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 function Index() {
-
-
-
-
   const tags = [
     "Trendy",
     "Heels",
@@ -35,12 +31,11 @@ function Index() {
     "Shoe",
   ];
 
-
   return (
     <ScrollView style={styles.main}>
       <Link href={"/(story)/story"}>our story</Link>
       <Link href={"/(story)/contact"}>contact</Link>
-      {/* <Link href={"/checkout"}>checkout</Link> */}
+      <Link href={"/checkout"}>checkout</Link>
       <View>
         <FlatList
           horizontal
@@ -71,7 +66,6 @@ function Index() {
       <BestDeals />
     </ScrollView>
   );
-
 }
 
 const styles = StyleSheet.create({
