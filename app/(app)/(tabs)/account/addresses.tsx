@@ -8,11 +8,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const AddressForm = () => {
   const [firstName, setFirstName] = useState("");
@@ -27,25 +29,18 @@ const AddressForm = () => {
   const [saveAddressAs, setSaveAddressAs] = useState("");
   const [isDefaultAddress, setIsDefaultAddress] = useState(false);
 
-  // async handleAddAddress() {
-  //     const res = await fetch(``)
-  //   };
-
   async function handleAddAddress() {
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
 
     const user = JSON.parse(userDetails) as IUser;
 
-    const res = await fetch(`${BASE_URL}/address`, {
-      method: "GET",
+    const result = await axios.get(`${BASE_URL}/address`, {
       headers: {
         "Content-Type": "application/json",
         "x-access-token": user.token,
       },
     });
-
-    const data = await res.json();
   }
 
   return (
@@ -80,36 +75,18 @@ const AddressForm = () => {
         value={city}
         onChangeText={setCity}
       />
-
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          width: "100%",
-          justifyContent: "space-between",
-        }}
-      >
-        <View style={{ ...styles.pickerContainer, width: "48%" }}>
-          <Picker
-            selectedValue={state}
-            onValueChange={(itemValue) => setState(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="State" value="" />
-            {/* Add state options here */}
-          </Picker>
-        </View>
-        <View style={{ ...styles.pickerContainer, width: "48%" }}>
-          <Picker
-            selectedValue={zipCode}
-            onValueChange={(itemValue) => setZipCode(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Zip Code" value="" />
-            {/* Add zip code options here */}
-          </Picker>
-        </View>
-      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="State"
+        value={state}
+        onChangeText={setState}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Zip Code"
+        value={zipCode}
+        onChangeText={setZipCode}
+      />
 
       <View style={styles.pickerContainer}>
         <Picker
@@ -118,7 +95,21 @@ const AddressForm = () => {
           style={styles.picker}
         >
           <Picker.Item label="Country" value="" />
-          {/* Add country options here */}
+
+          {[
+            "India",
+            "USA",
+            "UK",
+            "France",
+            "Germany",
+            "Spain",
+            "Italy",
+            "Japan",
+            "Australia",
+            "Canada",
+          ].map((item, index) => (
+            <Picker.Item label={item} value={index} key={index} />
+          ))}
         </Picker>
       </View>
       <TextInput
@@ -129,7 +120,16 @@ const AddressForm = () => {
         keyboardType="phone-pad"
       />
 
-      <Text style={styles.label}>SAVE ADDRESS AS</Text>
+      <Text
+        style={{
+          fontSize: 16,
+          fontWeight: 600,
+          marginBottom: 8,
+          letterSpacing: 2,
+        }}
+      >
+        SAVE ADDRESS AS
+      </Text>
       <View style={styles.addressTypeContainer}>
         <TouchableOpacity
           style={[
@@ -176,9 +176,23 @@ const AddressForm = () => {
         <Text style={styles.checkboxLabel}>MAKE THIS A DEFAULT ADDRESS</Text>
       </View>
 
-      <TouchableOpacity style={styles.addButton} onPress={handleAddAddress}>
-        <Text style={styles.addButtonText}>ADD ADDRESS</Text>
-      </TouchableOpacity>
+      <Pressable
+        style={{
+          backgroundColor: "black",
+          paddingVertical: 12,
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            color: "white",
+            fontSize: 16,
+            fontWeight: 600,
+          }}
+        >
+          ADD ADDRESS
+        </Text>
+      </Pressable>
     </ScrollView>
   );
 };
@@ -192,7 +206,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 600,
     marginBottom: 16,
   },
   input: {
@@ -269,7 +283,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 600,
   },
 });
 
