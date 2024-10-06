@@ -3,6 +3,7 @@ import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import axios, { AxiosResponse } from "axios";
 import React from "react";
 import {
   Text,
@@ -103,48 +104,90 @@ type catsType = {
 
 function index() {
   const [categories, setCategories] = React.useState<catsType[]>([]);
+  const [subCategories, setSubCategories] = React.useState<catsType[]>([]);
 
   async function getCategories() {
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
-    const result = await fetch(`${BASE_URL}/categories/get`, {
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": user.token,
-      },
-    });
-    const j = await result.json();
-    console.log(j);
+    let result: AxiosResponse<any, any>;
 
-    if (j.code === 403) {
-      setCategories([]);
-      console.log("a;sdlfjk");
+    try {
+      const result = await axios.get(
+        `http://13.126.237.254:8080/categories/get`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user.token,
+          },
+        },
+      );
+
+      if (result.status === 404) {
+        console.log(result.statusText);
+      }
+      const data = result.data.data;
+      console.log("Categories");
+      console.log(data);
+      let cats: catsType[] = [];
+
+      data.forEach(
+        (val: {
+          category_id: number;
+          category_name: string;
+          category_image: string;
+        }) => {
+          cats.push({
+            name: val.category_name,
+            image: val.category_image,
+          });
+        },
+      );
+
+      const res = await axios.get(
+        `http://13.126.237.254:8080/subcategories/get`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user.token,
+          },
+        },
+      );
+      const subcats = res.data.data;
+
+      console.log("Subcategories");
+      console.log(subcats);
+
+      let womanCats: catsType[] = [];
+      subcats.forEach(
+        (val: {
+          subcategory_id: number;
+          subcategory_name: string;
+          subcategory_image: string;
+          category_id: number;
+          category_name: string;
+        }) => {
+          if (val.category_id === 1) {
+            womanCats.push({
+              name: val.subcategory_name,
+              image: val.subcategory_image,
+            });
+          }
+        },
+      );
+
+      console.log(womanCats);
+      setCategories([...cats]);
+
+      setSubCategories([...womanCats]);
+    } catch (e) {
+      console.log(e);
       return;
     }
-    const data = (await result.json()).data;
-    console.log("alsdfkadsfj");
-    console.log(result);
-    let cats: catsType[] = [];
-    data.forEach(
-      (val: {
-        category_id: number;
-        category_name: string;
-        category_image: string;
-      }) => {
-        console.log(val);
-        cats.push({
-          name: val.category_name,
-          image: val.category_image,
-        });
-      },
-    );
-    //setCategories([...cats]);
-    setCategories([...data]);
-    console.log(data);
   }
 
   React.useEffect(() => {
+    console.log("useEffect");
     getCategories();
   }, []);
 
@@ -189,6 +232,7 @@ function index() {
           <ListElement
             image={val.image}
             name={val.name}
+            subCats={subCategories}
             key={womanCats.indexOf(val)}
           />
         ))}
@@ -213,6 +257,7 @@ function index() {
             image={val.image}
             name={val.name}
             key={womanCats.indexOf(val)}
+            subCats={subCategories}
           />
         ))}
       </View>
@@ -222,7 +267,7 @@ function index() {
 
 // function sub(params:type) {
 
-function SubListElement({ image, name }: catsType) {
+function SubListElement({ image, name }: { image: string; name: string }) {
   return (
     <View
       // key={key}
@@ -243,7 +288,8 @@ function SubListElement({ image, name }: catsType) {
         }}
         source={{ uri: image }}
       ></ImageBackground>
-      <View
+
+      <Pressable
         style={{
           display: "flex",
           flexDirection: "row",
@@ -253,6 +299,12 @@ function SubListElement({ image, name }: catsType) {
           paddingBottom: 10,
           width: "80%",
           justifyContent: "space-between",
+        }}
+        onPress={() => {
+          router.push({
+            pathname: "/(tabs)/categories/categoryListView",
+            params: { name },
+          });
         }}
       >
         <View
@@ -266,20 +318,22 @@ function SubListElement({ image, name }: catsType) {
             <Text style={{ fontSize: 12 }}>{name}</Text>
           </View>
         </View>
-        <Pressable
-          onPress={() => {
-            router.push({ pathname: "/(tabs)/categories/categoryListView" });
-          }}
-        >
-          <Text>{">"}</Text>
-        </Pressable>
-      </View>
+        <Text>{">"}</Text>
+      </Pressable>
     </View>
   );
 }
 // }
 
-function ListElement({ image, name }: catsType) {
+function ListElement({
+  image,
+  name,
+  subCats,
+}: {
+  image: string;
+  name: string;
+  subCats: catsType[];
+}) {
   const [sublistOpen, setSublistOpen] = React.useState(false);
   return (
     <View>
@@ -299,6 +353,7 @@ function ListElement({ image, name }: catsType) {
             height: 100,
             flexDirection: "column-reverse",
             display: "flex",
+            marginRight: 10,
           }}
           source={{ uri: image }}
         />
@@ -347,7 +402,7 @@ function ListElement({ image, name }: catsType) {
             <Text>{">"}</Text>
           </View>
 
-          {womanCats.map((val) => (
+          {subCats.map((val) => (
             <SubListElement
               image={val.image}
               name={val.name}

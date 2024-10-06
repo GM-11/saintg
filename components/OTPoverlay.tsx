@@ -69,7 +69,8 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
       // }
       //
       const data = {
-        token: "asdkfj;D",
+        token:
+          "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOWMwZTc2NGEtMDgwMi00MmY5LTgyZGUtODIwNTc4ZTc5YzFlIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzI2NjAwNzQ1LCJleHAiOjE3MjkxOTI3NDV9.SgbjH-5BICP0Dh3cUeYYs4ZPbyeED_yXGA75t_BFJX7ABY9OxLklFZmLZIQNBkjCEz8QOXjPeaTnGUvZ9gYPkA",
       };
 
       await AsyncStorage.setItem(

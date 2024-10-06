@@ -2,6 +2,8 @@ import WhyChooseUs from "@/components/home/WhyUs";
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useLocalSearchParams } from "expo-router";
 import React from "react";
 import {
   Image,
@@ -12,35 +14,6 @@ import {
   StyleSheet,
   FlatList,
 } from "react-native";
-
-const product = {
-  image: "https://via.placeholder.com/150",
-  title: "SAINTG",
-  subtitle: "Recycle Boucle Knit Cardigan Pink",
-  price: 120,
-  orginalPrice: 240,
-  discountPercentage: 50,
-  manufacturer: "M/s. Kiwi Enterprises Pvt. Ltd.",
-  manufacturerAddress:
-    " RZ- A/4, DWARKA PURI, VIJAY ENCLAVE, DABRI NEW DELHI-110045",
-  customerCareNo: " +91-9910591396",
-  email: "support@saintshoes.com",
-  marketedBy:
-    "M/s. Saint G Leather Studio Pvt Ltd, Pace City-2, Sector-37,122001 Gurugram Haryana, India",
-  specs: {
-    material: "Synthetic",
-    saleMaterial: "Synthetic",
-    HeelHeight: [2.5, 3],
-    HeelType: "Block",
-    ToeType: "Open Toe",
-    PackContains: "1 Pair of Heels",
-    occasion: "Party",
-  },
-  colors: ["#0F140D", "#333333", "#E1E0DB"],
-  estimatedDelivery: ["11 Mar", "12 Mar"],
-  productId: 23,
-  size: ["36", "37", "38", "39", "40", "41"],
-};
 
 type productType = {
   image: string;
@@ -72,18 +45,108 @@ type specs = {
 };
 
 function productDetail() {
-  const [selectedColor, setSelectedColor] = React.useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = React.useState(product.size[0]);
+  const [selectedColor, setSelectedColor] = React.useState("#000000");
+  const [selectedSize, setSelectedSize] = React.useState("32");
   const [showDetails, setShowDetails] = React.useState(true);
   const [showSpecs, setShowSpecs] = React.useState(true);
   const [showCare, setShowCare] = React.useState(true);
   const [showShipping, setShowShipping] = React.useState(true);
   const [showMoreInfo, setShowMoreInfo] = React.useState(true);
+  const [product, setProduct] = React.useState<productType>();
+  const [showMore, setShowMore] = React.useState<productType[]>();
 
+  const { searchKeyWord, productId } = useLocalSearchParams();
+
+  async function getProductDetails() {
+    const userDetails = await AsyncStorage.getItem("userDetails");
+    if (!userDetails) return;
+
+    const user = JSON.parse(userDetails) as IUser;
+    const response = await axios.get(
+      `${BASE_URL}products/search?keyword=${searchKeyWord}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
+        },
+      },
+    );
+
+    const today = new Date();
+    const afterSevenDays = new Date(today);
+    afterSevenDays.setDate(today.getDate() + 7);
+
+    const todayString = today.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    const afterSevenDaysString = afterSevenDays.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    const data = response.data.data;
+
+    // Convert all products to productType
+    const convertedProducts: productType[] = data.map((product: any) => {
+      const specs: specs = {
+        material:
+          product.product_specifications.find(
+            (spec: any) => spec.label === "Material",
+          )?.content || "not available",
+        saleMaterial: "not available",
+        HeelHeight: [0, 0],
+        HeelType: "not available",
+        ToeType: "not available",
+        PackContains: "not available",
+        occasion: "not available",
+      };
+
+      return {
+        image: product.product_images[0].image_url,
+        title: product.product_name,
+        subtitle: product.description,
+        price: product.price || 0,
+        orginalPrice: product.original_price || 0,
+        discountPercentage: product.discount || 0,
+        manufacturer:
+          product.product_more_info.find(
+            (info: { label: string; content: string }) =>
+              info.label === "Manufactured By",
+          )?.content || "not available",
+        manufacturerAddress: "not available",
+        customerCareNo: "not available",
+        email: "not available",
+        marketedBy: "not available",
+        specs: specs,
+        colors: product.product_colors.map(
+          (color: { color_code: string }) => color.color_code,
+        ),
+        estimatedDelivery: [todayString, afterSevenDaysString],
+        productId: product.product_id,
+        size: product.product_size.map((size: { label: string }) => size.label),
+      };
+    });
+
+    // Set the current product
+    setProduct(convertedProducts[parseInt(productId as string) - 1]);
+
+    // Set the showMore state with the rest of the products
+    setShowMore(
+      convertedProducts.filter(
+        (_, index) => index !== parseInt(productId as string) - 1,
+      ),
+    );
+  }
   async function addInCart() {
     try {
       const userDetails = await AsyncStorage.getItem("userDetails");
       if (!userDetails) return;
+
+      if (!product) return;
+
       const user = JSON.parse(userDetails) as IUser;
       const result = await fetch(`${BASE_URL}/cart`, {
         method: "POST",
@@ -104,6 +167,12 @@ function productDetail() {
       console.error("Error fetching data:", error);
     }
   }
+
+  React.useEffect(() => {
+    getProductDetails();
+  }, []);
+
+  if (!product) return <></>;
 
   return (
     <ScrollView
@@ -195,7 +264,7 @@ function productDetail() {
           }}
         >
           <Text style={{ marginRight: 12 }}>Color</Text>
-          {product.colors.map((color) => (
+          {product.colors.map((color: string) => (
             <Pressable
               key={color}
               onPress={() => setSelectedColor(color)}
@@ -223,7 +292,7 @@ function productDetail() {
         >
           <Text style={{ marginRight: 12 }}>Size</Text>
 
-          {product.size.map((size) => (
+          {product.size.map((size: string) => (
             <Pressable
               key={size}
               onPress={() => setSelectedSize(size)}
@@ -337,23 +406,23 @@ function productDetail() {
         >
           <View style={{ flex: 1 }}>
             <Text style={{ marginTop: 8 }}>Material</Text>
-            <Text style={{ marginTop: 8 }}>Sole Material</Text>
+            {/* <Text style={{ marginTop: 8 }}>Sole Material</Text>
             <Text style={{ marginTop: 8 }}>Heel Height</Text>
             <Text style={{ marginTop: 8 }}>Heel Type</Text>
             <Text style={{ marginTop: 8 }}>Occasion</Text>
             <Text style={{ marginTop: 8 }}>Toe Type</Text>
-            <Text style={{ marginTop: 8 }}>Pack Contains</Text>
+            <Text style={{ marginTop: 8 }}>Pack Contains</Text> */}
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{ marginTop: 8 }}>: {product.specs.material}</Text>
-            <Text style={{ marginTop: 8 }}>: {product.specs.saleMaterial}</Text>
+            {/* <Text style={{ marginTop: 8 }}>: {product.specs.saleMaterial}</Text>
             <Text style={{ marginTop: 8 }}>
               : {product.specs.HeelHeight.join(" - ")} Inches
             </Text>
             <Text style={{ marginTop: 8 }}>: {product.specs.HeelType}</Text>
             <Text style={{ marginTop: 8 }}>: {product.specs.occasion}</Text>
             <Text style={{ marginTop: 8 }}>: {product.specs.ToeType}</Text>
-            <Text style={{ marginTop: 8 }}>: {product.specs.PackContains}</Text>
+            <Text style={{ marginTop: 8 }}>: {product.specs.PackContains}</Text> */}
           </View>
         </View>
       ) : (
@@ -632,18 +701,11 @@ function productDetail() {
         )}
       />
       <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 16 }}>
-        MORE FROM HEELS
+        More from {searchKeyWord}
       </Text>
       <FlatList
         style={{ width: "100%" }}
-        data={Array(10).fill({
-          image: "https://via.placeholder.com/150",
-          title: "SAINTG",
-          subtitle: "Recycle Boucle Knit Cardigan Pink",
-          price: 120,
-          originalPrice: 240,
-          discountPercentage: 50,
-        })}
+        data={showMore}
         horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={(val) => (
@@ -684,7 +746,7 @@ function productDetail() {
                   marginRight: 8,
                 }}
               >
-                ${val.item.originalPrice}
+                ${val.item.orginalPrice}
               </Text>
               <Text
                 style={{

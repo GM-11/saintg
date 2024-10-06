@@ -76,8 +76,6 @@ function _layout() {
   React.useEffect(() => {
     async function getUserDetails() {
       const userDetails = await AsyncStorage.getItem("userDetails");
-      console.log("does not exist");
-      console.log(userDetails);
 
       setUserDetails(userDetails);
     }
@@ -101,7 +99,6 @@ function _layout() {
   // }, []);
 
   if (userDetails !== null) {
-    console.log("userDetails", userDetails);
     return (
       <Tabs screenOptions={{}}>
         <Tabs.Screen

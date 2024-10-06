@@ -52,7 +52,16 @@ const data = [
   },
 ];
 
-function LatestArrival() {
+function LatestArrival({
+  data,
+}: {
+  data: Array<{
+    title?: string;
+    subtitle?: string;
+    id?: string;
+    image: { uri: string };
+  }>;
+}) {
   return (
     <View>
       <CustomCarousel

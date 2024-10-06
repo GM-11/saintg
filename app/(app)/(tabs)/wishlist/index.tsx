@@ -2,6 +2,7 @@ import SelectSizeOverlay from "@/components/SelectSizeOverlay";
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import React, { useEffect } from "react";
 import {
   Text,
@@ -29,35 +30,16 @@ function index() {
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
     try {
-      const result = await fetch(`${BASE_URL}/wishlist`, {
-        method: "GET",
+      const result = await axios.get(`${BASE_URL}wishlist`, {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": user.token,
         },
       });
-      const data = await result.json();
+      const data = result.data.data;
       console.log(data);
-      setData((prev) => [
-        ...prev,
-        {
-          image: "https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b",
-          title: "Title",
-          subtitle: "Subtitle",
-          price: 100,
-          id: 1,
-        },
-      ]);
     } catch (error) {
-      setData([
-        {
-          image: "https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b",
-          title: "Title",
-          subtitle: "Subtitle",
-          price: 100,
-          id: 1,
-        },
-      ]);
+      setData([]);
       console.error("Error fetching data:", error);
     }
   }

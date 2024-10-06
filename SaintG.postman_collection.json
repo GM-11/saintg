@@ -1864,6 +1864,169 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "homePage",
+					"item": [
+						{
+							"name": "initialize  homePage",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}homePage/initialize"
+							},
+							"response": []
+						},
+						{
+							"name": "get homePage",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}homePage/get?gender=WOMEN",
+									"host": [
+										"{{base_url}}homePage"
+									],
+									"path": [
+										"get"
+									],
+									"query": [
+										{
+											"key": "gender",
+											"value": "WOMEN"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update slider",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n      \"gender\": \"MEN\",\n      \"imageUrl\": \"https://example.com/men-slider1.jpg\",\n      \"text\": \"Summer Collection for Men\",\n      \"categoryId\": 1\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/slider/1"
+							},
+							"response": []
+						},
+						{
+							"name": "update featured Collection",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"gender\": \"WOMEN\",\n      \"imageUrl\": \"https://example.com/women-collection1.jpg\",\n      \"categoryId\": 1,\n      \"homePageId\":\"978c942c-48f1-4cff-b7e7-00300edc4405\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/featured-collection/1a68ccff-d675-414c-8686-e43bc0511352"
+							},
+							"response": []
+						},
+						{
+							"name": "update accessories",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"gender\": \"MEN\",\n      \"imageUrl\": \"https://example.com/men-accessories.jpg\",\n      \"text\": \"Explore Men's Accessories\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/accessories-section"
+							},
+							"response": []
+						},
+						{
+							"name": "update trending now",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"gender\": \"MEN\",\n      \"categoryId\": 1\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/trending-now"
+							},
+							"response": []
+						},
+						{
+							"name": "update latest arrivals",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"gender\": \"MEN\",\n      \"imageUrl\": \"https://example.com/new-mens-collection.jpg\",\n      \"text\": \"Explore Our New Men's Collection\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/latest-arrivals"
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},

@@ -413,6 +413,18 @@ function index() {
             padding: 20,
             backgroundColor: "black",
           }}
+          onPress={() => {
+            const itemsToPass = items.map(
+              (val) => `
+              ${val.title}SEP${val.subtitle}SEP${val.price}SEP${val.size}SEP${val.image}SEP${val.estimatedDelivery}SEP${val.quantity}SEP`,
+            );
+            router.push({
+              pathname: "/checkout/payment",
+              params: {
+                items: itemsToPass,
+              },
+            });
+          }}
         >
           <Text
             style={{
@@ -433,6 +445,7 @@ function index() {
 export default index;
 
 import { Picker } from "@react-native-picker/picker";
+import { router } from "expo-router";
 
 function Item({
   image,
@@ -449,16 +462,19 @@ function Item({
 }) {
   const sizes = ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
   const numsLeft = 5;
-  const quantityArr = Array(numsLeft)
-    .fill(0)
-    .map((_, i) => i + 1);
   const [selectedSize, setSelectedSize] = useState(sizes[0]);
-  const [selectedQuantity, setSelectedQuantity] = useState(quantityArr[0]);
+  const [selectedQuantity, setSelectedQuantity] = useState(0);
 
   return (
     <View style={{ margin: 10 }}>
-      <View style={{ display: "flex", flexDirection: "row" }}>
-        <Image source={{ uri: image }} style={{ width: 175, height: 175 }} />
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          height: 200,
+        }}
+      >
+        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
 
         <View
           style={{
@@ -476,6 +492,8 @@ function Item({
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
+              justifyContent: "space-between",
+              width: "50%",
             }}
           >
             <Text style={{ marginRight: 10 }}>Size </Text>
@@ -495,6 +513,8 @@ function Item({
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
+              justifyContent: "space-between",
+              width: "50%",
             }}
           >
             <Text style={{ marginRight: 10 }}>Qty </Text>
@@ -504,9 +524,12 @@ function Item({
                 setSelectedQuantity(itemValue)
               }
             >
-              {quantityArr.map((val, index) => (
-                <Picker.Item key={index} label={val.toString()} value={val} />
-              ))}
+              {Array(numsLeft)
+                .fill(0)
+                .map((_, i) => i + 1)
+                .map((val, index) => (
+                  <Picker.Item key={index} label={val.toString()} value={val} />
+                ))}
             </Picker>
           </View>
           <View

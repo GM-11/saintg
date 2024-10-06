@@ -14,6 +14,9 @@ import { Link, Redirect } from "expo-router";
 import React from "react";
 import { StyleSheet, ScrollView, FlatList, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { IUser } from "@/constants/types";
+import axios from "axios";
+import { BASE_URL } from "@/constants/constant";
 function Index() {
   const tags = [
     "Trendy",
@@ -31,11 +34,28 @@ function Index() {
     "Shoe",
   ];
 
+  const [latestArrival, setLatestArrival] = React.useState<any[]>([]);
+
+  async function getData() {
+    const userDetails = await AsyncStorage.getItem("userDetails");
+
+    if (!userDetails) return;
+    const user = JSON.parse(userDetails) as IUser;
+    console.log(user);
+
+    const response = await axios.get(
+      `${BASE_URL}homePage/get?gender=${user.gender}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
+        },
+      },
+    );
+  }
+
   return (
     <ScrollView style={styles.main}>
-      <Link href={"/(story)/story"}>our story</Link>
-      <Link href={"/(story)/contact"}>contact</Link>
-      <Link href={"/checkout"}>checkout</Link>
       <View>
         <FlatList
           horizontal

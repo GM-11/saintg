@@ -1,7 +1,11 @@
 import CustomCarousel from "@/components/CustomCarousel";
 import TopCategory from "@/components/home/TopCategory";
+import { BASE_URL } from "@/constants/constant";
+import { IUser } from "@/constants/types";
 import textStyles from "@/styles/textStyles";
-import { Link } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { Link, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, View, Image, FlatList, ScrollView } from "react-native";
 
@@ -65,33 +69,57 @@ type t = {
   price: number;
   imageUri: string;
   originalPrice?: number;
+  sizes: string[];
+  productId: number;
   discountPercentage?: number;
 };
 
 function categoryListView() {
   const [items, setItems] = useState<t[]>([]);
 
-  useEffect(() => {
-    setItems([
+  const { name } = useLocalSearchParams();
+
+  async function fetchItems() {
+    const userDetails = await AsyncStorage.getItem("userDetails");
+    if (!userDetails) return;
+    const user = JSON.parse(userDetails) as IUser;
+
+    const response = await axios.get(
+      `${BASE_URL}products/search?keyword=${name}`,
       {
-        title: "Item 1",
-        subtitle: "Subtitle 1",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
+        },
+      },
+    );
+
+    const data = response.data.data;
+
+    let i: t[] = [];
+    data.forEach((val: any) => {
+      const sizes = (val.product_size as { label: string }[]).map(
+        (val) => val.label,
+      );
+
+      i.push({
+        title: val.product_name,
+        subtitle: val.description,
+        imageUri: val.product_images[0].image_url,
         amount: 1,
-        price: 10,
-        imageUri: "https://via.placeholder.com/150",
-        originalPrice: 20,
+        price: 100,
+        originalPrice: 200,
         discountPercentage: 50,
-      },
-      {
-        title: "Item 2",
-        subtitle: "Subtitle 2",
-        amount: 2,
-        price: 20,
-        imageUri: "https://via.placeholder.com/150",
-        originalPrice: 40,
-        discountPercentage: 50,
-      },
-    ]);
+        productId: parseInt(val.product_id),
+        sizes,
+      });
+    });
+
+    setItems(i);
+  }
+
+  useEffect(() => {
+    fetchItems();
   }, []);
 
   return (
@@ -150,14 +178,25 @@ function categoryListView() {
 
       <View>
         {items.map((item, index) => (
-          <Link key={index} href={"/product/productDetail"}>
+          <Link
+            key={index}
+            href={{
+              pathname: "/product/productDetail",
+              params: {
+                productId: item.productId,
+                searchKeyWord: name,
+              },
+            }}
+          >
             <Item
               title={item.title}
               subtitle={item.subtitle}
               amount={item.amount}
               price={item.price}
+              productId={item.productId}
               imageUri={item.imageUri}
               originalPrice={item.originalPrice}
+              sizes={item.sizes}
               discountPercentage={item.discountPercentage}
             />
           </Link>
@@ -174,8 +213,9 @@ function Item({
   subtitle,
   originalPrice,
   discountPercentage,
-  price,
+  sizes,
   imageUri,
+  price,
 }: t) {
   return (
     <View style={{ padding: 20 }}>
@@ -189,10 +229,14 @@ function Item({
             justifyContent: "space-between",
           }}
         >
-          <Text style={{ fontSize: 16 }}>{title}</Text>
-          <Text style={{ fontSize: 16, fontWeight: 300 }}>{subtitle}</Text>
+          <Text style={{ fontSize: 16, flexWrap: "wrap", maxWidth: "70%" }}>
+            {title}
+          </Text>
+          <Text style={{ fontSize: 16, fontWeight: 300, maxWidth: "60%" }}>
+            {subtitle}
+          </Text>
           <View style={{ display: "flex", flexDirection: "row" }}>
-            {[36, 37, 38, 39, 40].map((val) => (
+            {sizes.map((val) => (
               <Text
                 key={val}
                 style={{

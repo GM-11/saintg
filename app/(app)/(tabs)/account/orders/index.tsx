@@ -30,16 +30,13 @@ function orders() {
     const user = JSON.parse(userDetails) as IUser;
 
     try {
-      const response = await fetch(
-        `${BASE_URL}/order/user/orders`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": user.token,
-          },
+      const response = await fetch(`${BASE_URL}/order/user/orders`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
         },
-      );
+      });
       const data = await response.json();
 
       setOrders(data.data ?? []);
@@ -54,17 +51,36 @@ function orders() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "white", height: "100%" }}>
-      <FlatList
-        data={_orders}
-        renderItem={(val) => (
-          <OrderComponent
-            status={val.item.status}
-            date={val.item.date}
-            orderId={val.item.orderId}
-            numsItems={val.item.numsItems}
-          />
-        )}
-      />
+      {orders.length === 0 ? (
+        <View
+          style={{
+            display: "flex",
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 24, fontWeight: 600, marginBottom: 16 }}>
+            No Orders Yet
+          </Text>
+          <Text style={{ fontSize: 16, fontWeight: 400 }}>
+            You haven't placed any orders yet
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={_orders}
+          style={{ margin: 16 }}
+          renderItem={(val) => (
+            <OrderComponent
+              status={val.item.status}
+              date={val.item.date}
+              orderId={val.item.orderId}
+              numsItems={val.item.numsItems}
+            />
+          )}
+        />
+      )}
     </View>
   );
 }

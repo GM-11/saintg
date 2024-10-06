@@ -1,6 +1,9 @@
 import TopCategory from "@/components/home/TopCategory";
 import { BASE_URL } from "@/constants/constant";
+import { IUser } from "@/constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Picker } from "@react-native-picker/picker";
+import axios from "axios";
 import { Link, router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import {
@@ -24,6 +27,18 @@ type t = {
   discountPercentage: number;
 };
 
+const convertApiResponseToT = (apiResponse: any[]): t[] => {
+  return apiResponse.map((item) => ({
+    image: item.product_images[0]?.image_url || "", // Assuming the first image is the main one
+    title: item.product_name,
+    subtitle: item.description,
+    price: item.product_specifications[0]?.value || 0, // Assuming the first specification is the price
+    id: item.product_id,
+    originalPrice: item.product_specifications[0]?.value || 0, // You might need to adjust this if there's an original price field
+    discountPercentage: item.discount || 0,
+  }));
+};
+
 function index() {
   const [search, setSearch] = React.useState("");
   const [showResults, setShowResults] = React.useState(false);
@@ -32,17 +47,30 @@ function index() {
 
   async function fetchData() {
     try {
-      const res = await fetch(`${BASE_URL}/products/search?keyword=${search}`);
-      const data = await res.json();
-      if (data.code !== 200) {
-        setData([]);
-        return;
-      }
-      console.log(data);
-      setData(data.data);
+      setLoading(true);
+
+      const userDetails = await AsyncStorage.getItem("userDetails");
+      if (!userDetails) return;
+      const user = JSON.parse(userDetails) as IUser;
+
+      const resul = await axios.get(
+        `${BASE_URL}products/search?keyword=${search}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user.token,
+          },
+        },
+      );
+      const d = resul.data.data;
+
+      const convertedData = convertApiResponseToT(d);
+      setData(convertedData);
       setShowResults(true);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -112,7 +140,7 @@ function index() {
         SearchResult(search as string, data)
       ) : (
         <View>
-          <Text
+          {/* <Text
             style={{
               letterSpacing: 4,
               color: "gray",
@@ -122,14 +150,14 @@ function index() {
             }}
           >
             RECENT SEARCH
-          </Text>
-          <FlatList
+          </Text> */}
+          {/* <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
             data={Array(10).fill("New Arrival")}
             style={{ marginTop: 40 }}
             renderItem={(val) => <TopCategory title={val.item} />}
-          />
+          /> */}
 
           <Text
             style={{
@@ -164,7 +192,7 @@ function index() {
             )}
           />
 
-          <Text
+          {/* <Text
             style={{
               letterSpacing: 4,
               color: "gray",
@@ -174,9 +202,9 @@ function index() {
             }}
           >
             BROWSE BY CATEGORY
-          </Text>
+          </Text> */}
 
-          <FlatList
+          {/* <FlatList
             style={{ width: "100%" }}
             data={[
               "BEST SELLERS",
@@ -212,7 +240,7 @@ function index() {
                 </Text>
               </ImageBackground>
             )}
-          />
+          /> */}
         </View>
       )}
     </View>
@@ -360,10 +388,10 @@ function SearchResult(search: string, data: t[]) {
           }}
         >
           <Text style={{ fontSize: 14, color: "black" }}>
-            {data.length} Results {search}
+            {data.length} results for {search}
           </Text>
 
-          <View
+          {/* <View
             style={{
               display: "flex",
               flexDirection: "row",
@@ -382,7 +410,7 @@ function SearchResult(search: string, data: t[]) {
                 source={require("../../../assets/images/icons/listview.png")}
               />
             </Link>
-          </View>
+          </View> */}
         </View>
 
         <FlatList

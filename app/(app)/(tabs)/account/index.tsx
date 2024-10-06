@@ -35,11 +35,6 @@ function index() {
       uri: "/(tabs)/account/orders",
     },
     {
-      title: "Wishlist",
-      icon: require("../../../../assets/images/account/heart.png"),
-      uri: "/(tabs)/wishlist",
-    },
-    {
       title: "Contact",
       icon: require("../../../../assets/images/account/heart.png"),
       uri: "/(app)/(tabs)/account/contact",
@@ -56,9 +51,9 @@ function index() {
       uri: "/(tabs)/account/coupons",
     },
     {
-      title: "Help Center",
+      title: "Checkout",
       icon: require("../../../../assets/images/account/headphones.png"),
-      uri: "/(tabs)/account/manageAccount",
+      uri: "/(app)/checkout",
     },
     {
       title: "Settings",

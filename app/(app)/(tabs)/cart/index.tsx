@@ -1,6 +1,7 @@
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 
@@ -16,63 +17,22 @@ function index() {
   const [data, setItems] = useState<t[]>([]);
 
   async function getItems() {
+    const userDetails = await AsyncStorage.getItem("userDetails");
+    if (!userDetails) return;
+    const user = JSON.parse(userDetails) as IUser;
+
     try {
-      const userDetails = await AsyncStorage.getItem("userDetails");
-      if (!userDetails) return;
-      const user = JSON.parse(userDetails) as IUser;
-      const result = await fetch(`${BASE_URL}/cart`, {
-        method: "GET",
+      const result = await axios.get(`${BASE_URL}cart`, {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": user.token,
         },
       });
-      const data = await result.json();
-      console.log(data);
-
-      if (data.code === 200) {
-        setItems(
-          data ?? [
-            {
-              title: "Item 1",
-              subtitle: "Item 1 subtitle",
-              amount: 1,
-              price: 100,
-              imageUri:
-                "https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b",
-            },
-            {
-              title: "Item 2",
-              subtitle: "Item 2 subtitle",
-              amount: 1,
-              price: 200,
-              imageUri:
-                "https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b",
-            },
-          ],
-        );
-      } else {
-        setItems([
-          {
-            title: "Item 1",
-            subtitle: "Item 1 subtitle",
-            amount: 1,
-            price: 100,
-            imageUri:
-              "https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b",
-          },
-          {
-            title: "Item 2",
-            subtitle: "Item 2 subtitle",
-            amount: 1,
-            price: 200,
-            imageUri:
-              "https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b",
-          },
-        ]);
-      }
+      const data = result.data.data;
+      console.log(data.items);
+      setItems(data.items);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      setItems([]);
     }
   }
 
@@ -91,7 +51,7 @@ function index() {
           backgroundColor: "white",
         }}
       >
-        <Text style={{ fontSize: 24 }}>No items in cart</Text>
+        <Text>No items in cart</Text>
       </View>
     );
   } else {

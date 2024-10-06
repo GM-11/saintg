@@ -6,6 +6,7 @@ function AuthRoot() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerTitle: "CHECKOUT" }} />
+      <Stack.Screen name="payment" options={{ headerTitle: "CONFIRM ORDER" }} />
     </Stack>
   );
 }
