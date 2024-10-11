@@ -15,9 +15,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { BASE_URL } from "@/constants/constant";
 import OTPOverlay from "@/components/OTPoverlay";
+import axios from "axios";
 
 function signup() {
-  const genderOPtions = ["MAN", "WOMAN", "RATHER NOT SAY"];
+  const genderOPtions = ["men", "women", "unisex"];
   const countryCodeOptions = ["+91", "+90"];
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -75,29 +76,47 @@ function signup() {
     }
 
     try {
-      // const result = await fetch(`${BASE_URL}/user/register`, {
+      console.log(`${countryCode}${mobile}`);
+      const body = {
+        fullName: name,
+        phoneNumber: `${countryCode}${mobile}`,
+        email,
+        gender: selectedGender,
+        password,
+      };
+
+      console.log(body);
+
+      setShowOTPOtpOverlay(true);
+
+      // fetch(`${BASE_URL}user/register`, {
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json",
       //   },
-      //   body: JSON.stringify({
-      //     fullName: name,
-      //     phoneNumber: mobile,
-      //     email,
-      //     gender: selectedGender,
-      //     password,
-      //   }),
-      // });
-
-      // if (result.status == 200) {
-      // console.log("User signed up successfully");
-      // const data = await result.json();
-      // const message = data.message;
-      setShowOTPOtpOverlay(true);
-
-      // storeUserDetails();
-      // }
+      //   body: JSON.stringify(body),
+      // })
+      //   .then((res) => {
+      //     console.log(res);
+      //     setShowOTPOtpOverlay(true);
+      //   })
+      //   .catch((error) => {
+      //     if (error.response) {
+      //       // Server responded with a status code out of the range of 2xx
+      //       console.log("Error response data:", error.response.data);
+      //       console.log("Error response status:", error.response.status);
+      //       console.log("Error response headers:", error.response.headers);
+      //     } else if (error.request) {
+      //       // Request was made but no response was received
+      //       console.log("Error request:", error.request);
+      //     } else {
+      //       // Something happened in setting up the request
+      //       console.log("Error message:", error.message);
+      //     }
+      //     console.log("Error config:", error.config);
+      //   });
     } catch (error) {
+      console.log("in error block");
       console.error("Error signing up user:", error);
     }
   }

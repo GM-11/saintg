@@ -138,8 +138,10 @@ function categoryListView() {
           justifyContent: "space-between",
         }}
       >
-        <Text style={{ fontSize: 16 }}>4500 "HEELS"</Text>
-        <Text style={{ fontSize: 16 }}>{"O"}</Text>
+        <Text style={{ fontSize: 16 }}>
+          {items.length} "{name}"
+        </Text>
+        {/* <Text style={{ fontSize: 16 }}>{"O"}</Text> */}
       </View>
       <View>
         <FlatList
@@ -173,7 +175,7 @@ function categoryListView() {
           marginVertical: 32,
         }}
       >
-        SHOP ALL HEELS
+        Shop all {name}
       </Text>
 
       <View>

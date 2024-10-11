@@ -35,6 +35,9 @@ function Index() {
   ];
 
   const [latestArrival, setLatestArrival] = React.useState<any[]>([]);
+  const [featuredCollection, setFeaturedCollection] = React.useState<any[]>([]);
+  const [trendingNow, setTrendingNow] = React.useState<any[]>([]);
+  const [brands, setBrands] = React.useState<any[]>([]);
 
   async function getData() {
     const userDetails = await AsyncStorage.getItem("userDetails");
@@ -43,16 +46,75 @@ function Index() {
     const user = JSON.parse(userDetails) as IUser;
     console.log(user);
 
-    const response = await axios.get(
-      `${BASE_URL}homePage/get?gender=${user.gender}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": user.token,
-        },
+    const response = await axios.get(`${BASE_URL}homePage/get?gender=MEN`, {
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": user.token,
       },
-    );
+    });
+
+    const res = JSON.parse(JSON.stringify(response.data.data));
+
+    const _latestArrival = res.latestArrivals;
+    const _featuredCollection = res.featuredCollection;
+    const _trendingNow = res.trendingNow;
+    const _brands = res.brands;
+    console.log(_brands);
+
+    const l = _latestArrival.map((item: any) => {
+      return {
+        id: item.id,
+        title: item.text,
+        subtitle: "Latest styles for you",
+        image: {
+          uri: item.imageUrl,
+        },
+      };
+    });
+
+    const f = _featuredCollection.map((item: any) => {
+      console.log(item);
+      return {
+        id: item.id,
+        title: item.category.category_name,
+        subtitle: "Latest styles for you",
+        image: {
+          uri: item.category.category_image,
+        },
+      };
+    });
+
+    const t = _trendingNow.map((item: any) => {
+      return {
+        id: item.id,
+        title: item.category.category_name,
+        subtitle: "Latest styles for you",
+        image: {
+          uri: item.category.category_image,
+        },
+      };
+    });
+
+    const b = _brands.map((item: any) => {
+      console.log("brand: ", item);
+      return {
+        id: item.brand_id,
+        image: item.brand_image,
+        name: item.brand_name,
+      };
+    });
+
+    console.log(f, "fdja;klsf");
+    setFeaturedCollection(f);
+    setTrendingNow(t);
+    setLatestArrival(l);
+    console.log(l);
+    setBrands(b);
   }
+
+  React.useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <ScrollView style={styles.main}>
@@ -75,15 +137,11 @@ function Index() {
 
       <MyPager />
       <WhyChooseUs />
-      <FeaturedCollection />
-      <TrendingNow />
-      <Partners />
-      <AllAccess />
-      <Offers />
-      <Accessories />
+      <FeaturedCollection data={featuredCollection} />
+      <TrendingNow data={trendingNow} />
+      {/* <Partners data={brands} /> */}
       <BestDeals />
-      <LatestArrival />
-      <BestDeals />
+      <LatestArrival data={latestArrival} />
     </ScrollView>
   );
 }

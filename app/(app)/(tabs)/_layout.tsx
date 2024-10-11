@@ -55,19 +55,6 @@ function tabHeader() {
   );
 }
 
-async function checkUserLoggedIn() {
-  try {
-    const userDetails = AsyncStorage.getItem("userDetails").then((res) => {
-      return res;
-    });
-    if (userDetails !== null) {
-      return true;
-    }
-  } catch (error) {
-    console.error("Error checking user login status:", error);
-    return false;
-  }
-}
 function _layout() {
   const [loggedIn, setLoggedIn] = React.useState(true);
 
@@ -76,6 +63,7 @@ function _layout() {
   React.useEffect(() => {
     async function getUserDetails() {
       const userDetails = await AsyncStorage.getItem("userDetails");
+
 
       setUserDetails(userDetails);
     }

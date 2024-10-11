@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   Image,
+  ImageSourcePropType,
 } from "react-native";
 
 // const data = [
@@ -30,46 +31,38 @@ import {
 //   },
 // ];
 
-function Partners() {
+function Partners({
+  data,
+}: {
+  data: {
+    id: string;
+    name: string;
+    image: string;
+  }[];
+}) {
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      pagingEnabled
-      style={{
-        width: "100%",
-        marginVertical: 12,
-      }}
-    >
-      <Image
-        style={{ marginHorizontal: 12 }}
-        source={require("../../assets/partners/1.png")}
-      />
-      <Image
-        style={{ marginHorizontal: 12 }}
-        source={require("../../assets/partners/2.png")}
-      />
-      <Image
-        style={{ marginHorizontal: 12 }}
-        source={require("../../assets/partners/3.png")}
-      />
-      <Image
-        style={{ marginHorizontal: 12 }}
-        source={require("../../assets/partners/2.png")}
-      />
-      <Image
-        style={{ marginHorizontal: 12 }}
-        source={require("../../assets/partners/3.png")}
-      />
-      <Image
-        style={{ marginHorizontal: 12 }}
-        source={require("../../assets/partners/1.png")}
-      />
-      <Image
-        style={{ marginHorizontal: 12 }}
-        source={require("../../assets/partners/1.png")}
-      />
-    </ScrollView>
+    <>
+      <Text>PARTNERS</Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        style={{
+          width: "100%",
+          marginVertical: 12,
+        }}
+      >
+        {data.map((item) => {
+          return (
+            <Image
+              key={data.indexOf(item)}
+              style={{ marginHorizontal: 12 }}
+              source={{ uri: item.image }}
+            />
+          );
+        })}
+      </ScrollView>
+    </>
   );
 }
 

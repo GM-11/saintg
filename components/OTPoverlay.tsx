@@ -2,6 +2,7 @@ import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import textStyles from "@/styles/textStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { router } from "expo-router";
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -51,8 +52,7 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
     }
 
     try {
-      // const result = await fetch(`${BASE_URL}/user/register/otp`, {
-      //   method: "POST",
+      // const result = await axios.post(`${BASE_URL}/user/register/otp`, {
       //   headers: {
       //     "Content-Type": "application/json",
       //   },
@@ -60,13 +60,14 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
       //     otp: otpString,
       //   }),
       // });
-      //
-
-      // const data = await result.json();
+      // const data = result.data;
+      // console.log(data);
       // if (data.code !== 200) {
       //   console.log("Error sending OTP");
       //   return;
       // }
+
+      // console.log(data);
       //
       const data = {
         token:

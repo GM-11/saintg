@@ -113,15 +113,12 @@ function index() {
     let result: AxiosResponse<any, any>;
 
     try {
-      const result = await axios.get(
-        `http://13.126.237.254:8080/categories/get`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": user.token,
-          },
+      const result = await axios.get(`${BASE_URL}categories/get`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
         },
-      );
+      });
 
       if (result.status === 404) {
         console.log(result.statusText);
@@ -193,7 +190,7 @@ function index() {
 
   return (
     <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
-      <View>
+      {/* <View>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -213,7 +210,7 @@ function index() {
                 width: 100,
               }}
               ///@ts-ignore
-              source={val.item.image}
+              source={{ uri: val.item.image }}
             >
               <View style={{ margin: 16 }}>
                 <Text style={{ textAlign: "center" }}>{val.item.title}</Text>
@@ -221,7 +218,7 @@ function index() {
             </ImageBackground>
           )}
         />
-      </View>
+      </View> */}
 
       <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 10 }}>
         SHOP BY CATEGORY
@@ -238,16 +235,16 @@ function index() {
         ))}
       </View>
 
-      <CustomCarousel
+      {/* <CustomCarousel
         data={summmerStyles}
         mainTitleStyle={{ textAlign: "flex-start", margin: 16 }}
         imageWidth="100%"
         imageHeight="300"
         title={"SUMMER STYLES"}
         additionalStyles={{ width: "100%" }}
-      />
+      /> */}
 
-      <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 10 }}>
+      {/* <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 10 }}>
         CURATED STYLE STORE
       </Text>
 
@@ -260,7 +257,7 @@ function index() {
             subCats={subCategories}
           />
         ))}
-      </View>
+      </View> */}
     </ScrollView>
   );
 }

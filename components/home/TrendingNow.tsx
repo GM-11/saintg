@@ -8,61 +8,18 @@ import {
   ImageBackground,
 } from "react-native";
 import CustomCarousel from "../CustomCarousel";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const data = [
-  {
-    id: "1",
-    title: "Sandals",
-    subtitle: "Upto 40% off",
-    image: {
-      uri: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-    },
-  },
-  {
-    id: "2",
-    title: "Winter Jackets",
-    subtitle: "Stay warm this winter",
-    image: {
-      uri: "https://images.unsplash.com/photo-1517841905240-472988babdf9",
-    },
-  },
-  {
-    id: "3",
-    title: "Spring Dresses",
-    subtitle: "Stay warm this winter",
+type dataProps = {
+  data: {
+    title?: string;
+    subtitle?: string;
+    id?: string;
+    image: { uri: string };
+  }[];
+};
 
-    image: {
-      uri: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f",
-    },
-  },
-  {
-    id: "4",
-    title: "Fall Boots",
-    subtitle: "Trendy and comfortable",
-    image: {
-      uri: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a",
-    },
-  },
-  {
-    id: "5",
-    title: "Casual Shirts",
-    subtitle: "Perfect for any occasion",
-    image: {
-      uri: "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb",
-    },
-  },
-  {
-    id: "6",
-    title: "Accessories",
-    subtitle: "Stay warm this winter",
-
-    image: {
-      uri: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f",
-    },
-  },
-];
-
-function TrendingNow() {
+function TrendingNow({ data }: dataProps) {
   return (
     <View>
       <CustomCarousel
@@ -70,8 +27,8 @@ function TrendingNow() {
         subTitleStyle={{ color: "white", textAlign: "center" }}
         title={"TRENDING NOW"}
         data={data}
-        imageHeight="40vh"
-        imageWidth="40vw"
+        imageHeight="50vh"
+        imageWidth="100vw"
         additionalStyles={{ margin: 12 }}
       />
       {/* <FlatList

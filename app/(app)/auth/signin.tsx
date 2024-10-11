@@ -9,10 +9,49 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BASE_URL } from "@/constants/constant";
+import { router } from "expo-router";
 
 function signin() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  async function signInUser() {
+    if (email === "" || password === "") {
+      return;
+    }
+
+    try {
+      const result = await fetch(`${BASE_URL}user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await result.json();
+      console.log(data);
+      if (data.code !== 200) {
+        console.log("Error signing in user");
+        return;
+      }
+
+      // await AsyncStorage.setItem(
+      //   "userDetails",
+      //   JSON.stringify({ ...userDetails, token: data.token }),
+      // );
+      console.log("User details stored successfully");
+      setTimeout(() => {
+        router.replace("/");
+      }, 1000);
+    } catch (error) {
+      console.error("Error signing in user:", error);
+    }
+  }
   return (
     <View style={styles.body}>
       <Image
@@ -50,7 +89,7 @@ function signin() {
       <Pressable>
         <Text>CREATE ACCOUNT</Text>
       </Pressable>
-      <Text>LOGIN WITH SOCIAL MEDIA</Text>
+      {/* <Text>LOGIN WITH SOCIAL MEDIA</Text>
 
       <Pressable
         onPress={async () => {
@@ -59,7 +98,7 @@ function signin() {
         style={styles.googleLogin}
       >
         <Text style={styles.text}>LOGIN WITH GOOGLE</Text>
-      </Pressable>
+      </Pressable> */}
       <Text style={styles.textTnc}>
         By clicking on sign in you agree to our terms of use and privacy policy
       </Text>

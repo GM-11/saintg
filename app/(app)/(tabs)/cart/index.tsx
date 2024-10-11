@@ -29,8 +29,20 @@ function index() {
         },
       });
       const data = result.data.data;
-      console.log(data.items);
-      setItems(data.items);
+
+      let d: t[] = [];
+      data.items.forEach((val: any) => {
+        const v: t = {
+          title: val.productName,
+          subtitle: val.description,
+          amount: val.quantity,
+          price: val.price,
+          imageUri: val.coverImage,
+        };
+        d.push(v);
+      });
+
+      setItems(d);
     } catch (error) {
       setItems([]);
     }

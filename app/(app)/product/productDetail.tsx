@@ -148,7 +148,7 @@ function productDetail() {
       if (!product) return;
 
       const user = JSON.parse(userDetails) as IUser;
-      const result = await fetch(`${BASE_URL}/cart`, {
+      const result = await fetch(`${BASE_URL}cart/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -156,8 +156,8 @@ function productDetail() {
         },
         body: JSON.stringify({
           productId: product.productId,
-          color: selectedColor,
-          size: selectedSize,
+          // color: selectedColor,
+          // size: selectedSize,
           quantity: 1,
         }),
       });
@@ -561,7 +561,7 @@ function productDetail() {
         <View />
       )}
 
-      <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 16 }}>
+      {/* <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 16 }}>
         SIMILAR PRODUCTS
       </Text>
 
@@ -699,69 +699,73 @@ function productDetail() {
             </View>
           </View>
         )}
-      />
+      /> */}
       <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 16 }}>
         More from {searchKeyWord}
       </Text>
-      <FlatList
-        style={{ width: "100%" }}
-        data={showMore}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={(val) => (
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              margin: 10,
-            }}
-          >
-            <Image
-              source={{ uri: val.item.image }}
-              style={{ width: 200, height: 200 }}
-            />
-            <Text style={{ fontWeight: 300, marginVertical: 2 }}>
-              {val.item.title}
-            </Text>
-            <Text style={{ fontWeight: 300, marginVertical: 2 }}>
-              {val.item.subtitle}
-            </Text>
+      {showMore && showMore.length > 0 ? (
+        <FlatList
+          style={{ width: "100%" }}
+          data={showMore}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={(val) => (
             <View
               style={{
                 display: "flex",
-                flexDirection: "row",
-                width: "100%",
+                flexDirection: "column",
+                margin: 10,
               }}
             >
-              <Text
-                style={{ fontWeight: 500, marginVertical: 2, marginRight: 8 }}
-              >
-                ${val.item.price}
+              <Image
+                source={{ uri: val.item.image }}
+                style={{ width: 200, height: 200 }}
+              />
+              <Text style={{ fontWeight: 300, marginVertical: 2 }}>
+                {val.item.title}
               </Text>
-              <Text
+              <Text style={{ fontWeight: 300, marginVertical: 2 }}>
+                {val.item.subtitle}
+              </Text>
+              <View
                 style={{
-                  textDecorationLine: "line-through",
-                  fontWeight: 300,
-                  marginVertical: 2,
-                  marginRight: 8,
+                  display: "flex",
+                  flexDirection: "row",
+                  width: "100%",
                 }}
               >
-                ${val.item.orginalPrice}
-              </Text>
-              <Text
-                style={{
-                  color: "green",
-                  fontWeight: 300,
-                  marginVertical: 2,
-                  marginRight: 8,
-                }}
-              >
-                {val.item.discountPercentage}% off
-              </Text>
+                <Text
+                  style={{ fontWeight: 500, marginVertical: 2, marginRight: 8 }}
+                >
+                  ${val.item.price}
+                </Text>
+                <Text
+                  style={{
+                    textDecorationLine: "line-through",
+                    fontWeight: 300,
+                    marginVertical: 2,
+                    marginRight: 8,
+                  }}
+                >
+                  ${val.item.orginalPrice}
+                </Text>
+                <Text
+                  style={{
+                    color: "green",
+                    fontWeight: 300,
+                    marginVertical: 2,
+                    marginRight: 8,
+                  }}
+                >
+                  {val.item.discountPercentage}% off
+                </Text>
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
+      ) : (
+        <Text> No similar produtcts </Text>
+      )}
 
       <WhyChooseUs />
 

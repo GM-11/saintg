@@ -52,16 +52,17 @@ const data = [
   },
 ];
 
-function LatestArrival({
-  data,
-}: {
-  data: Array<{
+type dataProps = {
+  data: {
     title?: string;
     subtitle?: string;
     id?: string;
     image: { uri: string };
-  }>;
-}) {
+  }[];
+};
+
+function LatestArrival({ data }: dataProps) {
+  console.log("adfjklsasfkdjlasd;fjkl", data);
   return (
     <View>
       <CustomCarousel
@@ -70,7 +71,7 @@ function LatestArrival({
         title={"LATEST ARRIVAL"}
         data={data}
         imageHeight="20vh"
-        imageWidth="90vw"
+        imageWidth="50%"
         additionalStyles={{ margin: 16 }}
       />
     </View>

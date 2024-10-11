@@ -63,24 +63,27 @@ function CustomCarousel({
           margin: 0,
         }}
         data={data}
-        renderItem={(val) => (
-          <ImageBackground
+        renderItem={(val) => {
+          console.log(val.item.image.uri);
+          return (
             ///@ts-ignore
-            style={{
-              width: imageWidth,
-              height: imageHeight,
-              flexDirection: "column-reverse",
-              display: "flex",
-              ...additionalStyles,
-            }}
-            source={val.item.image}
-          >
-            <View style={{ margin: 16 }}>
-              <Text style={titleStyle}>{val.item.title}</Text>
-              <Text style={subTitleStyle}>{val.item.subtitle}</Text>
-            </View>
-          </ImageBackground>
-        )}
+            <ImageBackground
+              style={{
+                width: imageWidth,
+                height: imageHeight,
+                flexDirection: "column-reverse",
+                display: "flex",
+                ...additionalStyles,
+              }}
+              source={{ uri: val.item.image.uri }}
+            >
+              <View style={{ margin: 16 }}>
+                <Text style={titleStyle}>{val.item.title}</Text>
+                <Text style={subTitleStyle}>{val.item.subtitle}</Text>
+              </View>
+            </ImageBackground>
+          );
+        }}
       />
     </View>
   );
