@@ -115,6 +115,23 @@ function _layout() {
         }}
       />
       <Stack.Screen
+        name="story"
+        options={{
+          header(props) {
+            return _h("OUR STORY");
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="contact"
+        options={{
+          header(props) {
+            return _h("CONTACT US");
+          },
+        }}
+      />
+      <Stack.Screen
         name="coupons"
         options={{
           header(props) {

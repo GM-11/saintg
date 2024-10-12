@@ -3,7 +3,7 @@ import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import {
   Image,
@@ -32,6 +32,7 @@ type productType = {
   estimatedDelivery: string[];
   productId: number;
   size: string[];
+  quantity: number;
 };
 
 type specs = {
@@ -56,6 +57,19 @@ function productDetail() {
   const [showMore, setShowMore] = React.useState<productType[]>();
 
   const { searchKeyWord, productId } = useLocalSearchParams();
+
+  async function buyNow() {
+    if (!product) return;
+    const item = `
+      ${product.title}SEP${product.subtitle}SEP${product.price}SEP${product.size}SEP${product.image}SEP${product.estimatedDelivery}SEP${product.quantity}SEP`;
+
+    router.push({
+      pathname: "/(app)/checkout/payment",
+      params: {
+        items: [item],
+      },
+    });
+  }
 
   async function getProductDetails() {
     const userDetails = await AsyncStorage.getItem("userDetails");
@@ -127,6 +141,7 @@ function productDetail() {
         estimatedDelivery: [todayString, afterSevenDaysString],
         productId: product.product_id,
         size: product.product_size.map((size: { label: string }) => size.label),
+        quantity: 1,
       };
     });
 
@@ -162,10 +177,29 @@ function productDetail() {
         }),
       });
       const data = await result.json();
-      console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  }
+
+  async function addInWishlist() {
+    const userDetails = await AsyncStorage.getItem("userDetails");
+    if (!userDetails) return;
+
+    const user = JSON.parse(userDetails) as IUser;
+
+    const result = await fetch(`${BASE_URL}wishlist/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": user.token,
+      },
+      body: JSON.stringify({
+        productId: parseInt(productId as string),
+      }),
+    });
+    const data = await result.json();
+    console.log(data);
   }
 
   React.useEffect(() => {
@@ -198,7 +232,7 @@ function productDetail() {
         <Text style={{ color: "gray", fontSize: 18, marginRight: 10 }}>
           Add to Wishlist
         </Text>
-        <Pressable>
+        <Pressable onPress={addInWishlist}>
           <Image
             source={require("../../../assets/images/account/heart.png")}
             style={{ width: 20, height: 20, marginVertical: 20 }}
@@ -346,6 +380,7 @@ function productDetail() {
             <Text style={{ fontSize: 12, letterSpacing: 4 }}>ADD TO CART</Text>
           </Pressable>
           <Pressable
+            onPress={buyNow}
             style={{
               paddingHorizontal: 12,
               paddingVertical: 16,
@@ -795,6 +830,7 @@ function productDetail() {
           <Text style={{ fontSize: 12, letterSpacing: 4 }}>ADD TO CART</Text>
         </Pressable>
         <Pressable
+          onPress={buyNow}
           style={{
             paddingHorizontal: 12,
             paddingVertical: 16,

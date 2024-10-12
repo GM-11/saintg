@@ -12,6 +12,8 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "@/constants/types";
 import { useLocalSearchParams } from "expo-router";
+import RazorpayCheckout from "react-native-razorpay";
+import { RAZORPAY_KEY, RAZORPAY_SECRET_KEY } from "@/constants/constant";
 
 interface ProductItem {
   id: string;
@@ -32,8 +34,8 @@ const ConfirmOrderScreen = () => {
   const [productItems, setProductItems] = useState<ProductItem[]>([]);
   const paymentMethods = [
     { id: "wallet", name: "Wallet" },
-    { id: "credit", name: "Credit / Debit Card" },
-    { id: "emi", name: "EMI UPI" },
+    // { id: "credit", name: "Credit / Debit Card" },
+    // { id: "emi", name: "EMI UPI" },
     { id: "netbanking", name: "Net Banking" },
     { id: "cod", name: "Cash On Delivery (COD)" },
     { id: "paylater", name: "Pay Later" },
@@ -43,8 +45,29 @@ const ConfirmOrderScreen = () => {
     setSelectedPaymentMethod(id);
   };
 
-  const handleMakePayment = () => {
-    console.log("Processing payment...");
+  const handleMakePayment = async () => {
+    try {
+      console.log("Processing payment...");
+      const res = await RazorpayCheckout.open({
+        description: "Credits towards consultation",
+        image: "https://i.imgur.com/3g7nmJC.png",
+        currency: "INR",
+        key: RAZORPAY_KEY!,
+        amount: 5000,
+        name: "foo",
+        order_id: "order_123456", // Added missing required property
+        prefill: {
+          email: "void@razorpay.com",
+          contact: "9191919191",
+          name: "Razorpay Software",
+        },
+        theme: { color: "#F37254" },
+      });
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   async function getData() {
@@ -58,9 +81,7 @@ const ConfirmOrderScreen = () => {
     console.log(items);
 
     for (let str of items) {
-      console.log(str);
       const parts = str.split("SEP");
-      console.log(parts);
 
       const map: ProductItem = {
         id: items.indexOf(str).toString(),
@@ -87,8 +108,8 @@ const ConfirmOrderScreen = () => {
         <Text style={styles.addressTitle}>DELIVERS TO</Text>
         <Text style={styles.addressName}>{user?.name}</Text>
         <Text style={styles.addressDetails}>
-          B-36, 2nd Floor, Baba House,{"\n"}
-          Neb sarai, New Delhi 110 068{"\n"}
+          {/* B-36, 2nd Floor, Baba House,{"\n"}
+          Neb sarai, New Delhi 110 068{"\n"} */}
           {user?.phoneNumber}
         </Text>
         <Pressable style={styles.changeButton}>

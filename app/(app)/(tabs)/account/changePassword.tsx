@@ -1,4 +1,5 @@
 import OTPOverlay from "@/components/OTPoverlay";
+import { BASE_URL } from "@/constants/constant";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import {
@@ -35,7 +36,7 @@ function changePassword() {
     const user = JSON.parse(userDetails);
 
     try {
-      const response = await fetch("/user/reset-password", {
+      const response = await fetch(`${BASE_URL}user/reset-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +63,6 @@ function changePassword() {
 
   return (
     <>
-      {" "}
       {showOTPOtpOverlay && (
         <View
           style={{

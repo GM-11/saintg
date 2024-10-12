@@ -118,7 +118,7 @@ function Index() {
 
   return (
     <ScrollView style={styles.main}>
-      <View>
+      <View style={{ marginBottom: 24 }}>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -126,13 +126,13 @@ function Index() {
           style={{ marginTop: 40 }}
           renderItem={(val) => <Tag title={val.item} />}
         />
-        <FlatList
+        {/* <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
           data={Array(10).fill("New Arrival")}
           style={{ marginVertical: 40 }}
           renderItem={(val) => <TopCategory title={val.item} />}
-        />
+        /> */}
       </View>
 
       <MyPager />

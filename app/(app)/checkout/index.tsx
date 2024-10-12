@@ -1,6 +1,6 @@
 import Tag from "@/components/home/Tag";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   Image,
@@ -9,6 +9,26 @@ import {
   Pressable,
   FlatList,
 } from "react-native";
+
+function formatDate(date: Date) {
+  const day = date.getDate().toString().padStart(2, "0");
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const month = monthNames[date.getMonth()];
+  return `${day} ${month}`;
+}
 
 type item = {
   image: string;
@@ -83,27 +103,52 @@ function index() {
   const [deliveryCity, setDeliveryCity] = React.useState("Gurugram");
   const [showSizeOverlay, setShowSizeOverlay] = React.useState(false);
 
-  const [items, setItems] = React.useState<item[]>([
-    {
-      image: "https://picsum.photos/200/300",
-      title: "SaintG",
-      subtitle: "Black Boots with glittery stars",
-      price: 120,
-      quantity: 1,
-      size: 36,
-      estimatedDelivery: ["11 Mar", "12 mar"],
-    },
-    {
-      image: "https://picsum.photos/200/300",
-      title: "SaintG",
-      subtitle: "Black Boots with glittery stars",
-      price: 120,
-      quantity: 1,
-      size: 36,
-      estimatedDelivery: ["11 Mar", "12 mar"],
-    },
-  ]);
+  const [items, setItems] = React.useState<item[]>([]);
 
+  async function getData() {
+    const userDetails = await AsyncStorage.getItem("userDetails");
+    if (!userDetails) return;
+    const user = JSON.parse(userDetails) as IUser;
+    try {
+      const result = await fetch(`${BASE_URL}cart`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
+        },
+      });
+      const data = await result.json();
+      console.log(data.data.items);
+
+      let d: item[] = [];
+      data.data.items.forEach((item: any) => {
+        const today = new Date();
+        const deliveryEnd = new Date(today);
+        deliveryEnd.setDate(today.getDate() + 7);
+
+        const p: item = {
+          image: item.coverImage,
+          title: item.productName,
+          subtitle: item.description,
+          quantity: item.quantity,
+          estimatedDelivery: [formatDate(today), formatDate(deliveryEnd)],
+          price: 0,
+          size: 36,
+        };
+        d.push(p);
+      });
+
+      setItems(d);
+
+      // setItems(data.items);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
       <Image
@@ -165,7 +210,7 @@ function index() {
             justifyContent: "space-around",
           }}
         >
-          <Image
+          {/* <Image
             style={{ width: 15, height: 15 }}
             source={require("../../../assets/images/icons/search.png")}
           />
@@ -176,7 +221,7 @@ function index() {
           <Image
             style={{ width: 15, height: 15 }}
             source={require("../../../assets/images/icons/search.png")}
-          />
+          /> */}
         </View>
       </View>
 
@@ -209,7 +254,7 @@ function index() {
       >
         <Text>Assured Quality | 100% Handpicked | Easy Exchange</Text>
       </View>
-      <Text
+      {/* <Text
         style={{
           fontSize: 16,
           fontWeight: 600,
@@ -298,7 +343,7 @@ function index() {
             </View>
           )}
         />
-      </View>
+      </View> */}
 
       <View
         style={{
@@ -446,6 +491,9 @@ export default index;
 
 import { Picker } from "@react-native-picker/picker";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { IUser } from "@/constants/types";
+import { BASE_URL } from "@/constants/constant";
 
 function Item({
   image,

@@ -30,14 +30,26 @@ function index() {
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
     try {
+      console.log("fetching wishlist");
       const result = await axios.get(`${BASE_URL}wishlist`, {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": user.token,
         },
       });
-      const data = result.data.data;
+      const data = result.data;
       console.log(data);
+
+      data.forEach((item: any) => {
+        const p: t = {
+          id: item.product.product_id,
+          image: "https://",
+          price: 100,
+          subtitle: item.product.description,
+          title: item.product.product_name,
+        };
+        setData((prev) => [...prev, p]);
+      });
     } catch (error) {
       setData([]);
       console.error("Error fetching data:", error);
@@ -98,7 +110,7 @@ function index() {
               >
                 ${val.item.price}
               </Text>
-              <Pressable
+              {/* <Pressable
                 onPress={() => setShowSizeOverlay(true)}
                 style={{
                   padding: 10,
@@ -112,7 +124,7 @@ function index() {
                 }}
               >
                 <Text>MOVE TO BAG</Text>
-              </Pressable>
+              </Pressable> */}
             </View>
           )}
         />

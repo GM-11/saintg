@@ -249,102 +249,6 @@ function index() {
 
 export default index;
 
-const data: t[] = [
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 1,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 2,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 3,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 4,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 5,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 6,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 7,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 8,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 9,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-  {
-    image: "https://picsum.photos/200/300",
-    title: "Title",
-    subtitle: "Subtitle",
-    price: 100,
-    id: 10,
-    originalPrice: 200,
-    discountPercentage: 50,
-  },
-];
-
 function SearchResult(search: string, data: t[]) {
   // const pickerVals = ["New", "Old"];
   // const [selectedPicker, setSelectedPicker] = React.useState("New");
@@ -377,7 +281,7 @@ function SearchResult(search: string, data: t[]) {
     );
   } else {
     return (
-      <ScrollView>
+      <View>
         <View
           style={{
             margin: 20,
@@ -427,10 +331,23 @@ function SearchResult(search: string, data: t[]) {
                 margin: 10,
               }}
             >
-              <Image
-                source={{ uri: val.item.image }}
-                style={{ width: "100%", height: 200 }}
-              />
+              <Pressable
+                onPress={() => {
+                  console.log("asdfk");
+                  router.push({
+                    pathname: "/(app)/product/productDetail",
+                    params: {
+                      searchKeyWord: search,
+                      productId: val.item.id,
+                    },
+                  });
+                }}
+              >
+                <Image
+                  source={{ uri: val.item.image }}
+                  style={{ width: "100%", height: 200 }}
+                />
+              </Pressable>
               <Text
                 style={{ fontSize: 16, fontWeight: 300, marginVertical: 2 }}
               >
@@ -469,7 +386,7 @@ function SearchResult(search: string, data: t[]) {
             </View>
           )}
         />
-      </ScrollView>
+      </View>
     );
   }
 }
