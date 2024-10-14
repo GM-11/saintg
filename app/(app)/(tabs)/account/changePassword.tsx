@@ -9,8 +9,8 @@ import {
   StyleSheet,
   Pressable,
   Image,
-  ToastAndroid,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 function changePassword() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -52,10 +52,11 @@ function changePassword() {
       }
 
       // Password reset successful
-      ToastAndroid.show("Password reset successful", ToastAndroid.SHORT);
+      // ToastAndroid.show("Password reset successful", ToastAndroid.SHORT);
+      Toast.show("Password reset succesful", Toast.SHORT);
     } catch (error) {
       console.error("Error:", error);
-      ToastAndroid.show("Password reset failed", ToastAndroid.SHORT);
+      Toast.show("Password reset failed", Toast.SHORT);
     }
 
     setShowOTPOtpOverlay(true);

@@ -8,7 +8,6 @@ import {
   Pressable,
   TouchableHighlight,
   TouchableOpacity,
-  ToastAndroid,
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,6 +15,7 @@ import { router } from "expo-router";
 import { BASE_URL } from "@/constants/constant";
 import OTPOverlay from "@/components/OTPoverlay";
 import axios from "axios";
+import Toast from "react-native-simple-toast";
 
 function signup() {
   const genderOPtions = ["men", "women", "unisex"];
@@ -36,26 +36,7 @@ function signup() {
   const [showOTPOtpOverlay, setShowOTPOtpOverlay] = useState<boolean>(false);
 
   function showToast(text: string) {
-    ToastAndroid.showWithGravity(text, 1500, ToastAndroid.BOTTOM);
-  }
-
-  async function storeUserDetails() {
-    try {
-      const userDetails = {
-        name,
-        email,
-        password,
-        gender: selectedGender,
-        mobile: `${countryCode}${mobile}`,
-      };
-      await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
-      console.log("User details stored successfully");
-      setTimeout(() => {
-        router.replace("/");
-      }, 1000);
-    } catch (error) {
-      console.error("Error storing user details:", error);
-    }
+    Toast.show(text, Toast.SHORT);
   }
 
   async function signUpUser() {
@@ -81,40 +62,48 @@ function signup() {
         fullName: name,
         phoneNumber: `${countryCode}${mobile}`,
         email,
-        gender: selectedGender,
+        gender: selectedGender == "men" ? "male" : "female",
         password,
+        // address: "",
       };
 
       console.log(body);
 
-      setShowOTPOtpOverlay(true);
+      console.log("fetcf");
 
-      // fetch(`${BASE_URL}user/register`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(body),
-      // })
-      //   .then((res) => {
-      //     console.log(res);
-      //     setShowOTPOtpOverlay(true);
-      //   })
-      //   .catch((error) => {
-      //     if (error.response) {
-      //       // Server responded with a status code out of the range of 2xx
-      //       console.log("Error response data:", error.response.data);
-      //       console.log("Error response status:", error.response.status);
-      //       console.log("Error response headers:", error.response.headers);
-      //     } else if (error.request) {
-      //       // Request was made but no response was received
-      //       console.log("Error request:", error.request);
-      //     } else {
-      //       // Something happened in setting up the request
-      //       console.log("Error message:", error.message);
-      //     }
-      //     console.log("Error config:", error.config);
-      //   });
+      fetch(`${BASE_URL}user/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then(async (res) => {
+          const data = await res.json();
+          console.log(data);
+
+          Toast;
+
+          if (data.code !== 200) {
+            return;
+          }
+          setShowOTPOtpOverlay(true);
+        })
+        .catch((error) => {
+          if (error.response) {
+            // Server responded with a status code out of the range of 2xx
+            console.log("Error response data:", error.response.data);
+            console.log("Error response status:", error.response.status);
+            console.log("Error response headers:", error.response.headers);
+          } else if (error.request) {
+            // Request was made but no response was received
+            console.log("Error request:", error.request);
+          } else {
+            // Something happened in setting up the request
+            console.log("Error message:", error.message);
+          }
+          console.log("Error config:", error.config);
+        });
     } catch (error) {
       console.log("in error block");
       console.error("Error signing up user:", error);

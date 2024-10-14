@@ -52,7 +52,16 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
     }
 
     try {
-      // const result = await axios.post(`${BASE_URL}/user/register/otp`, {
+      const result = await fetch(`${BASE_URL}user/register/otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          otp: otpString,
+        }),
+      });
+      // const result = await axios.post(`${BASE_URL}user/register/otp`, {
       //   headers: {
       //     "Content-Type": "application/json",
       //   },
@@ -60,19 +69,19 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
       //     otp: otpString,
       //   }),
       // });
-      // const data = result.data;
-      // console.log(data);
-      // if (data.code !== 200) {
-      //   console.log("Error sending OTP");
-      //   return;
-      // }
+      const data = await result.json();
+      console.log(data);
+      if (data.code !== 200) {
+        console.log("Error sending OTP");
+        return;
+      }
 
-      // console.log(data);
-      //
-      const data = {
-        token:
-          "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOWMwZTc2NGEtMDgwMi00MmY5LTgyZGUtODIwNTc4ZTc5YzFlIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzI2NjAwNzQ1LCJleHAiOjE3MjkxOTI3NDV9.SgbjH-5BICP0Dh3cUeYYs4ZPbyeED_yXGA75t_BFJX7ABY9OxLklFZmLZIQNBkjCEz8QOXjPeaTnGUvZ9gYPkA",
-      };
+      console.log(data);
+
+      // const data = {
+      //   token:
+      //     "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOWMwZTc2NGEtMDgwMi00MmY5LTgyZGUtODIwNTc4ZTc5YzFlIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzI2NjAwNzQ1LCJleHAiOjE3MjkxOTI3NDV9.SgbjH-5BICP0Dh3cUeYYs4ZPbyeED_yXGA75t_BFJX7ABY9OxLklFZmLZIQNBkjCEz8QOXjPeaTnGUvZ9gYPkA",
+      // };
 
       await AsyncStorage.setItem(
         "userDetails",

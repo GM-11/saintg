@@ -55,11 +55,11 @@ function index() {
       icon: require("../../../../assets/images/account/headphones.png"),
       uri: "/(app)/checkout",
     },
-    {
-      title: "Settings",
-      icon: require("../../../../assets/images/account/settigns.png"),
-      uri: "/(tabs)/account/settings",
-    },
+    // {
+    //   title: "Settings",
+    //   icon: require("../../../../assets/images/account/settigns.png"),
+    //   uri: "/(tabs)/account/settings",
+    // },
     {
       title: "Change Password",
       icon: require("../../../../assets/images/account/settigns.png"),
@@ -96,18 +96,18 @@ function index() {
             alignItems: "center",
           }}
         >
-          <Image
+          {/* <Image
             style={{ height: 48, width: 48, borderRadius: 100, margin: 16 }}
             source={{
               uri: "https://static.dc.com/dc/files/default_images/Char_Profile_Batman_20190116_5c3fc4b40faec2.47318964.jpg",
             }}
-          />
-          <View>
+          /> */}
+          <View style={{ marginLeft: 24 }}>
             <Text style={{ fontSize: 14, fontWeight: 300, ...textStyles.font }}>
-              {userDetails ? userDetails.name : "Nishit Verma"}
+              {userDetails ? userDetails.name : ""}
             </Text>
             <Text style={{ fontSize: 10, fontWeight: 300, ...textStyles.font }}>
-              {userDetails ? userDetails.email : "nishitasaintg@gmail.com"}
+              {userDetails ? userDetails.email : ""}
             </Text>
           </View>
         </View>

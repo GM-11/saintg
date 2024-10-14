@@ -5,4 +5,5 @@ export interface IUser {
   gender: string;
   password: string;
   token: string;
+  address: string;
 }

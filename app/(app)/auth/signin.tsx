@@ -8,6 +8,8 @@ import {
   Pressable,
 } from "react-native";
 
+import Toast from "react-native-simple-toast";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "@/constants/constant";
 import { router } from "expo-router";
@@ -21,21 +23,45 @@ function signin() {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+
+    const isEmail = emailRegex.test(email);
+    const isPhone = phoneRegex.test(email);
+
+    if (!isEmail && !isPhone) {
+      Toast.show("Invalid email or phone number", Toast.SHORT);
+      return;
+    }
+
+    let body;
+    let url;
+
+    if (isEmail) {
+      body = { email, password };
+      url = `${BASE_URL}user/login/email`;
+    } else {
+      body = {
+        phoneNumber: email,
+        password,
+      };
+      url = `${BASE_URL}user/login/phone`;
+    }
+
     try {
-      const result = await fetch(`${BASE_URL}user/login`, {
+      const result = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify(body),
       });
 
       const data = await result.json();
       console.log(data);
       if (data.code !== 200) {
+        Toast.show(data.msg || data.message, Toast.SHORT);
         console.log("Error signing in user");
         return;
       }
@@ -44,6 +70,10 @@ function signin() {
       //   "userDetails",
       //   JSON.stringify({ ...userDetails, token: data.token }),
       // );
+      //
+
+      Toast.show("User sign in successful", Toast.SHORT);
+
       console.log("User details stored successfully");
       setTimeout(() => {
         router.replace("/");
@@ -74,19 +104,18 @@ function signin() {
           style={styles.input}
           onChangeText={(e) => setPassword(e)}
         />
-        <Pressable>
+        {/* <Pressable>
           <Text>FORGOT PASSWORD</Text>
-        </Pressable>
+        </Pressable> */}
       </View>
-      <Pressable
-        onPress={() => {
-          // router.push("/(auth)/signin");
-        }}
-        style={styles.buttonSignIn}
-      >
+      <Pressable onPress={signInUser} style={styles.buttonSignIn}>
         <Text style={styles.buttonText}>SIGN IN</Text>
       </Pressable>
-      <Pressable>
+      <Pressable
+        onPress={() => {
+          router.push("/(app)/auth/signup");
+        }}
+      >
         <Text>CREATE ACCOUNT</Text>
       </Pressable>
       {/* <Text>LOGIN WITH SOCIAL MEDIA</Text>
@@ -102,7 +131,7 @@ function signin() {
       <Text style={styles.textTnc}>
         By clicking on sign in you agree to our terms of use and privacy policy
       </Text>
-      <Text style={styles.text}>SKIP </Text>
+      {/* <Text style={styles.text}>SKIP </Text> */}
     </View>
   );
 }
@@ -175,7 +204,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: "100%",
     marginVertical: 16,
-    paddingVertical: 8,
+    padding: 8,
   },
 });
 

@@ -35,12 +35,42 @@ const AddressForm = () => {
 
     const user = JSON.parse(userDetails) as IUser;
 
-    const result = await axios.get(`${BASE_URL}/address`, {
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": user.token,
-      },
-    });
+    const body = {
+      firstName,
+      lastName,
+      addressLine1: address + addressLine2,
+      city,
+      state,
+      zipCode,
+      country,
+      phoneNumber,
+      tag: saveAddressAs,
+    };
+
+    console.log(body);
+
+    const addressText = `${address}${addressLine2 ? ", " + addressLine2 : ""}, ${city}, ${state}, ${zipCode}, ${country}`;
+
+    console.log(addressText);
+
+    try {
+      const result = await fetch(`${BASE_URL}address`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await result.json();
+      console.log(data);
+
+      // user.address = addressText;
+      await AsyncStorage.setItem("userDetails", JSON.stringify(user));
+      console.log("User details stored successfully");
+    } catch (error) {
+      console.error("Error adding address:", error);
+    }
   }
 
   return (
@@ -108,7 +138,7 @@ const AddressForm = () => {
             "Australia",
             "Canada",
           ].map((item, index) => (
-            <Picker.Item label={item} value={index} key={index} />
+            <Picker.Item label={item} value={item} key={index} />
           ))}
         </Picker>
       </View>
@@ -182,6 +212,7 @@ const AddressForm = () => {
           paddingVertical: 12,
           alignItems: "center",
         }}
+        onPress={handleAddAddress}
       >
         <Text
           style={{

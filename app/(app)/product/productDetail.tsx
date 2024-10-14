@@ -61,7 +61,7 @@ function productDetail() {
   async function buyNow() {
     if (!product) return;
     const item = `
-      ${product.title}SEP${product.subtitle}SEP${product.price}SEP${product.size}SEP${product.image}SEP${product.estimatedDelivery}SEP${product.quantity}SEP`;
+      ${product.title}SEP${product.subtitle}SEP${product.price}SEP${selectedSize}SEP${product.image}SEP${product.estimatedDelivery}SEP${product.quantity}SEP`;
 
     router.push({
       pathname: "/(app)/checkout/payment",

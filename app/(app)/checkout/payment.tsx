@@ -11,8 +11,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "@/constants/types";
-import { useLocalSearchParams } from "expo-router";
-import RazorpayCheckout from "react-native-razorpay";
+import { Link, useLocalSearchParams } from "expo-router";
 import { RAZORPAY_KEY, RAZORPAY_SECRET_KEY } from "@/constants/constant";
 
 interface ProductItem {
@@ -33,7 +32,7 @@ const ConfirmOrderScreen = () => {
 
   const [productItems, setProductItems] = useState<ProductItem[]>([]);
   const paymentMethods = [
-    { id: "wallet", name: "Wallet" },
+    // { id: "wallet", name: "Wallet" },
     // { id: "credit", name: "Credit / Debit Card" },
     // { id: "emi", name: "EMI UPI" },
     { id: "netbanking", name: "Net Banking" },
@@ -48,23 +47,23 @@ const ConfirmOrderScreen = () => {
   const handleMakePayment = async () => {
     try {
       console.log("Processing payment...");
-      const res = await RazorpayCheckout.open({
-        description: "Credits towards consultation",
-        image: "https://i.imgur.com/3g7nmJC.png",
-        currency: "INR",
-        key: RAZORPAY_KEY!,
-        amount: 5000,
-        name: "foo",
-        order_id: "order_123456", // Added missing required property
-        prefill: {
-          email: "void@razorpay.com",
-          contact: "9191919191",
-          name: "Razorpay Software",
-        },
-        theme: { color: "#F37254" },
-      });
+      // const res = await RazorpayCheckout.open({
+      //   description: "Credits towards consultation",
+      //   image: "https://i.imgur.com/3g7nmJC.png",
+      //   currency: "INR",
+      //   key: RAZORPAY_KEY!,
+      //   amount: 5000,
+      //   name: "foo",
+      //   order_id: "order_123456", // Added missing required property
+      //   prefill: {
+      //     email: "void@razorpay.com",
+      //     contact: "9191919191",
+      //     name: "Razorpay Software",
+      //   },
+      //   theme: { color: "#F37254" },
+      // });
 
-      console.log(res);
+      // console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -108,6 +107,19 @@ const ConfirmOrderScreen = () => {
         <Text style={styles.addressTitle}>DELIVERS TO</Text>
         <Text style={styles.addressName}>{user?.name}</Text>
         <Text style={styles.addressDetails}>
+          {user && user.address ? (
+            user.address
+          ) : (
+            <>
+              <Link
+                href={{
+                  pathname: "/(app)/account/addresses",
+                }}
+              >
+                <Text> Add new address {"\n"} </Text>
+              </Link>
+            </>
+          )}
           {/* B-36, 2nd Floor, Baba House,{"\n"}
           Neb sarai, New Delhi 110 068{"\n"} */}
           {user?.phoneNumber}
