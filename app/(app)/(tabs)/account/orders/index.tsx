@@ -43,7 +43,7 @@ function ordersPage() {
       const data = await response.json();
 
       data.forEach((d: any) => {
-        console.log(d);
+        // console.log(d);
 
         const personName = d.address.firstName + " " + d.address.lastName;
         const deliveryAddress = d.address.addressLine1 + ", " + d.address.city;

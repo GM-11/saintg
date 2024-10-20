@@ -52,7 +52,7 @@ export default function Index() {
         >
           <Text style={styles.text}>CREATE ACCOUNT</Text>
         </Pressable>
-        <Text style={styles.textLater}>MAYBE LATER</Text>
+        {/* <Text style={styles.textLater}>MAYBE LATER</Text> */}
       </ImageBackground>
     </View>
   );

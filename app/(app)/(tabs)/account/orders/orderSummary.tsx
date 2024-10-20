@@ -1,6 +1,10 @@
+import { BASE_URL } from "@/constants/constant";
+import { IUser } from "@/constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, Image, Pressable, StyleSheet } from "react-native";
+import Toast from "react-native-toast-message";
 
 function orderSummary() {
   const {
@@ -17,190 +21,271 @@ function orderSummary() {
     productSubtitle,
   } = useLocalSearchParams();
 
+  const [orderImage, setOrderImage] = React.useState<string>("");
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  async function getOrderDetails() {
+    try {
+      setLoading(true);
+      const userDetails = await AsyncStorage.getItem("userDetails");
+      if (!userDetails) return;
+      const user = JSON.parse(userDetails) as IUser;
+      const response = await fetch(`${BASE_URL}order/ByOrderId/${orderId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
+        },
+      });
+
+      if (!response.ok) {
+        Toast.show({
+          type: "error",
+          text1: "Error showing details",
+        });
+        return;
+      }
+
+      const data = await response.json();
+
+      setOrderImage(data.orderItems[0].product.product_images[0].image_url);
+    } catch (error) {
+      setOrderImage("");
+      Toast.show({
+        type: "error",
+        text1: "Error showing details",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getOrderDetails();
+  }, []);
+
   return (
-    <View style={{ backgroundColor: "white", flex: 1, padding: 10 }}>
-      <View>
-        <Text style={{ fontSize: 16, fontWeight: 600, marginBottom: 10 }}>
-          {status}
-        </Text>
-        <Text style={{ fontSize: 14, marginBottom: 10 }}>
-          {status === "PENDING"
-            ? `Expected by ${date}`
-            : `Delivered on ${date}`}
-        </Text>
-      </View>
-
-      <View style={{ display: "flex", flexDirection: "row", width: 350 }}>
-        <Image
-          source={{
-            uri: "https://via.placeholder.com/150",
-          }}
-          style={{
-            width: 150,
-            height: 150,
-          }}
-        />
-        <View style={{ marginHorizontal: 12, width: 360 }}>
-          <Text style={{ letterSpacing: 1, fontWeight: 600, width: "60%" }}>
-            {productTitle}
-          </Text>
-          <Text style={{ letterSpacing: 1, width: "60%" }}>
-            {productSubtitle}
-          </Text>
-          <View
-            style={{ display: "flex", flexDirection: "row", marginTop: 12 }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 12, color: "gray", fontWeight: 400 }}>
-                Size
-              </Text>
-              <Text style={{ fontSize: 12, color: "gray", fontWeight: 400 }}>
-                Quantity
-              </Text>
-              <Text style={{ fontSize: 12, color: "gray", fontWeight: 400 }}>
-                OrderId
-              </Text>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-              }}
-            >
-              <Text style={{ fontSize: 12, fontWeight: 400 }}>{size}</Text>
-              <Text style={{ fontSize: 12, fontWeight: 400 }}>{quantity}</Text>
-              <Text style={{ fontSize: 12, fontWeight: 400 }}>{orderId}</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <Pressable style={styles.button}>
-          <Text style={{ color: "white", textAlign: "center" }}>
-            {status === "Delivered" ? "Return" : "Cancel Order"}
-          </Text>
-        </Pressable>
-        <Pressable style={styles.button}>
-          <Text style={{ color: "white", textAlign: "center" }}>
-            {status === "Delivered" ? "Cancel Order" : "Track Order"}
-          </Text>
-        </Pressable>
-      </View>
-
-      <View
-        style={{ backgroundColor: "#FCFCFC", padding: 8, marginVertical: 8 }}
-      >
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: 600,
-            marginBottom: 16,
-          }}
-        >
-          Delivery Address
-        </Text>
-
-        <View style={{ display: "flex", flexDirection: "row" }}>
-          <Text style={{ fontWeight: 600, fontSize: 14, marginRight: 12 }}>
-            {personName}
-          </Text>
-          <Text style={{ fontWeight: 600, fontSize: 14 }}>{personNumber}</Text>
-        </View>
-        <Text style={{ fontSize: 14, width: "70%" }}>{deliveryAddress}</Text>
-      </View>
-      <View
-        style={{ backgroundColor: "#FCFCFC", padding: 8, marginVertical: 8 }}
-      >
+    <>
+      {loading ? (
         <View
           style={{
+            flex: 1,
+            backgroundColor: "white",
             display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
+          <Text> Loading </Text>
+        </View>
+      ) : (
+        <View style={{ backgroundColor: "white", flex: 1, padding: 10 }}>
           <View>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: 600,
-              }}
-            >
-              Total Order Price
+            <Text style={{ fontSize: 16, fontWeight: 600, marginBottom: 10 }}>
+              {status}
             </Text>
-            {/* <Text
-              style={{
-                fontSize: 12,
-                fontWeight: 400,
+            <Text style={{ fontSize: 14, marginBottom: 10 }}>
+              {status === "PENDING"
+                ? `Expected by ${date}`
+                : `Delivered on ${date}`}
+            </Text>
+          </View>
+
+          <View style={{ display: "flex", flexDirection: "row", width: 350 }}>
+            <Image
+              source={{
+                uri: orderImage,
               }}
-            >
-              You saved $120 on this order
-            </Text> */}
+              style={{
+                width: 150,
+                height: 150,
+              }}
+            />
+            <View style={{ marginHorizontal: 12, width: 360 }}>
+              <Text style={{ letterSpacing: 1, fontWeight: 600, width: "60%" }}>
+                {productTitle}
+              </Text>
+
+              <Text style={{ letterSpacing: 1, width: "60%" }}>
+                {productSubtitle}
+              </Text>
+              <View
+                style={{ display: "flex", flexDirection: "row", marginTop: 12 }}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{ fontSize: 12, color: "gray", fontWeight: 400 }}
+                  >
+                    Size
+                  </Text>
+                  <Text
+                    style={{ fontSize: 12, color: "gray", fontWeight: 400 }}
+                  >
+                    Quantity
+                  </Text>
+                  <Text
+                    style={{ fontSize: 12, color: "gray", fontWeight: 400 }}
+                  >
+                    OrderId
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <Text style={{ fontSize: 12, fontWeight: 400 }}>{size}</Text>
+                  <Text style={{ fontSize: 12, fontWeight: 400 }}>
+                    {quantity}
+                  </Text>
+                  <Text style={{ fontSize: 12, fontWeight: 400 }}>
+                    {orderId}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Pressable style={styles.button}>
+              <Text style={{ color: "white", textAlign: "center" }}>
+                {status === "Delivered" ? "Return" : "Cancel Order"}
+              </Text>
+            </Pressable>
+            <Pressable style={styles.button}>
+              <Text style={{ color: "white", textAlign: "center" }}>
+                {status === "Delivered" ? "Cancel Order" : "Track Order"}
+              </Text>
+            </Pressable>
           </View>
 
           <View
             style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
+              backgroundColor: "#FCFCFC",
+              padding: 8,
+              marginVertical: 8,
             }}
           >
             <Text
               style={{
                 fontSize: 16,
                 fontWeight: 600,
+                marginBottom: 16,
               }}
             >
-              ${price}
+              Delivery Address
             </Text>
 
-            <Text
-              style={{
-                fontSize: 12,
-                fontWeight: 400,
-              }}
-            >
-              View Breakup
+            <View style={{ display: "flex", flexDirection: "row" }}>
+              <Text style={{ fontWeight: 600, fontSize: 14, marginRight: 12 }}>
+                {personName}
+              </Text>
+              <Text style={{ fontWeight: 600, fontSize: 14 }}>
+                {personNumber}
+              </Text>
+            </View>
+            <Text style={{ fontSize: 14, width: "70%" }}>
+              {deliveryAddress}
             </Text>
           </View>
-        </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            marginTop: 16,
-            alignItems: "center",
-          }}
-        >
-          <Image
-            style={{ width: 15, height: 15 }}
-            source={require("../../../../../assets/images/icons/search.png")}
-          />
-          <Text style={{ marginLeft: 12 }}> Paid by Credit Card</Text>
-        </View>
+          <View
+            style={{
+              backgroundColor: "#FCFCFC",
+              padding: 8,
+              marginVertical: 8,
+            }}
+          >
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 600,
+                  }}
+                >
+                  Total Order Price
+                </Text>
+                {/* <Text
+               style={{
+                 fontSize: 12,
+                 fontWeight: 400,
+               }}
+             >
+               You saved $120 on this order
+             </Text> */}
+              </View>
 
-        <Pressable
-          style={{
-            width: "100%",
-            borderWidth: 1,
-            borderColor: "gray",
-            paddingVertical: 10,
-            marginVertical: 8,
-          }}
-        >
-          <Text style={{ color: "black", textAlign: "center" }}>
-            Get Invoice
-          </Text>
-        </Pressable>
-      </View>
-    </View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 600,
+                  }}
+                >
+                  ${price}
+                </Text>
+
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 400,
+                  }}
+                >
+                  View Breakup
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                marginTop: 16,
+                alignItems: "center",
+              }}
+            >
+              <Image
+                style={{ width: 15, height: 15 }}
+                source={require("../../../../../assets/images/icons/search.png")}
+              />
+              <Text style={{ marginLeft: 12 }}> Paid by Credit Card</Text>
+            </View>
+
+            <Pressable
+              style={{
+                width: "100%",
+                borderWidth: 1,
+                borderColor: "gray",
+                paddingVertical: 10,
+                marginVertical: 8,
+              }}
+            >
+              <Text style={{ color: "black", textAlign: "center" }}>
+                Get Invoice
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      )}
+    </>
   );
 }
 

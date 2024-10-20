@@ -51,7 +51,7 @@ const ConfirmOrderScreen = () => {
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
 
-    // console.log(user);
+    console.log(user.token);
 
     if (user.address === "") {
       Toast.show({ text1: "Please add address" });
@@ -60,7 +60,6 @@ const ConfirmOrderScreen = () => {
     }
 
     const addressId = user.address.substring(user.address.length - 1);
-    console.log(addressId);
 
     console.log(user.token);
     const result = await fetch(`${BASE_URL}order/create`, {
@@ -77,6 +76,12 @@ const ConfirmOrderScreen = () => {
 
     const data = await result.json();
     console.log(data);
+    console.log(data.orderId);
+
+    if (data.error) {
+      Toast.show({ text1: data.error });
+      return;
+    }
 
     const res2 = await fetch(`${BASE_URL}payment/create-order`, {
       method: "POST",
@@ -96,7 +101,12 @@ const ConfirmOrderScreen = () => {
     // // console.log(res2.ok);
     const orderData = await res2.json();
 
-    // console.log(orderData);
+    console.log(orderData);
+
+    if (orderData.error) {
+      Toast.show({ text1: orderData.error });
+      return;
+    }
     try {
       console.log("Processing payment...");
       const res = await RazorpayCheckout.open({
@@ -105,10 +115,9 @@ const ConfirmOrderScreen = () => {
           "https://www.saintg.in/cdn/shop/files/new-web6.png?v=1727171817&width=140",
         currency: "INR",
         key: "rzp_test_9DtTuk9KjkdDSX",
-        // amount: parseInt(orderData.amount) * 100,
-        amount: 100,
-
+        amount: parseInt(orderData.amount) * 100,
         name: "Order",
+
         order_id: orderData.id, // Added missing required property
         prefill: {
           email: user.email,
@@ -118,16 +127,33 @@ const ConfirmOrderScreen = () => {
         theme: { color: "#F37254" },
       });
       console.log(res);
-
-      Toast.show({ text1: "Payment Successful" });
-
+      // const verify = await fetch(`${BASE_URL}order/verify`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "x-access-token": user.token,
+      //   },
+      //   body: JSON.stringify({
+      //     orderId: data.orderId,
+      //     paymentId: res.razorpay_payment_id,
+      //     signature: res.razorpay_signature,
+      //     razorpayOrderId: res.razorpay_order_id,
+      //     provider: "razorpay",
+      //   }),
+      // });
+      // console.log(verify);
+      // console.log(verify.ok);
+      // console.log(await verify.json());
+      // if (verify.ok) {
       router.push({
         pathname: "/(app)/checkout/success",
         params: {
           orderId: data.orderId,
         },
       });
-      console.log("res");
+      // } else {
+      //   Toast.show({ text1: "Payment Failed" });
+      // }
     } catch (error: any) {
       // console.log(error);
       // console.log(error.description);
@@ -185,8 +211,7 @@ const ConfirmOrderScreen = () => {
               </Link>
             </>
           )}
-          {/* B-36, 2nd Floor, Baba House,{"\n"}
-          Neb sarai, New Delhi 110 068{"\n"} */}
+
           {user?.phoneNumber}
         </Text>
         <Pressable style={styles.changeButton}>
