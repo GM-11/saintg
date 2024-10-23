@@ -104,6 +104,7 @@ function signin() {
         gender: userDetails.gender,
         password: password,
         address: addressText,
+        regionId: "1",
       };
 
       await AsyncStorage.setItem("userDetails", JSON.stringify(u));

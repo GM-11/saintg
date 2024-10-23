@@ -24,6 +24,7 @@ interface OTPVerificationProps {
     password: string;
     phoneNumber: string;
     gender: string;
+    regionId: number;
   };
 }
 
@@ -61,14 +62,7 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
           otp: otpString,
         }),
       });
-      // const result = await axios.post(`${BASE_URL}user/register/otp`, {
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     otp: otpString,
-      //   }),
-      // });
+
       const data = await result.json();
       // console.log(data);
       if (data.code !== 200) {
@@ -76,7 +70,7 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
         return;
       }
 
-      // console.log(data);
+      console.log(data);
 
       // const data = {
       //   token:
@@ -167,7 +161,11 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
           VERIFY YOUR OTP
         </Text>
 
-        <Pressable onPress={async () => {}}>
+        <Pressable
+          onPress={() => {
+            closeModel();
+          }}
+        >
           <Text> X </Text>
         </Pressable>
       </View>

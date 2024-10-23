@@ -11,6 +11,7 @@ type t = {
   amount: number;
   price: number;
   imageUri: string;
+  currency: string;
 };
 
 function index() {
@@ -30,16 +31,42 @@ function index() {
       });
       const data = result.data.data;
 
+      const regionData = await axios.get(
+        `${BASE_URL}products/region/${user.regionId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user.token,
+          },
+        },
+      );
+
+      const productIds: any[] = regionData.data.map(
+        (val: any) => val.product_id,
+      );
+
+      console.log(regionData.data);
+      console.log(productIds);
+
       let d: t[] = [];
       data.items.forEach((val: any) => {
-        const v: t = {
-          title: val.productName,
-          subtitle: val.description,
-          amount: val.quantity,
-          price: val.price,
-          imageUri: val.coverImage,
-        };
-        d.push(v);
+        console.log(val);
+
+        if (productIds.includes(val.productId)) {
+          const v: t = {
+            title: val.productName,
+            subtitle: val.description,
+            amount: val.quantity,
+            imageUri: val.coverImage,
+            currency: (regionData.data as any[]).find(
+              (v) => v.product_id === val.productId,
+            ).currency_type,
+            price: (regionData.data as any[]).find(
+              (v) => v.product_id === val.productId,
+            ).price,
+          };
+          d.push(v);
+        }
       });
 
       setItems(d);

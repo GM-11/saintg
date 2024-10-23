@@ -15,6 +15,7 @@ import { Link, router, useLocalSearchParams } from "expo-router";
 import { BASE_URL, EXPO_PUBLIC_API_KEY } from "@/constants/constant";
 import RazorpayCheckout from "react-native-razorpay";
 import Toast from "react-native-toast-message";
+import razorpayHandler from "@/handlers/razorpayHandler";
 
 interface ProductItem {
   id: string;
@@ -109,25 +110,25 @@ const ConfirmOrderScreen = () => {
     }
     try {
       console.log("Processing payment...");
-      const res = await RazorpayCheckout.open({
-        description: "Confirm Order",
-        image:
-          "https://www.saintg.in/cdn/shop/files/new-web6.png?v=1727171817&width=140",
-        currency: "INR",
-        key: "rzp_test_9DtTuk9KjkdDSX",
-        amount: parseInt(orderData.amount) * 100,
-        name: "Order",
+      // const res = await RazorpayCheckout.open({
+      //   description: "Confirm Order",
+      //   image:
+      //     "https://www.saintg.in/cdn/shop/files/new-web6.png?v=1727171817&width=140",
+      //   currency: "INR",
+      //   key: "rzp_test_9DtTuk9KjkdDSX",
+      //   amount: parseInt(orderData.amount) * 100,
+      //   name: "Order",
 
-        order_id: orderData.id, // Added missing required property
-        prefill: {
-          email: user.email,
-          contact: user.phoneNumber,
-          name: "SaintG",
-        },
-        theme: { color: "#F37254" },
-      });
-      console.log(res);
-      // const verify = await fetch(`${BASE_URL}order/verify`, {
+      //   order_id: orderData.id, // Added missing required property
+      //   prefill: {
+      //     email: user.email,
+      //     contact: user.phoneNumber,
+      //     name: "SaintG",
+      //   },
+      //   theme: { color: "#F37254" },
+      // });
+
+      // const verify = await fetch(`${BASE_URL}payment/verify-payment`, {
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json",
@@ -141,19 +142,17 @@ const ConfirmOrderScreen = () => {
       //     provider: "razorpay",
       //   }),
       // });
-      // console.log(verify);
-      // console.log(verify.ok);
-      // console.log(await verify.json());
-      // if (verify.ok) {
-      router.push({
-        pathname: "/(app)/checkout/success",
-        params: {
-          orderId: data.orderId,
-        },
-      });
-      // } else {
-      //   Toast.show({ text1: "Payment Failed" });
-      // }
+      const verify = await razorpayHandler(user, orderData, data);
+      if (verify.ok) {
+        router.push({
+          pathname: "/(app)/checkout/success",
+          params: {
+            orderId: data.orderId,
+          },
+        });
+      } else {
+        Toast.show({ text1: "Payment Failed" });
+      }
     } catch (error: any) {
       // console.log(error);
       // console.log(error.description);

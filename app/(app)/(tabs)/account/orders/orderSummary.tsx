@@ -22,6 +22,7 @@ function orderSummary() {
   } = useLocalSearchParams();
 
   const [orderImage, setOrderImage] = React.useState<string>("");
+  const [paymentMethod, setPaymentMethod] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
 
   async function getOrderDetails() {
@@ -48,6 +49,7 @@ function orderSummary() {
       const data = await response.json();
 
       setOrderImage(data.orderItems[0].product.product_images[0].image_url);
+      setPaymentMethod(data.paymentDetails.paymentMethod);
     } catch (error) {
       setOrderImage("");
       Toast.show({
@@ -154,16 +156,23 @@ function orderSummary() {
               justifyContent: "space-between",
             }}
           >
-            <Pressable style={styles.button}>
+            <Pressable
+              style={{ ...styles.button, width: "98%" }}
+              onPress={() => {
+                Toast.show({
+                  text1: "Cannot perform this action",
+                });
+              }}
+            >
               <Text style={{ color: "white", textAlign: "center" }}>
                 {status === "Delivered" ? "Return" : "Cancel Order"}
               </Text>
             </Pressable>
-            <Pressable style={styles.button}>
+            {/* <Pressable style={styles.button}>
               <Text style={{ color: "white", textAlign: "center" }}>
                 {status === "Delivered" ? "Cancel Order" : "Track Order"}
               </Text>
-            </Pressable>
+            </Pressable> */}
           </View>
 
           <View
@@ -266,10 +275,10 @@ function orderSummary() {
                 style={{ width: 15, height: 15 }}
                 source={require("../../../../../assets/images/icons/search.png")}
               />
-              <Text style={{ marginLeft: 12 }}> Paid by Credit Card</Text>
+              <Text style={{ marginLeft: 12 }}> Paid by {paymentMethod}</Text>
             </View>
 
-            <Pressable
+            {/* <Pressable
               style={{
                 width: "100%",
                 borderWidth: 1,
@@ -281,7 +290,7 @@ function orderSummary() {
               <Text style={{ color: "black", textAlign: "center" }}>
                 Get Invoice
               </Text>
-            </Pressable>
+            </Pressable> */}
           </View>
         </View>
       )}

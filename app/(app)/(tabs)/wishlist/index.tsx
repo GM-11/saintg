@@ -38,17 +38,41 @@ function index() {
         },
       });
       const data = result.data;
-      // console.log(data);
+
+      const regionData = await axios.get(
+        `${BASE_URL}products/region/${user.regionId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user.token,
+          },
+        },
+      );
+
+      const productIds: any[] = regionData.data.map(
+        (val: any) => val.product_id,
+      );
 
       data.forEach((item: any) => {
-        const p: t = {
-          id: item.product.product_id,
-          image: "https://",
-          price: 100,
-          subtitle: item.product.description,
-          title: item.product.product_name,
-        };
-        setData((prev) => [...prev, p]);
+        console.log(
+          (regionData.data as any[]).find(
+            (v) => v.product_id === item.product.product_id,
+          ).product_images[0].image_url,
+        );
+        if (productIds.includes(item.product.product_id)) {
+          const p: t = {
+            id: item.product.product_id,
+            image: (regionData.data as any[]).find(
+              (v) => v.product_id === item.product.product_id,
+            ).product_images[0].image_url,
+            price: (regionData.data as any[]).find(
+              (v) => v.product_id === item.product.product_id,
+            ).price,
+            subtitle: item.product.description,
+            title: item.product.product_name,
+          };
+          setData((prev) => [...prev, p]);
+        }
       });
     } catch (error) {
       setData([]);

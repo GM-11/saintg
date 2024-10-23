@@ -2,6 +2,7 @@ import CustomCarousel from "@/components/CustomCarousel";
 import TopCategory from "@/components/home/TopCategory";
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
+import sortProductsByRegion from "@/handlers/sortProductsByRegion";
 import textStyles from "@/styles/textStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -68,10 +69,9 @@ type t = {
   amount: number;
   price: number;
   imageUri: string;
-  originalPrice?: number;
+  currency: string;
   sizes: string[];
   productId: number;
-  discountPercentage?: number;
 };
 
 function categoryListView() {
@@ -96,26 +96,43 @@ function categoryListView() {
 
     const data = response.data.data;
 
-    let i: t[] = [];
-    data.forEach((val: any) => {
-      const sizes = (val.product_size as { label: string }[]).map(
-        (val) => val.label,
-      );
+    const dataByRegion = await axios.get(
+      `${BASE_URL}products/region/${user.regionId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
+        },
+      },
+    );
 
-      i.push({
-        title: val.product_name,
-        subtitle: val.description,
-        imageUri: val.product_images[0].image_url,
-        amount: 1,
-        price: 100,
-        originalPrice: 200,
-        discountPercentage: 50,
-        productId: parseInt(val.product_id),
-        sizes,
-      });
-    });
+    // const finalData =
 
-    setItems(i);
+    // dataByRegion.data.filter((val: any) => val.product_id === data.);
+
+    // let i: t[] = [];
+    // data.forEach((val: any) => {
+    //   const sizes = (val.product_size as { label: string }[]).map(
+    //     (val) => val.label,
+    //   );
+
+    //   console.log(val);
+
+    //   i.push({
+    //     title: val.product_name,
+    //     subtitle: val.description,
+    //     imageUri: val.product_images[0].image_url,
+    //     amount: 1,
+    //     price: 100,
+    //     originalPrice: 200,
+    //     discountPercentage: 50,
+    //     productId: parseInt(val.product_id),
+    //     sizes,
+    //   });
+    // });
+
+    const finalData = sortProductsByRegion(data, dataByRegion.data);
+    setItems(finalData);
   }
 
   useEffect(() => {
@@ -143,7 +160,7 @@ function categoryListView() {
         </Text>
         {/* <Text style={{ fontSize: 16 }}>{"O"}</Text> */}
       </View>
-      <View>
+      {/* <View>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -151,7 +168,7 @@ function categoryListView() {
           style={{ marginVertical: 40 }}
           renderItem={(val) => <TopCategory title={val.item} />}
         />
-      </View>
+      </View> */}
 
       <CustomCarousel
         data={data}
@@ -187,6 +204,8 @@ function categoryListView() {
               params: {
                 productId: item.productId,
                 searchKeyWord: name,
+                currency: item.currency,
+                price: item.price,
               },
             }}
           >
@@ -197,9 +216,10 @@ function categoryListView() {
               price={item.price}
               productId={item.productId}
               imageUri={item.imageUri}
-              originalPrice={item.originalPrice}
+              currency={item.currency}
+              // originalPrice={item.originalPrice}
               sizes={item.sizes}
-              discountPercentage={item.discountPercentage}
+              // discountPercentage={item.discountPercentage}
             />
           </Link>
         ))}
@@ -213,11 +233,11 @@ export default categoryListView;
 function Item({
   title,
   subtitle,
-  originalPrice,
-  discountPercentage,
+
   sizes,
   imageUri,
   price,
+  currency,
 }: t) {
   return (
     <View style={{ padding: 20 }}>
@@ -252,8 +272,10 @@ function Item({
             ))}
           </View>
           <View style={{ display: "flex", flexDirection: "row" }}>
-            <Text style={{ fontSize: 16, fontWeight: 600 }}>${price}</Text>
-            <Text
+            <Text style={{ fontSize: 16, fontWeight: 600 }}>
+              {price} {"/-"} {currency}
+            </Text>
+            {/* <Text
               style={{
                 fontSize: 16,
                 fontWeight: 400,
@@ -272,7 +294,7 @@ function Item({
               }}
             >
               {discountPercentage}% off
-            </Text>
+            </Text> */}
           </View>
         </View>
       </View>

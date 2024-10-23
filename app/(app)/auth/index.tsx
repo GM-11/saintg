@@ -7,10 +7,13 @@ import {
   Pressable,
 } from "react-native";
 import { router, useNavigation } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Picker } from "@react-native-picker/picker";
 
 export default function Index() {
   const navigation = useNavigation();
+
+  const [selectedCountry, setSelectedCountry] = useState(1);
 
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
@@ -28,6 +31,30 @@ export default function Index() {
           display: "flex",
         }}
       >
+        <View style={styles.container}>
+          {/* <View style={styles.selectedContainer}>
+            <Text
+              style={styles.flag}
+            >{`${countryData[selectedCountry].flag}`}</Text>
+            <Text style={styles.textDropdown}>
+              {countryData[selectedCountry].countryName}
+            </Text>
+            <Text style={styles.textDropdown}>
+              ({countryData[selectedCountry].currency})
+            </Text>
+          </View> */}
+
+          <Picker
+            selectedValue={selectedCountry}
+            style={styles.picker}
+            dropdownIconColor={"white"}
+            onValueChange={(itemValue) => setSelectedCountry(itemValue)}
+          >
+            <Picker.Item label="🇬🇧 United Kingdom (GBP)" value={1} />
+            <Picker.Item label="🇺🇸 United States (USD)" value={2} />
+            <Picker.Item label="🇮🇳 India (INR)" value={3} />
+          </Picker>
+        </View>
         <Image
           style={{ alignSelf: "center" }}
           source={require("../../../assets/images/saintg-logo-white.png")}
@@ -46,7 +73,11 @@ export default function Index() {
         </Pressable>
         <Pressable
           onPress={() => {
-            router.push("/auth/signup");
+            console.log(selectedCountry);
+            router.push({
+              pathname: "/auth/signup",
+              params: { regionId: selectedCountry },
+            });
           }}
           style={styles.buttonCreate}
         >
@@ -64,6 +95,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     fontFamily: "Lato-Regular",
     alignItems: "center",
+  },
+  container: {
+    alignItems: "center",
+    top: -280,
+  },
+  selectedContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  flag: {
+    fontSize: 30,
+    marginRight: 10,
+  },
+  textDropdown: {
+    fontSize: 18,
+    color: "white",
+  },
+  picker: {
+    width: 250,
+    height: 30,
+    color: "white",
   },
   text: {
     color: "white",

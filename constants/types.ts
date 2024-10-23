@@ -6,4 +6,5 @@ export interface IUser {
   password: string;
   token: string;
   address: string;
+  regionId: string;
 }

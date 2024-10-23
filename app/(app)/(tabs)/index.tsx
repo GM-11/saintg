@@ -50,7 +50,7 @@ function Index() {
 
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
-    // // console.log(user);
+    console.log(user);
 
     const response = await axios.get(`${BASE_URL}homePage/get?gender=MEN`, {
       headers: {
@@ -133,7 +133,7 @@ function Index() {
             <Pressable
               onPress={() => {
                 router.push({
-                  pathname: "(app)/search/search",
+                  pathname: "/(app)/search/search",
                   params: { searchItem: val.item },
                 });
               }}

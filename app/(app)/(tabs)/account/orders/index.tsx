@@ -5,21 +5,6 @@ import { router } from "expo-router";
 import React from "react";
 import { Text, View, StyleSheet, Pressable, FlatList } from "react-native";
 
-// const _orders: orderProps[] = [
-//   {
-//     status: "Delivered",
-//     date: new Date(),
-//     orderId: "1234",
-//     numsItems: 4,
-//   },
-//   {
-//     status: "Processing",
-//     date: new Date(),
-//     orderId: "2345",
-//     numsItems: 4,
-//   },
-// ];
-
 function ordersPage() {
   const [orders, setOrders] = React.useState<orderProps[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -239,7 +224,7 @@ function OrderComponent({
         </Pressable>
       </View>
 
-      <View
+      {/* <View
         style={{
           display: "flex",
           flexDirection: "row",
@@ -256,7 +241,7 @@ function OrderComponent({
             {status === "Delivered" ? "Cancel Order" : "Track Order"}
           </Text>
         </Pressable>
-      </View>
+      </View> */}
     </View>
   );
 }

@@ -1,0 +1,2734 @@
+{
+	"info": {
+		"_postman_id": "71524d86-5a6a-4d6a-ab46-3b89588869b0",
+		"name": "SaintG",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28898766"
+	},
+	"item": [
+		{
+			"name": "In House APIs",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "userProfile",
+							"item": [
+								{
+									"name": "edit Profile",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"fullName\":\"mavens\",\n    \"email\":\"malishri321@gmail.com\",\n    \"gender\":\"male\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{base_url}}user/profile"
+									},
+									"response": []
+								},
+								{
+									"name": "get user profile",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{serverToken}}",
+												"type": "text"
+											}
+										],
+										"url": "{{url}}user/profile"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Registration - Send OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fullName\": \"Marvin\",\n    \"email\": \"mavensuk1@gmail.com\",\n    \"phoneNumber\": \"+918700148100\",\n    \"password\": \"password\",\n    \"gender\": \"male\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}user/register"
+							},
+							"response": [
+								{
+									"name": "Registration - Send OTP",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"fullName\": \"Mavens1\",\n    \"email\": \"saintG@gmail.com\",\n    \"phoneNumber\": \"9358740280\",\n    \"password\": \"saints17321\",\n    \"gender\": \"male\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}user/register"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"otp\": 653803\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}user/register/otp"
+							},
+							"response": [
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"otp\": 557188\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}user/register/otp"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Login with Email",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"anuragasawa219@gmail.com\",\n    \"password\": \"ciddharth\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}user/login/email"
+							},
+							"response": []
+						},
+						{
+							"name": "Login with Phone",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phoneNumber\": \"9358740280\",\n    \"password\": \"ciddharth\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}user/login/phone"
+							},
+							"response": [
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"phoneNumber\": \"8700148100\",\n    \"password\": \"Nice1234\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}}user/login/phone"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "forgot-password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZTJkZDY3NTctZTg3YS00NzFmLWJiNzYtNTFjYmU4ZWJkY2JiIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzI0NzYwMjQyLCJleHAiOjE3MjczNTIyNDJ9.d914QIG5Q9aSsfbWuLNL18s_yNJvw1BbfV9LrEaecG_sM0gi8PnSfC6c8rfMl2oFUEwZdO3ipe_lczSOHjQ3JQ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"emailOrPhone\": \"9358740280\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}user/forgot-password"
+							},
+							"response": []
+						},
+						{
+							"name": "verify-otp-forgot-password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNDZmOTY2YmUtN2U0My00MjI3LWI3ZWYtYjA2MjA3M2YxODQ0Iiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzI0NzQzNDE1LCJleHAiOjE3MjczMzU0MTV9.F5uHnneiMcpKYV2d1hM63MWTvafd8JrAzwSnJcvPG703YSrOp2-jcFc1GDSb-Qul1LAQtcBhQYy8EDwugmql5Q",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"emailOrPhone\": \"9358740280\", \n    \"otp\": 326028\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}user/verify-otp"
+							},
+							"response": []
+						},
+						{
+							"name": "reset-password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNDZmOTY2YmUtN2U0My00MjI3LWI3ZWYtYjA2MjA3M2YxODQ0Iiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzI0NzQzNDE1LCJleHAiOjE3MjczMzU0MTV9.F5uHnneiMcpKYV2d1hM63MWTvafd8JrAzwSnJcvPG703YSrOp2-jcFc1GDSb-Qul1LAQtcBhQYy8EDwugmql5Q",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"emailOrPhone\": \"9358740280\", \n    \"newPassword\": \"password\"\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}user/reset-password"
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"phoneNumber\": \"9358740280\",\n    \"password\": \"ciddharth\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{url}}}user/login/phone"
+							},
+							"response": []
+						},
+						{
+							"name": "fetch order delivery status",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}user/fetchDelivery/83633470"
+							},
+							"response": []
+						},
+						{
+							"name": "get Region Id by region Name",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}products/getRegion/UK"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Depricated",
+					"item": [
+						{
+							"name": "Sync Orders",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fromDate\": \"2024-04-01T00:00:42Z\",\n    \"toDate\": \"2024-04-24T00:00:42Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}unicommerce/sync-orders"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Order By Email or Phone",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}unicommerce/orders?emailOrPhone=mrinalinisingh1981@gmail.com",
+									"host": [
+										"{{base_url}}unicommerce"
+									],
+									"path": [
+										"orders"
+									],
+									"query": [
+										{
+											"key": "emailOrPhone",
+											"value": "mrinalinisingh1981@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Brands",
+					"item": [
+						{
+							"name": "Create Brand",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"brand_name\": \"SaintG\",\n    \"brand_image\": \"https://www.saintg.in/cdn/shop/files/new-web6.png?v=1727171817&width=140\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}brands/create"
+							},
+							"response": [
+								{
+									"name": "sever url",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"brand_name\": \"ViVi Blu\",\n    \"brand_image\": \"https://www.saintg.in/cdn/shop/collections/VIVIBLU_Banner.jpg?v=1725612357&width=2400\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}brands/create"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Get Brands",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}brands/get"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Categories",
+					"item": [
+						{
+							"name": "Create Category",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"category_name\": \"Shoes\",\n    \"category_image\": \"https://www.saintg.in/cdn/shop/files/Untitled-25.1.jpg?v=1703234406&width=1080\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}categories/create"
+							},
+							"response": [
+								{
+									"name": "server url",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"category_name\": \"Sandals\",\n    \"category_image\": \"https://www.saintg.in/cdn/shop/files/Untitled-25.1.jpg?v=1703234406&width=1080\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}categories/create"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Get Categories",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}categories/get"
+							},
+							"response": [
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{base_url}}categories/get"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Products",
+					"item": [
+						{
+							"name": "add selling regions",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"name\": \"UK\", \n    \"currency_type\": \"GBP\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}products/regions"
+							},
+							"response": [
+								{
+									"name": "server url",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \n    \"name\": \"United Kingdom\", \n    \"currency_type\": \"UK\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}products/regions"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Create Product",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"product_name\": \"Saint G Women's Black Leather Fashion Sandals\",\n    \"description\": \"The ViviBlu Leather Sandal with Black PU Sock.\",\n    \"brand_id\": 2,\n    \"category_id\": 1,\n    \"subcategory_id\": 1,\n    \"sku\":\"SG-F-31-BLACK-7UK\",\n    \"stock\":10,\n    \"gender\":\"women\",\n    \"images\": [\n        {\n            \"image_url\": \"https://cdn.shopify.com/s/files/1/0254/5883/5510/products/06-1_1024x1024.jpg?v=1631869251\",\n            \"preference\": 1\n        },\n        {\n            \"image_url\": \"https://www.saintg.in/cdn/shop/files/Untitled-1-2.5_045bc062-94d4-4cef-8070-efdc467b3fc8.jpg?v=1711606504&width=1080\",\n            \"preference\": 2\n        }\n    ],\n    \"colors\": [\n        {\n            \"color_name\": \"Black\",\n            \"color_code\": \"#000000\"\n        }\n    ],\n    \"specifications\": [\n        {\n            \"label\": \"Material\",\n            \"content\": \"Leather\"\n        }\n    ],\n    \"more_info\": [\n        {\n            \"label\": \"Manufactured By\",\n            \"content\": \"M/s. Kiwi Enterprises Pvt. Ltd.\"\n        }\n    ],\n    \"care\": [\n        {\n            \"type\": \"bleach\",\n            \"content\": \"Do not bleach\"\n        },\n         { \"type\": \"Storage\", \"content\": \"Store in a cool, dry place away from direct sunlight.\" }\n    ],\n    \"tags\": [\"running\", \"cushioned\", \"responsive\"],\n    \"size\": [\n        {\n            \"label\": \"36\",\n            \"type\": \"EURO\"\n        },\n         {\n            \"label\": \"37\",\n            \"type\": \"EURO\"\n        },\n         {\n            \"label\": \"38\",\n            \"type\": \"EURO\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}products/create"
+							},
+							"response": [
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{adminToken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product_name\": \"Saint G Women's Black Leather Fashion Sandals\",\n    \"description\": \"The ViviBlu Leather Sandal with Black PU Sock.\",\n    \"brand_id\": 1,\n    \"category_id\": 1,\n    \"subcategory_id\": 1,\n    \"sku\":\"SG-F-31-BLACK-4UK\",\n    \"images\": [\n        {\n            \"image_url\": \"https://cdn.shopify.com/s/files/1/0254/5883/5510/products/06-1_1024x1024.jpg?v=1631869251\",\n            \"preference\": 1\n        },\n        {\n            \"image_url\": \"https://www.saintg.in/cdn/shop/files/Untitled-1-2.5_045bc062-94d4-4cef-8070-efdc467b3fc8.jpg?v=1711606504&width=1080\",\n            \"preference\": 2\n        }\n    ],\n    \"colors\": [\n        {\n            \"color_name\": \"Black\",\n            \"color_code\": \"#000000\"\n        }\n    ],\n    \"specifications\": [\n        {\n            \"label\": \"Material\",\n            \"content\": \"Leather\"\n        }\n    ],\n    \"more_info\": [\n        {\n            \"label\": \"Manufactured By\",\n            \"content\": \"M/s. Kiwi Enterprises Pvt. Ltd.\"\n        }\n    ],\n    \"care\": [\n        {\n            \"type\": \"bleach\",\n            \"content\": \"Do not bleach\"\n        },\n         { \"type\": \"Storage\", \"content\": \"Store in a cool, dry place away from direct sunlight.\" }\n    ],\n    \"tags\": [\"running\", \"cushioned\", \"responsive\"],\n    \"size\": [\n        {\n            \"label\": \"36\",\n            \"type\": \"EURO\"\n        },\n         {\n            \"label\": \"37\",\n            \"type\": \"EURO\"\n        },\n         {\n            \"label\": \"38\",\n            \"type\": \"EURO\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}products/create"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Get All Products",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"product_name\": \"Orange Shoes\",\n    \"description\": \"This is a test description\",\n    \"brand_id\": 1,\n    \"category_id\": 1,\n    \"subcategory_id\": 1,\n    \"images\": [\n        {\n            \"image_url\": \"https://dailyneeds-assets-dev.s3.ap-south-1.amazonaws.com/products/name-513f8761-5d66-4d06-9335-3a53f7dba021.jpg\",\n            \"preference\": 1\n        }\n    ],\n    \"colors\": [\n        {\n            \"color_name\": \"Red\",\n            \"color_code\": \"#FF0000\"\n        }\n    ],\n    \"specifications\": [\n        {\n            \"label\": \"Material\",\n            \"content\": \"Leather\"\n        }\n    ],\n    \"more_info\": [\n        {\n            \"label\": \"Manufactured By\",\n            \"content\": \"M/s. Kiwi Enterprises Pvt. Ltd.\"\n        }\n    ],\n    \"care\": [\n        {\n            \"type\": \"bleach\",\n            \"content\": \"Do not bleach\"\n        }\n    ],\n    \"tags\": [\"tag1\", \"tag2\"],\n    \"size\": [\n        {\n            \"label\": \"32\",\n            \"type\": \"EURO\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}products/get-all"
+							},
+							"response": [
+								{
+									"name": "Get All Products",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product_name\": \"Orange Shoes\",\n    \"description\": \"This is a test description\",\n    \"brand_id\": 1,\n    \"category_id\": 1,\n    \"subcategory_id\": 1,\n    \"images\": [\n        {\n            \"image_url\": \"https://dailyneeds-assets-dev.s3.ap-south-1.amazonaws.com/products/name-513f8761-5d66-4d06-9335-3a53f7dba021.jpg\",\n            \"preference\": 1\n        }\n    ],\n    \"colors\": [\n        {\n            \"color_name\": \"Red\",\n            \"color_code\": \"#FF0000\"\n        }\n    ],\n    \"specifications\": [\n        {\n            \"label\": \"Material\",\n            \"content\": \"Leather\"\n        }\n    ],\n    \"more_info\": [\n        {\n            \"label\": \"Manufactured By\",\n            \"content\": \"M/s. Kiwi Enterprises Pvt. Ltd.\"\n        }\n    ],\n    \"care\": [\n        {\n            \"type\": \"bleach\",\n            \"content\": \"Do not bleach\"\n        }\n    ],\n    \"tags\": [\"tag1\", \"tag2\"],\n    \"size\": [\n        {\n            \"label\": \"32\",\n            \"type\": \"EURO\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}products/get-all"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								},
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product_name\": \"Orange Shoes\",\n    \"description\": \"This is a test description\",\n    \"brand_id\": 1,\n    \"category_id\": 1,\n    \"subcategory_id\": 1,\n    \"images\": [\n        {\n            \"image_url\": \"https://dailyneeds-assets-dev.s3.ap-south-1.amazonaws.com/products/name-513f8761-5d66-4d06-9335-3a53f7dba021.jpg\",\n            \"preference\": 1\n        }\n    ],\n    \"colors\": [\n        {\n            \"color_name\": \"Red\",\n            \"color_code\": \"#FF0000\"\n        }\n    ],\n    \"specifications\": [\n        {\n            \"label\": \"Material\",\n            \"content\": \"Leather\"\n        }\n    ],\n    \"more_info\": [\n        {\n            \"label\": \"Manufactured By\",\n            \"content\": \"M/s. Kiwi Enterprises Pvt. Ltd.\"\n        }\n    ],\n    \"care\": [\n        {\n            \"type\": \"bleach\",\n            \"content\": \"Do not bleach\"\n        }\n    ],\n    \"tags\": [\"tag1\", \"tag2\"],\n    \"size\": [\n        {\n            \"label\": \"32\",\n            \"type\": \"EURO\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{base_url}}products/get-all"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "get single product",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"productId\":3,\n    \"regionId\":1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}products/getProduct",
+									"host": [
+										"{{base_url}}products"
+									],
+									"path": [
+										"getProduct"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "server url",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"productId\":1,\n    \"regionId\":2\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}products/getProduct",
+											"host": [
+												"{{url}}products"
+											],
+											"path": [
+												"getProduct"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": null,
+													"disabled": true
+												}
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "add product price by region",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"regionId\":\"3\",\n    \"price\":300,\n    \"productId\":3\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}products/price"
+							},
+							"response": [
+								{
+									"name": "server url",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"regionId\":\"2\",\n    \"price\":90\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}products/price/1"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "get products by region",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}products/region/1"
+							},
+							"response": [
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"url": "{{url}}products/region/1"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "get products By subcategory",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}products/bySubcategory/1?regionId=1",
+									"host": [
+										"{{base_url}}products"
+									],
+									"path": [
+										"bySubcategory",
+										"1"
+									],
+									"query": [
+										{
+											"key": "regionId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get location",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}products/region-specific"
+							},
+							"response": []
+						},
+						{
+							"name": "upload Products",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "productFile",
+											"type": "file",
+											"src": "/Users/mavens/Downloads/Footwear Men-Women Listing (1).xlsx"
+										}
+									]
+								},
+								"url": "{{base_url}}products/uploadProducts"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Sub Categories",
+					"item": [
+						{
+							"name": "Create Sub Category",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"subcategory_name\": \"Flat Sandals\",\n    \"subcategory_image\": \"https://www.saintg.in/cdn/shop/files/Untitled-25.1.jpg?v=1703234406&width=1080\",\n    \"category_id\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}subcategories/create"
+							},
+							"response": [
+								{
+									"name": "server url",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"subcategory_name\": \"Flat Sandals\",\n    \"subcategory_image\": \"https://www.saintg.in/cdn/shop/files/Untitled-1-2.4_7f085913-1b4b-4e88-9f2b-59aa447f4d14.jpg?v=1711606504&width=1080\",\n    \"category_id\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}subcategories/create"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Get Sub Categories",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}subcategories/get"
+							},
+							"response": [
+								{
+									"name": "server url",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}subcategories/get"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Wishlist",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"productId\":1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}wishlist/add"
+							},
+							"response": []
+						},
+						{
+							"name": "remove Product",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"productId\":1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}wishlist/remove"
+							},
+							"response": []
+						},
+						{
+							"name": "get by user",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}wishlist/"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "search and filters",
+					"item": [
+						{
+							"name": "search products",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}products/search?keyword=xyz",
+									"host": [
+										"{{base_url}}products"
+									],
+									"path": [
+										"search"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "xyz"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "filters",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}products/filter?gender=unisex&categories[]=2&colors[]=Red&page=1&pageSize=20",
+									"host": [
+										"{{base_url}}products"
+									],
+									"path": [
+										"filter"
+									],
+									"query": [
+										{
+											"key": "gender",
+											"value": "unisex"
+										},
+										{
+											"key": "categories[]",
+											"value": "2"
+										},
+										{
+											"key": "colors[]",
+											"value": "Red"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "20"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "offers&Coupons",
+					"item": [
+						{
+							"name": "get offers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}offers/getAll"
+							},
+							"response": []
+						},
+						{
+							"name": "create offers",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"title\":\"exclusive diwali offers\",\n     \"discount\":30,\n     \"code\":\"diwali30\",\n     \"min_amount\":30\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}offers/create"
+							},
+							"response": []
+						},
+						{
+							"name": "create Coupons",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"code\": \"LADIESNIGHT\",\n  \"type\": \"PERCENTAGE\",\n  \"value\": 15, \n  \"minPurchaseAmount\": 100,\n  \"maxUses\": 1000,\n  \"isActive\": true,\n  \"startDate\": \"2024-10-05T14:48:00.000Z\",\n  \"endDate\": \"2024-12-05T14:48:00.000Z\", \n  \"customerEligibility\": \"ALL\",\n  \"productIds\":[1],\n  \"categoryIds\": [1] \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}coupons/create"
+							},
+							"response": []
+						},
+						{
+							"name": "get coupons",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}coupons/getAll"
+							},
+							"response": []
+						},
+						{
+							"name": "edit coupons",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}coupons/edit/73629ac6-2a10-44dc-bbe6-c22be7c01bf6"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cart",
+					"item": [
+						{
+							"name": "add in to cart server url",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{serverToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"productId\":1,\n    \"quantity\":1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{url}}cart/add"
+							},
+							"response": []
+						},
+						{
+							"name": "add in cart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"productId\":3,\n    \"quantity\":2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}cart/add"
+							},
+							"response": [
+								{
+									"name": "add in cart",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOWMwZTc2NGEtMDgwMi00MmY5LTgyZGUtODIwNTc4ZTc5YzFlIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzI2NjU5Mjg4LCJleHAiOjE3MjkyNTEyODh9.VzS8ooQAB-h610KI0J2BSN148F_WtggsJszn_RAOb0GlAD7MtDKpgiKa2yyFuV84EPgJg7FfwTYQxgE6UDRevg",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"productId\":1,\n    \"quantity\":1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}cart/add"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								},
+								{
+									"name": "add in cart",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"productId\":1,\n    \"quantity\":2\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{base_url}}cart/add"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Vary",
+											"value": "Origin, Accept-Encoding"
+										},
+										{
+											"key": "Access-Control-Allow-Credentials",
+											"value": "true"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "580"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"244-c0YH7bv6Es4PPKFjFbjNMNFmdgQ\""
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 20 Sep 2024 18:42:47 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"success\": true,\n    \"data\": {\n        \"cart_item_id\": \"e42f8b96-9ecd-444b-82e1-7712a8dad9d8\",\n        \"cart_id\": \"2acc0d83-d757-445f-9a44-cd2bec09f490\",\n        \"product_id\": 1,\n        \"quantity\": 2,\n        \"size\": null,\n        \"size_type\": null,\n        \"created_at\": \"2024-09-20T18:42:47.120Z\",\n        \"updated_at\": \"2024-09-20T18:42:47.120Z\",\n        \"product\": {\n            \"product_id\": 1,\n            \"product_name\": \"ViviBlu Black Leather Flat Sandals\",\n            \"description\": \"The ViviBlu Leather Sandal with Black PU Sock.\",\n            \"brand_id\": 1,\n            \"category_id\": 1,\n            \"subcategory_id\": 1,\n            \"gender\": \"unisex\",\n            \"created_at\": \"2024-09-20T18:30:46.000Z\",\n            \"updated_at\": \"2024-09-20T18:30:46.000Z\",\n            \"sku\": null,\n            \"discount\": null\n        }\n    }\n}"
+								},
+								{
+									"name": "add in cart example",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"productId\":3,\n    \"quantity\":2\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{base_url}}cart/add"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Vary",
+											"value": "Origin, Accept-Encoding"
+										},
+										{
+											"key": "Access-Control-Allow-Credentials",
+											"value": "true"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "597"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"255-PHaH4tMYWPW7Cgk6HcqJikyZRig\""
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 20 Sep 2024 19:25:11 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"success\": true,\n    \"data\": {\n        \"cart_item_id\": \"daac7bb1-8422-48d0-aa3e-2f63c1cc3091\",\n        \"cart_id\": \"2acc0d83-d757-445f-9a44-cd2bec09f490\",\n        \"product_id\": 3,\n        \"quantity\": 2,\n        \"size\": null,\n        \"size_type\": null,\n        \"created_at\": \"2024-09-20T19:25:11.506Z\",\n        \"updated_at\": \"2024-09-20T19:25:11.506Z\",\n        \"product\": {\n            \"product_id\": 3,\n            \"product_name\": \"ViviBlu Black Leather Flat Sandals\",\n            \"description\": \"The ViviBlu Leather Sandal with Black PU Sock.\",\n            \"brand_id\": 1,\n            \"category_id\": 1,\n            \"subcategory_id\": 1,\n            \"gender\": \"unisex\",\n            \"created_at\": \"2024-09-20T19:17:42.000Z\",\n            \"updated_at\": \"2024-09-20T19:17:42.000Z\",\n            \"sku\": \"SG-F-1429-BLACK-5UK\",\n            \"discount\": null\n        }\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "get Cart by user",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}cart/"
+							},
+							"response": []
+						},
+						{
+							"name": "remove from cart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"productId\":2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}cart/remove"
+							},
+							"response": [
+								{
+									"name": "remove from cart example",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{serverToken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"productId\":1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}cart/remove"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Vary",
+											"value": "Origin, Accept-Encoding"
+										},
+										{
+											"key": "Access-Control-Allow-Credentials",
+											"value": "true"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "51"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"33-59h1q0aKVj6x4DcBTgYWSwaFivs\""
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 20 Sep 2024 19:25:39 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"success\": true,\n    \"message\": \"Item removed from cart\"\n}"
+								}
+							]
+						},
+						{
+							"name": "update in cart product",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"productId\":1,\n    \"quantity\":2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}cart/update"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "address",
+					"item": [
+						{
+							"name": "add address",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"addressLine1\": \"hauz khas\",\n  \"city\": \"Delhi\",\n  \"state\": \"Delhi\",\n  \"zipCode\": \"110001\",\n  \"country\": \"India\",\n  \"phoneNumber\": \"9876543210\",\n  \"tag\": \"OFFICE\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}address/"
+							},
+							"response": [
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"addressLine1\": \"hauz khas\",\n  \"city\": \"Delhi\",\n  \"state\": \"Delhi\",\n  \"zipCode\": \"110001\",\n  \"country\": \"India\",\n  \"phoneNumber\": \"9876543210\",\n  \"tag\": \"OFFICE\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}address/"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "get All address for user",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}address/"
+							},
+							"response": [
+								{
+									"name": "example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"url": "{{url}}address/"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Vary",
+											"value": "Origin, Accept-Encoding"
+										},
+										{
+											"key": "Access-Control-Allow-Credentials",
+											"value": "true"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "726"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"2d6-a73/CeLKWCaPvpTfkGdHZJSxFGM\""
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 20 Sep 2024 19:29:51 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"userId\": \"8e2b1f39-1489-4c32-8364-9785ce2d86a7\",\n            \"firstName\": \"Jane\",\n            \"lastName\": \"Smith\",\n            \"addressLine1\": \"456 Elm Street\",\n            \"addressLine2\": null,\n            \"city\": \"Los Angeles\",\n            \"state\": \"CA\",\n            \"zipCode\": \"90001\",\n            \"country\": \"USA\",\n            \"phoneNumber\": \"9876543210\",\n            \"tag\": \"OFFICE\",\n            \"isDefault\": false,\n            \"createdAt\": \"2024-09-20T19:27:41.066Z\",\n            \"updatedAt\": \"2024-09-20T19:27:41.066Z\"\n        },\n        {\n            \"id\": 2,\n            \"userId\": \"8e2b1f39-1489-4c32-8364-9785ce2d86a7\",\n            \"firstName\": \"Jane\",\n            \"lastName\": \"Smith\",\n            \"addressLine1\": \"hauz khas\",\n            \"addressLine2\": null,\n            \"city\": \"Delhi\",\n            \"state\": \"Delhi\",\n            \"zipCode\": \"110001\",\n            \"country\": \"India\",\n            \"phoneNumber\": \"9876543210\",\n            \"tag\": \"OFFICE\",\n            \"isDefault\": false,\n            \"createdAt\": \"2024-09-20T19:28:46.765Z\",\n            \"updatedAt\": \"2024-09-20T19:28:46.765Z\"\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "edit a address",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"lastName\":\"Mishra\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}address/1"
+							},
+							"response": []
+						},
+						{
+							"name": "delete a address",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}address/1"
+							},
+							"response": []
+						},
+						{
+							"name": "set a address default",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}address/1/setDefault"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "orders",
+					"item": [
+						{
+							"name": "create order",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"addressId\":1,\n    \"paymentMethod\":\"COD\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}order/create",
+								"description": "PaymentMethod :  \n{ CREDIT_CARD  \nDEBIT_CARD  \nUPI  \nCOD  \nNET_BANKING  \n}"
+							},
+							"response": [
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{serverToken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"addressId\":1,\n    \"paymentMethod\":\"UPI\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}order/create"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "get user orders",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}order/user/orders"
+							},
+							"response": [
+								{
+									"name": "get user orders example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{serverToken}}",
+												"type": "text"
+											}
+										],
+										"url": "{{url}}order/user/orders"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Vary",
+											"value": "Origin, Accept-Encoding"
+										},
+										{
+											"key": "Access-Control-Allow-Credentials",
+											"value": "true"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"611-UqluBzKfFzIvBrZXicnJe4oDKxw\""
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 20 Sep 2024 19:48:51 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": \"2dcf2c3b-e65e-4178-9251-161aaa29fc65\",\n        \"orderId\": \"90454187\",\n        \"userId\": \"8e2b1f39-1489-4c32-8364-9785ce2d86a7\",\n        \"totalAmount\": 14000,\n        \"addressId\": 1,\n        \"createdAt\": \"2024-09-20T19:47:20.855Z\",\n        \"updatedAt\": \"2024-09-20T19:47:20.855Z\",\n        \"orderItems\": [\n            {\n                \"id\": \"1f49a976-b06a-4cc9-adbf-96376f8c86e0\",\n                \"orderDetailsId\": \"2dcf2c3b-e65e-4178-9251-161aaa29fc65\",\n                \"productId\": 3,\n                \"quantity\": 2,\n                \"amount\": 14000,\n                \"createdAt\": \"2024-09-20T19:47:20.855Z\",\n                \"updatedAt\": \"2024-09-20T19:47:20.855Z\",\n                \"product\": {\n                    \"product_id\": 3,\n                    \"product_name\": \"ViviBlu Black Leather Flat Sandals\",\n                    \"description\": \"The ViviBlu Leather Sandal with Black PU Sock.\",\n                    \"brand_id\": 1,\n                    \"category_id\": 1,\n                    \"subcategory_id\": 1,\n                    \"gender\": \"unisex\",\n                    \"created_at\": \"2024-09-20T19:17:42.000Z\",\n                    \"updated_at\": \"2024-09-20T19:17:42.000Z\",\n                    \"sku\": \"SG-F-1429-BLACK-5UK\",\n                    \"discount\": null\n                }\n            }\n        ],\n        \"paymentDetails\": {\n            \"id\": \"017f6317-fd89-4d8d-a162-ea9e758de9a2\",\n            \"orderDetailsId\": \"2dcf2c3b-e65e-4178-9251-161aaa29fc65\",\n            \"userId\": \"8e2b1f39-1489-4c32-8364-9785ce2d86a7\",\n            \"amount\": 14000,\n            \"currencyType\": \"INR\",\n            \"status\": \"PENDING\",\n            \"paymentMethod\": \"UPI\",\n            \"paymentProvider\": null,\n            \"providerOrderId\": null,\n            \"providerPaymentId\": null,\n            \"createdAt\": \"2024-09-20T19:47:20.855Z\",\n            \"updatedAt\": \"2024-09-20T19:47:20.855Z\"\n        },\n        \"address\": {\n            \"id\": 1,\n            \"userId\": \"8e2b1f39-1489-4c32-8364-9785ce2d86a7\",\n            \"firstName\": \"Jane\",\n            \"lastName\": \"Smith\",\n            \"addressLine1\": \"456 Elm Street\",\n            \"addressLine2\": null,\n            \"city\": \"Los Angeles\",\n            \"state\": \"CA\",\n            \"zipCode\": \"90001\",\n            \"country\": \"USA\",\n            \"phoneNumber\": \"9876543210\",\n            \"tag\": \"OFFICE\",\n            \"isDefault\": false,\n            \"createdAt\": \"2024-09-20T19:27:41.066Z\",\n            \"updatedAt\": \"2024-09-20T19:27:41.066Z\"\n        }\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "get order by order details Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}order/f5a6f9b7-9215-4d37-a043-00735a41da32"
+							},
+							"response": []
+						},
+						{
+							"name": "get Order By OrderId",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}order/ByOrderId/13764778"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "payments",
+					"item": [
+						{
+							"name": "razorpay create Order",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderId\":\"11544524\",\n    \"provider\":\"razorpay\",\n    \"currencyType\":\"INR\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}payment/create-order"
+							},
+							"response": [
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{serverToken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"orderId\":\"15895748\",\n    \"provider\":\"razorpay\",\n    \"currencyType\":\"INR\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{url}}payment/create-order"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "verify payment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"orderId\": \"order_id\",\n          \"paymentId\": \"response.razorpay_payment_id\",\n          \"razorpayOrderId\": \"order_PBEYiS7KPRSnFS\",\n          \"signature\": \"response.razorpay_signature\",\n          \"provider\": \"razorpay\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}payment/verify-payment"
+							},
+							"response": []
+						},
+						{
+							"name": "verify paypal payment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"orderId\": \"11544524\",\n        \"paymentId\": \"2YY1121357157651T\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}payment/verify-paypal-payment"
+							},
+							"response": []
+						},
+						{
+							"name": "create paypal Order",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderId\":\"11544524\",\n    \"provider\":\"paypal\",\n    \"currencyType\":\"USD\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}payment/create-order"
+							},
+							"response": []
+						},
+						{
+							"name": "paypal check",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer A21AAJoeT9NvO0jDcN5ZVaJXdwlII4sIVQCrEOhbVA6psnYMQEAH8g4qkV569sPuIlVvULKPY6FUqzztcKvezseM9DtsWaonQ",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": "https://api.sandbox.paypal.com/v2/checkout/orders/2YY1121357157651T/capture"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "homePage",
+					"item": [
+						{
+							"name": "initialize  homePage",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}homePage/initialize"
+							},
+							"response": [
+								{
+									"name": "server",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "x-access-token",
+												"value": "{{serverAdminToken}}",
+												"type": "text"
+											}
+										],
+										"url": "{{url}}homePage/initialize"
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "get homePage",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}homePage/get?gender=WOMEN",
+									"host": [
+										"{{base_url}}homePage"
+									],
+									"path": [
+										"get"
+									],
+									"query": [
+										{
+											"key": "gender",
+											"value": "WOMEN"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}homePage/get?gender=WOMEN",
+											"host": [
+												"{{base_url}}homePage"
+											],
+											"path": [
+												"get"
+											],
+											"query": [
+												{
+													"key": "gender",
+													"value": "WOMEN"
+												}
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "update slider",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n      \"gender\": \"MEN\",\n      \"imageUrl\": \"https://example.com/men-slider1.jpg\",\n      \"text\": \"Summer Collection for Men\",\n      \"categoryId\": 1\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/slider/1"
+							},
+							"response": []
+						},
+						{
+							"name": "update featured Collection",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"gender\": \"WOMEN\",\n      \"imageUrl\": \"https://example.com/women-collection1.jpg\",\n      \"categoryId\": 1,\n      \"homePageId\":\"978c942c-48f1-4cff-b7e7-00300edc4405\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/featured-collection/1a68ccff-d675-414c-8686-e43bc0511352"
+							},
+							"response": []
+						},
+						{
+							"name": "update accessories",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"gender\": \"MEN\",\n      \"imageUrl\": \"https://example.com/men-accessories.jpg\",\n      \"text\": \"Explore Men's Accessories\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/accessories-section"
+							},
+							"response": []
+						},
+						{
+							"name": "update trending now",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"gender\": \"MEN\",\n      \"categoryId\": 1\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/trending-now"
+							},
+							"response": []
+						},
+						{
+							"name": "update latest arrivals",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"gender\": \"MEN\",\n      \"imageUrl\": \"https://example.com/new-mens-collection.jpg\",\n      \"text\": \"Explore Our New Men's Collection\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}homePage/latest-arrivals"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "External APIs",
+			"item": [
+				{
+					"name": "Bluedart - Login",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "ClientID",
+								"value": "Yf167DfHt0RsuLwG9EOGAKmsi5UbVUzX",
+								"type": "default"
+							},
+							{
+								"key": "clientSecret",
+								"value": "vOHfQhZNp5eAvgwT",
+								"type": "default"
+							}
+						],
+						"url": "https://apigateway.bluedart.com/in/transportation/token/v1/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Tracking",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "JWTToken",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdWJqZWN0LXN1YmplY3QiLCJhdWQiOlsiYXVkaWVuY2UxIiwiYXVkaWVuY2UyIl0sIkNsaWVudFNlY3JldCI6InZPSGZRaFpOcDVlQXZnd1QiLCJpc3MiOiJ1cm46XC9cL2FwaWdlZS1lZGdlLUpXVC1wb2xpY3ktdGVzdCIsIkNsaWVudElEIjoiWWYxNjdEZkh0MFJzdUx3RzlFT0dBS21zaTVVYlZVelgiLCJleHAiOjE3MjcwNzI2NTIsImlhdCI6MTcyNjk4NjI1MiwianRpIjoiMjUyYTA2YjQtZGIxYi00MjQwLWI4YjktMGIwMDFiMGNhMjdiIn0.TnGGu7BC6BhLvpu_K1OHcEf4meahea2GhdFLKBUPhB8",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "https://api.bluedart.com/servlet/RoutingServlet?handler=tnt&action=custawbquery&loginid=GGN95409&awb=awb&numbers=80613111670&format=json&lickey=pmghgpehliftrfftgtlk8pkmhnqougwp&verno=1.3&scan=1",
+							"protocol": "https",
+							"host": [
+								"api",
+								"bluedart",
+								"com"
+							],
+							"path": [
+								"servlet",
+								"RoutingServlet"
+							],
+							"query": [
+								{
+									"key": "handler",
+									"value": "tnt"
+								},
+								{
+									"key": "action",
+									"value": "custawbquery"
+								},
+								{
+									"key": "loginid",
+									"value": "GGN95409"
+								},
+								{
+									"key": "awb",
+									"value": "awb"
+								},
+								{
+									"key": "numbers",
+									"value": "80613111670"
+								},
+								{
+									"key": "format",
+									"value": "json"
+								},
+								{
+									"key": "lickey",
+									"value": "pmghgpehliftrfftgtlk8pkmhnqougwp"
+								},
+								{
+									"key": "verno",
+									"value": "1.3"
+								},
+								{
+									"key": "scan",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unicommerce Login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://saintgshoes.unicommerce.com/oauth/token?grant_type=password&client_id=my-trusted-client&username=info@saintg.in&password=Saintg@734",
+							"protocol": "https",
+							"host": [
+								"saintgshoes",
+								"unicommerce",
+								"com"
+							],
+							"path": [
+								"oauth",
+								"token"
+							],
+							"query": [
+								{
+									"key": "grant_type",
+									"value": "password"
+								},
+								{
+									"key": "client_id",
+									"value": "my-trusted-client"
+								},
+								{
+									"key": "username",
+									"value": "info@saintg.in"
+								},
+								{
+									"key": "password",
+									"value": "Saintg@734"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "bearer a99b80ed-50cb-4340-8e3e-3d5d6ad6a4cf",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"code\": \"83633470\"\n}"
+						},
+						"url": "https://saintgshoes.unicommerce.com/services/rest/v1/oms/saleorder/get"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 164944f4-9ff4-45aa-92f6-285fa0c109fd",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"skuCode\": \"SG-F-09-PLATINUM-6UK\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://saintgshoes.unicommerce.com/services/rest/v1/catalog/itemType/get"
+					},
+					"response": []
+				},
+				{
+					"name": "Tracking - Correct URL",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "JWTToken",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdWJqZWN0LXN1YmplY3QiLCJhdWQiOlsiYXVkaWVuY2UxIiwiYXVkaWVuY2UyIl0sIkNsaWVudFNlY3JldCI6InZPSGZRaFpOcDVlQXZnd1QiLCJpc3MiOiJ1cm46XC9cL2FwaWdlZS1lZGdlLUpXVC1wb2xpY3ktdGVzdCIsIkNsaWVudElEIjoiWWYxNjdEZkh0MFJzdUx3RzlFT0dBS21zaTVVYlZVelgiLCJleHAiOjE3Mjc4NjY0ODksImlhdCI6MTcyNzc4MDA4OSwianRpIjoiN2IyZjkzOGUtZDBjNy00ZjM2LThlOTMtZTVkOTAxY2ZkMWU3In0.DCAmrwQjAOAR7yITyOVGIvUx8rD9psnfPBjPd3vR_f4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://apigateway.bluedart.com/in/transportation/tracking/v1/shipment?handler=tnt&loginid=GGN95409&numbers=80613111670&format=xml&lickey=pmghgpehliftrfftgtlk8pkmhnqougwp&scan=1&action=custawbquery&verno=1&awb=awb",
+							"protocol": "https",
+							"host": [
+								"apigateway",
+								"bluedart",
+								"com"
+							],
+							"path": [
+								"in",
+								"transportation",
+								"tracking",
+								"v1",
+								"shipment"
+							],
+							"query": [
+								{
+									"key": "handler",
+									"value": "tnt"
+								},
+								{
+									"key": "loginid",
+									"value": "GGN95409"
+								},
+								{
+									"key": "numbers",
+									"value": "80613111670"
+								},
+								{
+									"key": "format",
+									"value": "xml"
+								},
+								{
+									"key": "lickey",
+									"value": "pmghgpehliftrfftgtlk8pkmhnqougwp"
+								},
+								{
+									"key": "scan",
+									"value": "1"
+								},
+								{
+									"key": "action",
+									"value": "custawbquery"
+								},
+								{
+									"key": "verno",
+									"value": "1"
+								},
+								{
+									"key": "awb",
+									"value": "awb"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "bearer a99b80ed-50cb-4340-8e3e-3d5d6ad6a4cf",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dateType\": \"CREATED\",\n    \"channel\": \"SaintG_App\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://saintgshoes.unicommerce.com/services/rest/v1/oms/saleOrder/search",
+						"description": "\"fromDate\": \"2024-03-09T09:33:42Z\", \"toDate\": \"2024-04-08T09:33:42Z\","
+					},
+					"response": []
+				},
+				{
+					"name": "create unicommerce order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\":\"83633470\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}unicommerce/create-order"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080/"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MjUyMTIyNzYsImV4cCI6MTcyNzgwNDI3Nn0.ZIWZDXDwer3WHLX9Wek3HPdFtPebSMJ8pIZ2hSYP3yCnB7ZgZwahmAuHW3NZLJoSzetnNDIpfND4TKocsTDv5g"
+		}
+	]
+}

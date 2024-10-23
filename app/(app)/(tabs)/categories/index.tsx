@@ -30,72 +30,6 @@ const womanCats: catsType[] = [
   },
 ];
 
-const data = [
-  {
-    image:
-      "https://www.pngall.com/wp-content/uploads/13/Nike-Shoes-Jordan-PNG-Pic.png",
-    title: "Shoes",
-  },
-  {
-    image:
-      "https://www.pngall.com/wp-content/uploads/13/Nike-Shoes-Jordan-PNG-Pic.png",
-    title: "Shoes",
-  },
-  {
-    image:
-      "https://www.pngall.com/wp-content/uploads/13/Nike-Shoes-Jordan-PNG-Pic.png",
-    title: "Shoes",
-  },
-  {
-    image:
-      "https://www.pngall.com/wp-content/uploads/13/Nike-Shoes-Jordan-PNG-Pic.png",
-    title: "Shoes",
-  },
-];
-
-const summmerStyles = [
-  {
-    id: "1",
-    title: "NEW SEASON",
-    subtitle: "Latest styles for your summer refresh",
-    image: {
-      uri: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-    },
-  },
-  {
-    id: "2",
-    title: "WINTER COLLECTION",
-    subtitle: "Cozy and stylish for the cold weather",
-    image: {
-      uri: "https://images.unsplash.com/photo-1517841905240-472988babdf9",
-    },
-  },
-  {
-    id: "3",
-    title: "SPRING BLOSSOMS",
-    subtitle: "Fresh looks for the new season",
-    image: {
-      uri: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f",
-    },
-  },
-  {
-    id: "4",
-    title: "FALL FAVORITES",
-    subtitle: "Warm and comfortable outfits",
-    image: {
-      uri: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a",
-    },
-  },
-  {
-    id: "5",
-    title: "CASUAL WEAR",
-    subtitle: "Comfort meets style in casual wear",
-    image: {
-      uri: "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb",
-    },
-  },
-];
-
 type catsType = {
   name: string;
   // subtitle: string;
@@ -110,7 +44,7 @@ function index() {
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
-    let result: AxiosResponse<any, any>;
+    // let result: AxiosResponse<any, any>;
 
     try {
       const result = await axios.get(`${BASE_URL}categories/get`, {
@@ -121,6 +55,7 @@ function index() {
       });
 
       if (result.status === 404) {
+        return;
         // console.log(result.statusText);
       }
       const data = result.data.data;
@@ -141,15 +76,12 @@ function index() {
         },
       );
 
-      const res = await axios.get(
-        `http://13.126.237.254:8080/subcategories/get`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": user.token,
-          },
+      const res = await axios.get(`${BASE_URL}subcategories/get`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
         },
-      );
+      });
       const subcats = res.data.data;
 
       // console.log("Subcategories");

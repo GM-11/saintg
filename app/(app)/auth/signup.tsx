@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { BASE_URL } from "@/constants/constant";
 import OTPOverlay from "@/components/OTPoverlay";
 import axios from "axios";
@@ -34,6 +34,8 @@ function signup() {
     useState<boolean>(false);
 
   const [showOTPOtpOverlay, setShowOTPOtpOverlay] = useState<boolean>(false);
+
+  const { regionId } = useLocalSearchParams<{ regionId: string }>();
 
   function showToast(text: string) {
     Toast.show({
@@ -59,57 +61,37 @@ function signup() {
     }
 
     try {
-      // console.log(`${countryCode}${mobile}`);
       const body = {
         fullName: name,
         phoneNumber: `${countryCode}${mobile}`,
         email,
         gender: selectedGender == "men" ? "male" : "female",
         password,
-        // address: "",
+        // regionId,
       };
 
-      // console.log(body);
+      // setShowOTPOtpOverlay(true);
 
-      // console.log("fetcf");
-
-      setShowOTPOtpOverlay(true);
-
-      fetch(`${BASE_URL}user/register`, {
+      const res = await fetch(`${BASE_URL}user/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
-      })
-        .then(async (res) => {
-          const data = await res.json();
-          // console.log(data);
+      });
+      const data = await res.json();
+      console.log(data);
+      Toast.show({ text1: data.message || data.msg });
 
-          // Toast;
-
-          if (data.code !== 200) {
-            return;
-          }
-          setShowOTPOtpOverlay(true);
-        })
-        .catch((error) => {
-          if (error.response) {
-            // Server responded with a status code out of the range of 2xx
-            // console.log("Error response data:", error.response.data);
-            // console.log("Error response status:", error.response.status);
-            // console.log("Error response headers:", error.response.headers);
-          } else if (error.request) {
-            // Request was made but no response was received
-            // console.log("Error request:", error.request);
-          } else {
-            // Something happened in setting up the request
-            // console.log("Error message:", error.message);
-          }
-          // console.log("Error config:", error.config);
-        });
+      if (data.code !== 200) {
+        return;
+      }
+      setShowOTPOtpOverlay(true);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     } catch (error) {
-      // console.log("in error block");
       console.error("Error signing up user:", error);
     }
   }
@@ -142,6 +124,7 @@ function signup() {
               password,
               gender: selectedGender,
               phoneNumber: `${countryCode}${mobile}`,
+              regionId: parseInt(regionId),
             }}
           />
         </View>

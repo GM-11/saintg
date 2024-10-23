@@ -14,14 +14,14 @@ import {
   StyleSheet,
   FlatList,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 type productType = {
   image: string;
   title: string;
   subtitle: string;
   price: number;
-  orginalPrice: number;
-  discountPercentage: number;
+  currency: string;
   manufacturer: string;
   manufacturerAddress: string;
   customerCareNo: string;
@@ -56,7 +56,7 @@ function productDetail() {
   const [product, setProduct] = React.useState<productType>();
   const [showMore, setShowMore] = React.useState<productType[]>();
 
-  const { searchKeyWord, productId } = useLocalSearchParams();
+  const { searchKeyWord, productId, price, currency } = useLocalSearchParams();
 
   async function buyNow() {
     addInCart();
@@ -73,6 +73,7 @@ function productDetail() {
   }
 
   async function getProductDetails() {
+    console.log("a;ksdfj");
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
 
@@ -102,60 +103,64 @@ function productDetail() {
       year: "numeric",
     });
 
-    const data = response.data.data;
+    const convertedProducts: productType[] = response.data.data.map(
+      (product: any) => {
+        const specs: specs = {
+          material:
+            product.product_specifications.find(
+              (spec: any) => spec.label === "Material",
+            )?.content || "not available",
+          saleMaterial: "not available",
+          HeelHeight: [0, 0],
+          HeelType: "not available",
+          ToeType: "not available",
+          PackContains: "not available",
+          occasion: "not available",
+        };
 
-    // Convert all products to productType
-    const convertedProducts: productType[] = data.map((product: any) => {
-      const specs: specs = {
-        material:
-          product.product_specifications.find(
-            (spec: any) => spec.label === "Material",
-          )?.content || "not available",
-        saleMaterial: "not available",
-        HeelHeight: [0, 0],
-        HeelType: "not available",
-        ToeType: "not available",
-        PackContains: "not available",
-        occasion: "not available",
-      };
+        return {
+          image: product.product_images[0].image_url,
+          title: product.product_name,
+          subtitle: product.description,
+          price,
+          currency,
+          // orginalPrice: product.original_price || 0,
+          // discountPercentage: product.discount || 0,
+          manufacturer:
+            product.product_more_info.find(
+              (info: { label: string; content: string }) =>
+                info.label === "Manufactured By",
+            )?.content || "not available",
+          manufacturerAddress: "not available",
+          customerCareNo: "not available",
+          email: "not available",
+          marketedBy: "not available",
+          specs: specs,
+          colors: product.product_colors.map(
+            (color: { color_code: string }) => color.color_code,
+          ),
+          estimatedDelivery: [todayString, afterSevenDaysString],
+          productId: product.product_id,
+          size: product.product_size.map(
+            (size: { label: string }) => size.label,
+          ),
+          quantity: 1,
+        };
+      },
+    );
 
-      return {
-        image: product.product_images[0].image_url,
-        title: product.product_name,
-        subtitle: product.description,
-        price: product.price || 0,
-        orginalPrice: product.original_price || 0,
-        discountPercentage: product.discount || 0,
-        manufacturer:
-          product.product_more_info.find(
-            (info: { label: string; content: string }) =>
-              info.label === "Manufactured By",
-          )?.content || "not available",
-        manufacturerAddress: "not available",
-        customerCareNo: "not available",
-        email: "not available",
-        marketedBy: "not available",
-        specs: specs,
-        colors: product.product_colors.map(
-          (color: { color_code: string }) => color.color_code,
-        ),
-        estimatedDelivery: [todayString, afterSevenDaysString],
-        productId: product.product_id,
-        size: product.product_size.map((size: { label: string }) => size.label),
-        quantity: 1,
-      };
-    });
+    console.log(convertedProducts);
 
-    // Set the current product
     setProduct(convertedProducts[parseInt(productId as string) - 1]);
 
-    // Set the showMore state with the rest of the products
     setShowMore(
       convertedProducts.filter(
         (_, index) => index !== parseInt(productId as string) - 1,
       ),
     );
   }
+  //   });
+  // }
   async function addInCart() {
     try {
       const userDetails = await AsyncStorage.getItem("userDetails");
@@ -268,9 +273,9 @@ function productDetail() {
           }}
         >
           <Text style={{ fontSize: 16, fontWeight: 600 }}>
-            ${product.price}
+            {product.price} {"/-"} {product.currency}
           </Text>
-          <Text
+          {/* <Text
             style={{
               fontSize: 16,
               fontWeight: 400,
@@ -289,7 +294,7 @@ function productDetail() {
             }}
           >
             {product.discountPercentage}% off
-          </Text>
+          </Text> */}
         </View>
         <View
           style={{
@@ -377,6 +382,10 @@ function productDetail() {
               paddingVertical: 16,
               justifyContent: "center",
               alignItems: "center",
+            }}
+            onPress={() => {
+              addInCart();
+              Toast.show({ text1: "Added to cart" });
             }}
           >
             <Text style={{ fontSize: 12, letterSpacing: 4 }}>ADD TO CART</Text>
@@ -776,7 +785,7 @@ function productDetail() {
                 >
                   ${val.item.price}
                 </Text>
-                <Text
+                {/* <Text
                   style={{
                     textDecorationLine: "line-through",
                     fontWeight: 300,
@@ -795,7 +804,7 @@ function productDetail() {
                   }}
                 >
                   {val.item.discountPercentage}% off
-                </Text>
+                </Text> */}
               </View>
             </View>
           )}
