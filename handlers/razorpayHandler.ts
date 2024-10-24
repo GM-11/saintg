@@ -4,9 +4,32 @@ import RazorpayCheckout from "react-native-razorpay";
 
 export default async function razorpayHandler(
   user: IUser,
-  orderData: any,
   data: any,
-) {
+
+): Promise<Response | string> {
+  const res2 = await fetch(`${BASE_URL}payment/create-order`, {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": user.token,
+    },
+
+    body: JSON.stringify({
+      orderId: data.orderId,
+      provider: "razorpay",
+      currencyType: "INR",
+    }),
+  });
+
+  const orderData = await res2.json();
+
+  console.log(orderData);
+
+  if (orderData.error) {
+    // Toast.show({ text1: orderData.error });
+    return orderData.error;
+  }
   const res = await RazorpayCheckout.open({
     description: "Confirm Order",
     image:

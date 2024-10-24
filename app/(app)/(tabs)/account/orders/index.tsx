@@ -3,7 +3,14 @@ import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import React from "react";
-import { Text, View, StyleSheet, Pressable, FlatList } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 
 function ordersPage() {
   const [orders, setOrders] = React.useState<orderProps[]>([]);
@@ -83,7 +90,7 @@ function ordersPage() {
             justifyContent: "center",
           }}
         >
-          <Text> Loading </Text>
+          <ActivityIndicator size="large" color="black" />
         </View>
       ) : (
         <OrdersView orders={orders} />

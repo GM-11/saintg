@@ -8,6 +8,7 @@ import {
   Text,
   Pressable,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 
 function formatDate(date: Date) {
@@ -40,77 +41,25 @@ type item = {
   estimatedDelivery: string[];
 };
 
-// const data = [
-//   {
-//     image: "https://www.istockphoto.com/photos/converse-sneakers",
-//     title: "Title",
-//     subtitle: "Subtitle",
-//     price: 100,
-//     originalPrice: 200,
-//     discountPercentage: 50,
-//     id: 1,
-//   },
-
-//   {
-//     image: "https://picsum.photos/200/300",
-//     title: "Title",
-//     subtitle: "Subtitle",
-//     price: 100,
-//     originalPrice: 200,
-//     discountPercentage: 50,
-//     id: 2,
-//   },
-
-//   {
-//     image: "https://picsum.photos/200/300",
-//     title: "Title",
-//     subtitle: "Subtitle",
-//     price: 100,
-//     originalPrice: 200,
-//     discountPercentage: 50,
-//     id: 3,
-//   },
-
-//   {
-//     image: "https://picsum.photos/200/300",
-//     title: "Title",
-//     subtitle: "Subtitle",
-//     price: 100,
-//     originalPrice: 200,
-//     discountPercentage: 50,
-//     id: 4,
-//   },
-// ];
-
-// const tags = [
-//   "Trendy",
-//   "Heels",
-//   "Women",
-//   "Stilletos",
-//   "Shoe",
-//   "Heels",
-//   "Women",
-//   "Stilletos",
-//   "Shoe",
-//   "Heels",
-//   "Women",
-//   "Stilletos",
-//   "Shoe",
-// ];
-
 function index() {
   const [deliveryPincode, setDeliveryPincode] = React.useState("120021");
   const [deliveryCity, setDeliveryCity] = React.useState("Gurugram");
   const [showSizeOverlay, setShowSizeOverlay] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [currency, setCurrency] = React.useState("GBP");
 
   const [items, setItems] = React.useState<item[]>([]);
 
   async function getData() {
+    setLoading(true);
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
+    if (user.regionId === "1") setCurrency("GBP");
+    if (user.regionId === "2") setCurrency("USD");
+    if (user.regionId === "3") setCurrency("INR");
+
     try {
-      console.log("asdfjk");
       const result = await fetch(`${BASE_URL}cart`, {
         method: "GET",
         headers: {
@@ -162,6 +111,8 @@ function index() {
       // setItems(data.items);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -265,6 +216,8 @@ function index() {
                   image={val.image}
                   quantity={val.quantity}
                   size={val.size}
+                  title={val.title}
+                  subtitle={val.subtitle}
                   estimatedDelivery={val.estimatedDelivery}
                 />
               );
@@ -409,7 +362,7 @@ function index() {
           </View>
           <View style={{ padding: 10 }}>
             <Text style={{ fontSize: 16, letterSpacing: 2, fontWeight: 600 }}>
-              price details ({items.length} items)
+              Price details ({items.length} item/s)
             </Text>
             <View
               style={{
@@ -434,11 +387,18 @@ function index() {
               </View>
               <View style={{ flex: 1, alignItems: "flex-end" }}>
                 <Text style={{ marginTop: 8, fontWeight: 300 }}>
-                  ${items.reduce((acc, val) => acc + val.price, 0)}
+                  {items.reduce((acc, val) => acc + val.price, 0)} {"/-"}{" "}
+                  {currency}
                 </Text>
-                <Text style={{ marginTop: 8, fontWeight: 300 }}>$0.00</Text>
-                <Text style={{ marginTop: 8, fontWeight: 300 }}>$0.00</Text>
-                <Text style={{ marginTop: 8, fontWeight: 300 }}>$5</Text>
+                <Text style={{ marginTop: 8, fontWeight: 300 }}>
+                  0.00 {"/-"} {currency}
+                </Text>
+                <Text style={{ marginTop: 8, fontWeight: 300 }}>
+                  0.00 {"/-"} {currency}
+                </Text>
+                <Text style={{ marginTop: 8, fontWeight: 300 }}>
+                  5 {"/-"} {currency}
+                </Text>
                 <Text style={{ marginTop: 8, fontWeight: 300 }}>FREE</Text>
               </View>
             </View>
@@ -464,7 +424,7 @@ function index() {
               </Text>
             </View>
           </View>
-          <Text
+          {/* <Text
             style={{
               fontSize: 16,
               letterSpacing: 3,
@@ -473,7 +433,7 @@ function index() {
             }}
           >
             YOU SAVED <Text style={{ color: "green" }}>$120</Text> ON THIS ORDER
-          </Text>
+          </Text> */}
           <View style={{ display: "flex", flexDirection: "row" }}>
             <View
               style={{
@@ -484,7 +444,11 @@ function index() {
               }}
             >
               <Text
-                style={{ fontSize: 16, letterSpacing: 3, textAlign: "center" }}
+                style={{
+                  fontSize: 16,
+                  letterSpacing: 3,
+                  textAlign: "center",
+                }}
               >
                 ${items.reduce((a, b) => a + b.price, 0) + 5}
               </Text>
@@ -497,11 +461,18 @@ function index() {
               }}
               onPress={async () => {
                 // // console.log(await result.json());
+                let itemsToPass: string[] = [];
+                for (let val of items) {
+                  itemsToPass.push(
+                    `${val.title}SEP${val.subtitle}SEP${val.price}SEP${val.size}SEP${val.image}SEP${val.estimatedDelivery}SEP${val.quantity}SEP`,
+                  );
+                }
+                console.log(itemsToPass);
 
-                const itemsToPass = items.map(
-                  (val) => `
-                      ${val.title}SEP${val.subtitle}SEP${val.price}SEP${val.size}SEP${val.image}SEP${val.estimatedDelivery}SEP${val.quantity}SEP`,
-                );
+                // const itemsToPass = items.map((val) =>
+                //   `
+                //     ${val.title}SEP${val.subtitle}SEP${val.price}SEP${val.size}SEP${val.image}SEP${val.estimatedDelivery}SEP${val.quantity}SEP`.trim(),
+                // );
                 router.push({
                   pathname: "/checkout/payment",
                   params: {
@@ -543,12 +514,16 @@ function Item({
   size,
   price,
   estimatedDelivery,
+  title,
+  subtitle,
 }: {
   image: string;
   quantity: number;
   size: number;
   price: number;
   estimatedDelivery: string[];
+  title: string;
+  subtitle: string;
 }) {
   const sizes = ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
   const numsLeft = 5;
@@ -564,6 +539,8 @@ function Item({
           height: 200,
         }}
       >
+        {/* <Text>{price}</Text> */}
+
         <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
 
         <View
@@ -575,8 +552,8 @@ function Item({
             justifyContent: "space-around",
           }}
         >
-          <Text style={{ fontSize: 12, color: "#555555" }}>Saint G</Text>
-          <Text>Black Boots With Glittery Stars</Text>
+          <Text style={{ fontSize: 12, color: "#555555" }}>{title}</Text>
+          <Text style={{ width: "60%" }}>{subtitle}</Text>
           <View
             style={{
               display: "flex",
@@ -627,6 +604,7 @@ function Item({
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
+              width: "70%",
             }}
           >
             <Text>Total</Text>

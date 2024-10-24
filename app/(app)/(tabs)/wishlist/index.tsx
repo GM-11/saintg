@@ -11,6 +11,7 @@ import {
   FlatList,
   Image,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 
 type t = {
@@ -19,13 +20,16 @@ type t = {
   subtitle: string;
   price: number;
   id: number;
+  currency: string;
 };
 
 function index() {
   const [showSizeOverlay, setShowSizeOverlay] = React.useState(false);
   const [data, setData] = React.useState<t[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   async function getData() {
+    setLoading(true);
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
@@ -68,6 +72,9 @@ function index() {
             price: (regionData.data as any[]).find(
               (v) => v.product_id === item.product.product_id,
             ).price,
+            currency: (regionData.data as any[]).find(
+              (v) => v.product_id === item.product.product_id,
+            ).currency_type,
             subtitle: item.product.description,
             title: item.product.product_name,
           };
@@ -77,6 +84,8 @@ function index() {
     } catch (error) {
       setData([]);
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -132,7 +141,7 @@ function index() {
               <Text
                 style={{ fontSize: 16, fontWeight: 500, marginVertical: 2 }}
               >
-                ${val.item.price}
+                {val.item.price} {"/-"} {val.item.currency}
               </Text>
               {/* <Pressable
                 onPress={() => setShowSizeOverlay(true)}
@@ -156,17 +165,33 @@ function index() {
     );
   } else {
     return (
-      <View
-        style={{
-          backgroundColor: "white",
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text> No items in wishlist </Text>
+      <View>
+        {loading ? (
+          <View
+            style={{
+              backgroundColor: "white",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <ActivityIndicator size="large" color="black" />
+          </View>
+        ) : (
+          <View
+            style={{
+              backgroundColor: "white",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text> No items in wishlist </Text>
+          </View>
+        )}
       </View>
     );
   }

@@ -13,6 +13,7 @@ import {
   Pressable,
   ScrollView,
   Image,
+  ActivityIndicator,
 } from "react-native";
 
 const womanCats: catsType[] = [
@@ -39,8 +40,10 @@ type catsType = {
 function index() {
   const [categories, setCategories] = React.useState<catsType[]>([]);
   const [subCategories, setSubCategories] = React.useState<catsType[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   async function getCategories() {
+    setLoading(true);
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
@@ -112,6 +115,8 @@ function index() {
     } catch (e) {
       // console.log(e);
       return;
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -123,34 +128,34 @@ function index() {
   return (
     <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
       {/* <View>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          style={{
-            width: "100%",
-          }}
-          data={data}
-          renderItem={(val) => (
-            <ImageBackground
-              style={{
-                flexDirection: "column-reverse",
-                margin: 10,
-                display: "flex",
-                height: 100,
+   <FlatList
+     horizontal
+     showsHorizontalScrollIndicator={false}
+     pagingEnabled
+     style={{
+       width: "100%",
+     }}
+     data={data}
+     renderItem={(val) => (
+       <ImageBackground
+         style={{
+           flexDirection: "column-reverse",
+           margin: 10,
+           display: "flex",
+           height: 100,
 
-                width: 100,
-              }}
-              ///@ts-ignore
-              source={{ uri: val.item.image }}
-            >
-              <View style={{ margin: 16 }}>
-                <Text style={{ textAlign: "center" }}>{val.item.title}</Text>
-              </View>
-            </ImageBackground>
-          )}
-        />
-      </View> */}
+           width: 100,
+         }}
+         ///@ts-ignore
+         source={{ uri: val.item.image }}
+       >
+         <View style={{ margin: 16 }}>
+           <Text style={{ textAlign: "center" }}>{val.item.title}</Text>
+         </View>
+       </ImageBackground>
+     )}
+   />
+ </View> */}
 
       <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 10 }}>
         SHOP BY CATEGORY
@@ -168,30 +173,51 @@ function index() {
       </View>
 
       {/* <CustomCarousel
-        data={summmerStyles}
-        mainTitleStyle={{ textAlign: "flex-start", margin: 16 }}
-        imageWidth="100%"
-        imageHeight="300"
-        title={"SUMMER STYLES"}
-        additionalStyles={{ width: "100%" }}
-      /> */}
+   data={summmerStyles}
+   mainTitleStyle={{ textAlign: "flex-start", margin: 16 }}
+   imageWidth="100%"
+   imageHeight="300"
+   title={"SUMMER STYLES"}
+   additionalStyles={{ width: "100%" }}
+ /> */}
 
       {/* <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 10 }}>
-        CURATED STYLE STORE
-      </Text>
+   CURATED STYLE STORE
+ </Text>
 
-      <View>
-        {womanCats.slice(0, 3).map((val) => (
-          <ListElement
-            image={val.image}
-            name={val.name}
-            key={womanCats.indexOf(val)}
-            subCats={subCategories}
-          />
-        ))}
-      </View> */}
+ <View>
+   {womanCats.slice(0, 3).map((val) => (
+     <ListElement
+       image={val.image}
+       name={val.name}
+       key={womanCats.indexOf(val)}
+       subCats={subCategories}
+     />
+   ))}
+ </View> */}
     </ScrollView>
   );
+
+  // return (
+  //   <View>
+  //     {loading ? (
+  //       <View
+  //         style={{
+  //           flex: 1,
+  //           backgroundColor: "white",
+  //           display: "flex",
+  //           alignItems: "center",
+  //           justifyContent: "center",
+  //         }}
+  //       >
+  //         <ActivityIndicator color="black" size="large" />
+  //       </View>
+  //     ) :
+  //     (
+
+  //     )}
+  //   </View>
+  // );
 }
 
 // function sub(params:type) {

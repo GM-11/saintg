@@ -3,7 +3,14 @@ import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 type t = {
   title: string;
@@ -16,8 +23,11 @@ type t = {
 
 function index() {
   const [data, setItems] = useState<t[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currency, setCurrency] = useState("GBP");
 
   async function getItems() {
+    setLoading(true);
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
@@ -45,9 +55,6 @@ function index() {
         (val: any) => val.product_id,
       );
 
-      console.log(regionData.data);
-      console.log(productIds);
-
       let d: t[] = [];
       data.items.forEach((val: any) => {
         console.log(val);
@@ -65,6 +72,11 @@ function index() {
               (v) => v.product_id === val.productId,
             ).price,
           };
+          setCurrency(
+            (regionData.data as any[]).find(
+              (v) => v.product_id === val.productId,
+            ).currency_type,
+          );
           d.push(v);
         }
       });
@@ -72,6 +84,8 @@ function index() {
       setItems(d);
     } catch (error) {
       setItems([]);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -90,7 +104,11 @@ function index() {
           backgroundColor: "white",
         }}
       >
-        <Text>No items in cart</Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="black" />
+        ) : (
+          <Text>No items in cart</Text>
+        )}
       </View>
     );
   } else {
@@ -142,13 +160,13 @@ function index() {
                   </Pressable>
                 </View>
                 <Text style={{ fontSize: 16, fontWeight: 600 }}>
-                  ₹{item.price}
+                  {item.price} {"/-"} {item.currency}
                 </Text>
               </View>
             </View>
-            <Text style={{ fontWeight: 700, fontSize: 12, marginTop: 12 }}>
+            {/* <Text style={{ fontWeight: 700, fontSize: 12, marginTop: 12 }}>
               Estimated delivery between 11 Mar - 12 Mar
-            </Text>
+            </Text> */}
           </View>
         ))}
 
@@ -170,7 +188,8 @@ function index() {
             <Text style={{ fontSize: 16 }}>Sub Total</Text>
 
             <Text style={{ fontSize: 16, fontWeight: 600 }}>
-              ₹{data.reduce((acc, item) => acc + item.price * item.amount, 0)}
+              {data.reduce((acc, item) => acc + item.price * item.amount, 0)}
+              {"/-"} {currency}
             </Text>
           </View>
 

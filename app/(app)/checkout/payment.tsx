@@ -18,20 +18,23 @@ import Toast from "react-native-toast-message";
 import razorpayHandler from "@/handlers/razorpayHandler";
 
 interface ProductItem {
-  id: string;
+  // id: string;
   name: string;
   description: string;
   size: string;
   price: number;
+  estimatedDelivery: string;
   imageUrl: string;
+  quantity: string;
 }
 
 const ConfirmOrderScreen = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const [user, setUser] = useState<IUser>();
   const [showPaymentMethod, setShowPaymentMethod] = useState<boolean>(true);
+  const [currency, setCurrency] = useState("GBP");
 
-  const { items } = useLocalSearchParams<{ items: string[] }>();
+  const { items } = useLocalSearchParams();
 
   const [productItems, setProductItems] = useState<ProductItem[]>([]);
   const paymentMethods = [
@@ -84,65 +87,49 @@ const ConfirmOrderScreen = () => {
       return;
     }
 
-    const res2 = await fetch(`${BASE_URL}payment/create-order`, {
-      method: "POST",
+    // const res2 = await fetch(`${BASE_URL}payment/create-order`, {
+    //   method: "POST",
 
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": user.token,
-      },
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "x-access-token": user.token,
+    //   },
 
-      body: JSON.stringify({
-        orderId: data.orderId,
-        provider: "razorpay",
-        currencyType: "INR",
-      }),
-    });
+    //   body: JSON.stringify({
+    //     orderId: data.orderId,
+    //     provider: "razorpay",
+    //     currencyType: "INR",
+    //   }),
+    // });
 
-    // // console.log(res2.ok);
-    const orderData = await res2.json();
+    // const orderData = await res2.json();
 
-    console.log(orderData);
+    // console.log(orderData);
 
-    if (orderData.error) {
-      Toast.show({ text1: orderData.error });
-      return;
-    }
+    // if (orderData.error) {
+    //   Toast.show({ text1: orderData.error });
+    //   return;
+    // }
     try {
       console.log("Processing payment...");
-      // const res = await RazorpayCheckout.open({
-      //   description: "Confirm Order",
-      //   image:
-      //     "https://www.saintg.in/cdn/shop/files/new-web6.png?v=1727171817&width=140",
-      //   currency: "INR",
-      //   key: "rzp_test_9DtTuk9KjkdDSX",
-      //   amount: parseInt(orderData.amount) * 100,
-      //   name: "Order",
 
-      //   order_id: orderData.id, // Added missing required property
-      //   prefill: {
-      //     email: user.email,
-      //     contact: user.phoneNumber,
-      //     name: "SaintG",
-      //   },
-      //   theme: { color: "#F37254" },
-      // });
+      let verify: Response | string;
+      if (user.regionId === "3") {
+        verify = await razorpayHandler(user, data);
 
-      // const verify = await fetch(`${BASE_URL}payment/verify-payment`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     "x-access-token": user.token,
-      //   },
-      //   body: JSON.stringify({
-      //     orderId: data.orderId,
-      //     paymentId: res.razorpay_payment_id,
-      //     signature: res.razorpay_signature,
-      //     razorpayOrderId: res.razorpay_order_id,
-      //     provider: "razorpay",
-      //   }),
-      // });
-      const verify = await razorpayHandler(user, orderData, data);
+        if (typeof verify === "string") {
+          Toast.show({ text1: verify });
+          return;
+        }
+      } else {
+        verify = await razorpayHandler(user, data);
+
+        if (typeof verify === "string") {
+          Toast.show({ text1: verify });
+          return;
+        }
+      }
+
       if (verify.ok) {
         router.push({
           pathname: "/(app)/checkout/success",
@@ -165,24 +152,29 @@ const ConfirmOrderScreen = () => {
     const user = JSON.parse(userDetails) as IUser;
     setUser(user);
 
+    if (user.regionId === "1") setCurrency("GBP");
+    if (user.regionId === "2") setCurrency("USD");
+    if (user.regionId === "3") setCurrency("INR");
+
     let i: ProductItem[] = [];
 
-    // console.log(items);
+    // for (let str of items) {
+    //   console.log(str);
+    const parts = (items as string).split("SEP");
 
-    for (let str of items) {
-      const parts = str.split("SEP");
+    console.log(parts);
 
-      const map: ProductItem = {
-        id: items.indexOf(str).toString(),
-        name: parts[0].replace("${val.", "").replace("}", ""),
-        description: parts[1].replace("${val.", "").replace("}", ""),
-        price: parseInt(parts[2].replace("${val.", "").replace("}", "")),
-        size: parts[3].replace("${val.", "").replace("}", ""),
-        imageUrl: parts[4].replace("${val.", "").replace("}", ""),
-      };
-      // console.log(map);
-      i.push(map);
-    }
+    const map: ProductItem = {
+      name: parts[0],
+      description: parts[1],
+      price: parseInt(parts[2]),
+      size: parts[3],
+      imageUrl: parts[4],
+      estimatedDelivery: parts[5],
+      quantity: parts[6],
+    };
+    console.log(map);
+    i.push(map);
 
     setProductItems(i);
   }
@@ -220,7 +212,7 @@ const ConfirmOrderScreen = () => {
 
       <View style={styles.productContainer}>
         {productItems.map((item) => (
-          <View key={item.id} style={styles.productItem}>
+          <View key={productItems.indexOf(item)} style={styles.productItem}>
             <Image
               source={{ uri: item.imageUrl }}
               style={styles.productImage}
@@ -229,8 +221,11 @@ const ConfirmOrderScreen = () => {
               <Text style={styles.productName}>{item.name}</Text>
               <Text style={styles.productDescription}>{item.description}</Text>
               <Text style={styles.productSize}>Size: {item.size}</Text>
+              <Text style={styles.productSize}>Quantity: {item.quantity}</Text>
             </View>
-            <Text style={styles.productPrice}>${item.price}</Text>
+            <Text style={styles.productPrice}>
+              {item.price} {"/-"} {currency}
+            </Text>
           </View>
         ))}
       </View>
@@ -295,7 +290,7 @@ const ConfirmOrderScreen = () => {
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>TOTAL</Text>
         <Text style={styles.totalAmount}>
-          {productItems.reduce((a, b) => a + b.price, 0)}
+          {productItems.reduce((a, b) => a + b.price * parseInt(b.quantity), 0)}
         </Text>
       </View>
 

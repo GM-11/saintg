@@ -11,6 +11,7 @@ import {
   View,
   Image,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 
 type t = {
@@ -18,21 +19,38 @@ type t = {
   title: string;
   subtitle: string;
   price: number;
+  currency: string;
   id: number;
-  originalPrice: number;
-  discountPercentage: number;
+  // originalPrice: number;
+  // discountPercentage: number;
 };
 
-const convertApiResponseToT = (apiResponse: any[]): t[] => {
-  return apiResponse.map((item) => ({
-    image: item.product_images[0]?.image_url || "", // Assuming the first image is the main one
-    title: item.product_name,
-    subtitle: item.description,
-    price: item.product_specifications[0]?.value || 0, // Assuming the first specification is the price
-    id: item.product_id,
-    originalPrice: item.product_specifications[0]?.value || 0, // You might need to adjust this if there's an original price field
-    discountPercentage: item.discount || 0,
-  }));
+const convertApiResponseToT = (apiResponse: any[], regionData: any[]): t[] => {
+  const productIds: any[] = regionData.map((val: any) => val.product_id);
+  return apiResponse
+    .map((item) => {
+      if (productIds.includes(item.product_id)) {
+        return {
+          image: item.product_images[0]?.image_url || "", // Assuming the first image is the main one
+          title: item.product_name,
+          subtitle: item.description,
+          price: regionData.find((v) => v.product_id === item.product_id).price,
+          currency: regionData.find((v) => v.product_id === item.product_id)
+            .currency_type,
+          id: item.product_id,
+          // originalPrice: item.product_specifications[0]?.value || 0, // You might need to adjust this if there's an original price field
+          // discountPercentage: item.discount || 0,
+        };
+      }
+      return {
+        image: "",
+        title: "",
+        subtitle: "",
+        price: 0,
+        id: 0,
+      };
+    })
+    .filter((item): item is t => item !== undefined);
 };
 
 function index() {
@@ -61,9 +79,17 @@ function index() {
       );
       const d = result.data.data;
 
-      // console.log(result.data);
+      const regionData = await axios.get(
+        `${BASE_URL}products/region/${user.regionId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user.token,
+          },
+        },
+      );
 
-      const convertedData = convertApiResponseToT(d);
+      const convertedData = convertApiResponseToT(d, regionData.data);
       setData(convertedData);
       setShowResults(true);
     } catch (error) {
@@ -120,18 +146,18 @@ function index() {
       {loading ? (
         <View
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
+            backgroundColor: "white",
+            flex: 1,
             justifyContent: "center",
             alignItems: "center",
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
           }}
         >
-          <Text>Loading...</Text>
+          <ActivityIndicator color="black" size="large" />
         </View>
       ) : null}
 
@@ -365,9 +391,9 @@ function SearchResult(search: string, data: t[]) {
               </Text>
               <View style={{ display: "flex", flexDirection: "row" }}>
                 <Text style={{ fontSize: 16, fontWeight: 600 }}>
-                  ${val.item.price}
+                  {val.item.price} {"/-"} {val.item.currency}
                 </Text>
-                <Text
+                {/* <Text
                   style={{
                     fontSize: 16,
                     fontWeight: 400,
@@ -386,7 +412,7 @@ function SearchResult(search: string, data: t[]) {
                   }}
                 >
                   {val.item.discountPercentage}% off
-                </Text>
+                </Text> */}
               </View>
             </View>
           )}

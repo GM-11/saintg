@@ -1,19 +1,35 @@
-// import { IUser } from "@/constants/types";
+import { BASE_URL } from "@/constants/constant";
+import { IUser } from "@/constants/types";
+import "react-native-paypal";
 
-// import { requestOneTimePayment } from "react-native-paypal";
+export default async function razorpayHandler(
+  user: IUser,
+  data: any,
+  currency: string,
+): Promise<Response | string> {
+  const res2 = await fetch(`${BASE_URL}payment/create-order`, {
+    method: "POST",
 
-// export async function paypalHandler(user: IUser, orderData: any, data: any) {
-//   // For one time payments
-//   const { nonce, payerId, email, firstName, lastName, phone } =
-//     await requestOneTimePayment(token, {
-//       amount: "5", // required
-//       // any PayPal supported currency (see here: https://developer.paypal.com/docs/integration/direct/rest/currency-codes/#paypal-account-payments)
-//       currency: "GBP",
-//       // any PayPal supported locale (see here: https://braintree.github.io/braintree_ios/Classes/BTPayPalRequest.html#/c:objc(cs)BTPayPalRequest(py)localeCode)
-//       localeCode: "en_GB",
-//       shippingAddressRequired: false,
-//       userAction: "commit", // display 'Pay Now' on the PayPal review page
-//       // one of 'authorize', 'sale', 'order'. defaults to 'authorize'. see details here: https://developer.paypal.com/docs/api/payments/v1/#payment-create-request-body
-//       intent: "authorize",
-//     });
-// }
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": user.token,
+    },
+
+    body: JSON.stringify({
+      orderId: data.orderId,
+      provider: "paypal",
+      currencyType: currency,
+    }),
+  });
+
+  const orderData = await res2.json();
+
+  console.log(orderData);
+
+  if (orderData.error) {
+    // Toast.show({ text1: orderData.error });
+    return orderData.error;
+  }
+
+  // return verify;
+}
