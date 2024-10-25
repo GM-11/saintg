@@ -1,12 +1,18 @@
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
-import "react-native-paypal";
+// import {
+//   paypalLocalCodes,
+//   paypalSupportedCurrencies,
+//   requestOneTimePayment,
+// } from "react-native-paypal";
 
-export default async function razorpayHandler(
+export async function paypalHandler(
   user: IUser,
   data: any,
   currency: string,
-): Promise<Response | string> {
+  amount: string,
+): Promise<{ url: string; orderId: string; paymentId: string }> {
+  console.log("in paypal handler");
   const res2 = await fetch(`${BASE_URL}payment/create-order`, {
     method: "POST",
 
@@ -27,9 +33,31 @@ export default async function razorpayHandler(
   console.log(orderData);
 
   if (orderData.error) {
-    // Toast.show({ text1: orderData.error });
     return orderData.error;
   }
+  return {
+    url: orderData.links[1].href as string,
+    orderId: data.orderId,
+    paymentId: orderData.id,
+  };
+}
 
-  // return verify;
+export async function verifyPayment(
+  user: IUser,
+  orderId: string,
+  paymentId: string,
+) {
+  const verify = await fetch(`${BASE_URL}payment/verify-paypal-payment`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": user.token,
+    },
+    body: JSON.stringify({
+      orderId,
+      paymentId,
+    }),
+  });
+
+  return verify;
 }

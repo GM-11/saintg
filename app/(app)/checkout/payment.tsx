@@ -16,6 +16,8 @@ import { BASE_URL, EXPO_PUBLIC_API_KEY } from "@/constants/constant";
 import RazorpayCheckout from "react-native-razorpay";
 import Toast from "react-native-toast-message";
 import razorpayHandler from "@/handlers/razorpayHandler";
+import { paypalHandler, verifyPayment } from "@/handlers/paypalHandler";
+import WebView from "react-native-webview";
 
 interface ProductItem {
   // id: string;
@@ -33,6 +35,10 @@ const ConfirmOrderScreen = () => {
   const [user, setUser] = useState<IUser>();
   const [showPaymentMethod, setShowPaymentMethod] = useState<boolean>(true);
   const [currency, setCurrency] = useState("GBP");
+  const [webView, setWebView] = useState<string>("");
+  const [showWebView, setShowWebView] = useState<boolean>(false);
+  const [paypalPaymentId, setPaypalPaymentId] = useState<string>("");
+  const [paypalOrderId, setPaypalOrderId] = useState<string>("");
 
   const { items } = useLocalSearchParams();
 
@@ -87,63 +93,41 @@ const ConfirmOrderScreen = () => {
       return;
     }
 
-    // const res2 = await fetch(`${BASE_URL}payment/create-order`, {
-    //   method: "POST",
-
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "x-access-token": user.token,
-    //   },
-
-    //   body: JSON.stringify({
-    //     orderId: data.orderId,
-    //     provider: "razorpay",
-    //     currencyType: "INR",
-    //   }),
-    // });
-
-    // const orderData = await res2.json();
-
-    // console.log(orderData);
-
-    // if (orderData.error) {
-    //   Toast.show({ text1: orderData.error });
-    //   return;
-    // }
     try {
       console.log("Processing payment...");
 
       let verify: Response | string;
       if (user.regionId === "3") {
         verify = await razorpayHandler(user, data);
-
         if (typeof verify === "string") {
           Toast.show({ text1: verify });
           return;
         }
-      } else {
-        verify = await razorpayHandler(user, data);
 
-        if (typeof verify === "string") {
-          Toast.show({ text1: verify });
-          return;
+        if (verify.ok) {
+          router.push({
+            pathname: "/(app)/checkout/success",
+            params: {
+              orderId: data.orderId,
+            },
+          });
         }
-      }
-
-      if (verify.ok) {
-        router.push({
-          pathname: "/(app)/checkout/success",
-          params: {
-            orderId: data.orderId,
-          },
-        });
       } else {
-        Toast.show({ text1: "Payment Failed" });
+        const { url, orderId, paymentId } = await paypalHandler(
+          user,
+          data,
+          currency,
+          productItems
+            .reduce((a, b) => a + b.price * parseInt(b.quantity), 0)
+            .toString(),
+        );
+        console.log(url);
+        setWebView(url as string);
+        setPaypalOrderId(orderId);
+        setPaypalPaymentId(paymentId);
+        setShowWebView(true);
       }
-    } catch (error: any) {
-      // console.log(error);
-      // console.log(error.description);
-    }
+    } catch (error: any) {}
   };
 
   async function getData() {
@@ -158,11 +142,9 @@ const ConfirmOrderScreen = () => {
 
     let i: ProductItem[] = [];
 
-    // for (let str of items) {
-    //   console.log(str);
+    // for (let item of items as string[]) {
+    console.log(items);
     const parts = (items as string).split("SEP");
-
-    console.log(parts);
 
     const map: ProductItem = {
       name: parts[0],
@@ -175,6 +157,7 @@ const ConfirmOrderScreen = () => {
     };
     console.log(map);
     i.push(map);
+    // }
 
     setProductItems(i);
   }
@@ -185,121 +168,172 @@ const ConfirmOrderScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.addressContainer}>
-        <Text style={styles.addressTitle}>DELIVERS TO</Text>
-        <Text style={styles.addressName}>{user?.name}</Text>
-        <Text style={styles.addressDetails}>
-          {user && user.address ? (
-            user.address.substring(0, user.address.length - 6) + "\n"
-          ) : (
-            <>
-              <Link
-                href={{
-                  pathname: "/(app)/account/addresses",
-                }}
-              >
-                <Text> Add new address {"\n"} </Text>
-              </Link>
-            </>
-          )}
-
-          {user?.phoneNumber}
-        </Text>
-        <Pressable style={styles.changeButton}>
-          <Text style={styles.changeButtonText}>CHANGE</Text>
-        </Pressable>
-      </View>
-
-      <View style={styles.productContainer}>
-        {productItems.map((item) => (
-          <View key={productItems.indexOf(item)} style={styles.productItem}>
-            <Image
-              source={{ uri: item.imageUrl }}
-              style={styles.productImage}
-            />
-            <View style={styles.productDetails}>
-              <Text style={styles.productName}>{item.name}</Text>
-              <Text style={styles.productDescription}>{item.description}</Text>
-              <Text style={styles.productSize}>Size: {item.size}</Text>
-              <Text style={styles.productSize}>Quantity: {item.quantity}</Text>
-            </View>
-            <Text style={styles.productPrice}>
-              {item.price} {"/-"} {currency}
-            </Text>
-          </View>
-        ))}
-      </View>
-
-      {/* <View
-        style={{
-          backgroundColor: "black",
-          padding: 16,
-          flexDirection: "row",
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
-          marginBottom: 12,
-        }}
-      >
-        <Text
-          style={{
-            color: "white",
-            letterSpacing: 1,
-            fontWeight: 300,
-          }}
-        >
-          PAYMENT METHOD
-        </Text>
-
-        <Pressable
-          onPress={() => {
-            setShowPaymentMethod((prev) => !prev);
-          }}
-        >
-          <Text
+      <View>
+        {showWebView ? (
+          <View
             style={{
-              color: "white",
-              letterSpacing: 1,
-              fontWeight: 300,
+              alignSelf: "stretch",
             }}
           >
-            {showPaymentMethod ? "V" : "A"}
-          </Text>
-        </Pressable>
-      </View>
-      <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
-        {showPaymentMethod ? (
-          paymentMethods.map((method) => (
-            <TouchableOpacity
-              key={method.id}
-              style={styles.paymentMethodItem}
-              onPress={() => handlePaymentMethodSelect(method.id)}
-            >
-              <View style={styles.radioButton}>
-                {selectedPaymentMethod === method.id && (
-                  <View style={styles.radioButtonInner} />
-                )}
-              </View>
-              <Text style={styles.paymentMethodName}>{method.name}</Text>
-            </TouchableOpacity>
-          ))
-        ) : (
-          <View />
-      </View>
-        )} */}
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>TOTAL</Text>
-        <Text style={styles.totalAmount}>
-          {productItems.reduce((a, b) => a + b.price * parseInt(b.quantity), 0)}
-        </Text>
-      </View>
+            <WebView
+              style={{ left: 0, width: 450, height: 800 }}
+              javaScriptEnabled
+              onNavigationStateChange={async (state) => {
+                if (state.url.includes("?message=success")) {
+                  setShowWebView(false);
+                  setWebView("");
 
-      <TouchableOpacity
-        style={styles.makePaymentButton}
-        onPress={handleMakePayment}
-      >
-        <Text style={styles.makePaymentButtonText}>MAKE PAYMENT</Text>
-      </TouchableOpacity>
+                  const verify = await verifyPayment(
+                    user!,
+                    paypalOrderId,
+                    paypalPaymentId,
+                  );
+
+                  if (verify.ok) {
+                    router.push({
+                      pathname: "/(app)/checkout/success",
+                      params: {
+                        orderId: paypalOrderId,
+                      },
+                    });
+                  }
+                }
+              }}
+              source={{
+                uri: webView,
+              }}
+            />
+          </View>
+        ) : (
+          <View>
+            <View style={styles.addressContainer}>
+              <Text style={styles.addressTitle}>DELIVERS TO</Text>
+              <Text style={styles.addressName}>{user?.name}</Text>
+              <Text style={styles.addressDetails}>
+                {user && user.address ? (
+                  user.address.substring(0, user.address.length - 6) + "\n"
+                ) : (
+                  <>
+                    <Link
+                      href={{
+                        pathname: "/(app)/account/addresses",
+                      }}
+                    >
+                      <Text> Add new address {"\n"} </Text>
+                    </Link>
+                  </>
+                )}
+
+                {user?.phoneNumber}
+              </Text>
+              <Pressable style={styles.changeButton}>
+                <Text style={styles.changeButtonText}>CHANGE</Text>
+              </Pressable>
+            </View>
+
+            <View style={styles.productContainer}>
+              {productItems.map((item) => (
+                <View
+                  key={productItems.indexOf(item)}
+                  style={styles.productItem}
+                >
+                  <Image
+                    source={{ uri: item.imageUrl }}
+                    style={styles.productImage}
+                  />
+                  <View style={styles.productDetails}>
+                    <Text style={styles.productName}>{item.name}</Text>
+                    <Text style={styles.productDescription}>
+                      {item.description}
+                    </Text>
+                    <Text style={styles.productSize}>Size: {item.size}</Text>
+                    <Text style={styles.productSize}>
+                      Quantity: {item.quantity}
+                    </Text>
+                  </View>
+                  <Text style={styles.productPrice}>
+                    {item.price} {"/-"} {currency}
+                  </Text>
+                </View>
+              ))}
+            </View>
+
+            {/* <View
+                   style={{
+                     backgroundColor: "black",
+                     padding: 16,
+                     flexDirection: "row",
+                     display: "flex",
+                     justifyContent: "space-between",
+                     width: "100%",
+                     marginBottom: 12,
+                   }}
+                 >
+                   <Text
+                     style={{
+                       color: "white",
+                       letterSpacing: 1,
+                       fontWeight: 300,
+                     }}
+                   >
+                     PAYMENT METHOD
+                   </Text>
+
+                   <Pressable
+                     onPress={() => {
+                       setShowPaymentMethod((prev) => !prev);
+                     }}
+                   >
+                     <Text
+                       style={{
+                         color: "white",
+                         letterSpacing: 1,
+                         fontWeight: 300,
+                       }}
+                     >
+                       {showPaymentMethod ? "V" : "A"}
+                     </Text>
+                   </Pressable>
+                 </View>
+                 <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+                   {showPaymentMethod ? (
+                     paymentMethods.map((method) => (
+                       <TouchableOpacity
+                         key={method.id}
+                         style={styles.paymentMethodItem}
+                         onPress={() => handlePaymentMethodSelect(method.id)}
+                       >
+                         <View style={styles.radioButton}>
+                           {selectedPaymentMethod === method.id && (
+                             <View style={styles.radioButtonInner} />
+                           )}
+                         </View>
+                         <Text style={styles.paymentMethodName}>{method.name}</Text>
+                       </TouchableOpacity>
+                     ))
+                   ) : (
+                     <View />
+                 </View>
+                   )} */}
+            <View style={styles.totalContainer}>
+              <Text style={styles.totalText}>TOTAL</Text>
+              <Text style={styles.totalAmount}>
+                {productItems.reduce(
+                  (a, b) => a + b.price * parseInt(b.quantity),
+                  0,
+                )}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.makePaymentButton}
+              onPress={handleMakePayment}
+            >
+              <Text style={styles.makePaymentButtonText}>MAKE PAYMENT</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
     </ScrollView>
   );
 };
