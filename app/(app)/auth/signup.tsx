@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -23,7 +23,7 @@ function signup() {
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [mobile, setMobile] = useState<string>("");
-  const countryCodeOptions = ["+91", "+90"];
+  const countryCodeOptions = ["+44", "+1", "+91"];
   const [countryCode, setCountryCode] = useState<string>(countryCodeOptions[0]);
   const [selectedGender, setSelectedGender] = useState<string>(
     genderOPtions[0],
@@ -32,6 +32,8 @@ function signup() {
     useState<boolean>(false);
   const [countryCodeDropDownExpanded, setCountryCodeExpanded] =
     useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [showError, setShowError] = useState<boolean>(false);
 
   const [showOTPOtpOverlay, setShowOTPOtpOverlay] = useState<boolean>(false);
 
@@ -45,21 +47,26 @@ function signup() {
 
   async function signUpUser() {
     if (name === "" || email === "" || password === "" || mobile === "") {
+      setError("Please fill all fields");
+      setShowError(true);
       showToast("Please fill all fields");
       return;
     }
 
     if (mobile.length !== 10) {
+      setError("Mobile number should be 10 digits");
+      setShowError(true);
       showToast("Mobile number should be 10 digits");
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
+      setError("Invalid email");
+      setShowError(true);
       showToast("Invalid email");
       return;
     }
-
     try {
       const body = {
         fullName: name,
@@ -84,6 +91,8 @@ function signup() {
       Toast.show({ text1: data.message || data.msg });
 
       if (data.code !== 200) {
+        setError(data.message || data.msg || "Something went wrong");
+        setShowError(true);
         return;
       }
       setShowOTPOtpOverlay(true);
@@ -93,8 +102,14 @@ function signup() {
       //   });
     } catch (error) {
       console.error("Error signing up user:", error);
+      setError("Something went wrong. Please try again.");
+      setShowError(true);
     }
   }
+
+  useEffect(() => {
+    setCountryCode(countryCodeOptions[parseInt(regionId) - 1]);
+  }, []);
 
   return (
     <>
@@ -257,9 +272,15 @@ function signup() {
             <View />
           )}
         </View>
-        <Pressable onPress={signUpUser} style={styles.buttonSignIn}>
+        {showError && (
+          <Text style={{ color: "red", fontSize: 12, marginTop: 8 }}>
+            {error}
+          </Text>
+        )}
+
+        <TouchableOpacity onPress={signUpUser} style={styles.buttonSignIn}>
           <Text style={styles.buttonText}>SIGN UP</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </>
   );

@@ -156,7 +156,7 @@ function orderSummary() {
               justifyContent: "space-between",
             }}
           >
-            <Pressable
+            {/* <Pressable
               style={{ ...styles.button, width: "98%" }}
               onPress={() => {
                 Toast.show({
@@ -167,7 +167,7 @@ function orderSummary() {
               <Text style={{ color: "white", textAlign: "center" }}>
                 {status === "Delivered" ? "Return" : "Cancel Order"}
               </Text>
-            </Pressable>
+            </Pressable> */}
             {/* <Pressable style={styles.button}>
               <Text style={{ color: "white", textAlign: "center" }}>
                 {status === "Delivered" ? "Cancel Order" : "Track Order"}
@@ -253,14 +253,14 @@ function orderSummary() {
                   ${price}
                 </Text>
 
-                <Text
+                {/* <Text
                   style={{
                     fontSize: 12,
                     fontWeight: 400,
                   }}
                 >
                   View Breakup
-                </Text>
+                </Text> */}
               </View>
             </View>
             <View

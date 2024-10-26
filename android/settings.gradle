@@ -44,7 +44,7 @@ if (getRNMinorVersion() >= 75) {
   }
 }
 
-rootProject.name = 'saintg'
+rootProject.name = 'Saintg'
 
 dependencyResolutionManagement {
   versionCatalogs {

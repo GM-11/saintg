@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Pressable,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -29,7 +30,7 @@ function changePassword() {
       return;
     }
 
-    const userDetails = await AsyncStorage.getItem("userdetails");
+    const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) {
       return;
     }
@@ -47,17 +48,17 @@ function changePassword() {
         }),
       });
 
+      console.log(response);
       if (!response.ok) {
         console.error("Error:", response);
       }
+      setShowOTPOtpOverlay(true);
 
       Toast.show({ text1: "Password reset succesful" });
     } catch (error) {
       console.error("Error:", error);
       Toast.show({ text1: "Password reset failed" });
     }
-
-    setShowOTPOtpOverlay(true);
   }
 
   return (
@@ -153,16 +154,17 @@ function changePassword() {
           </View>
         </View>
 
-        <Pressable
+        <TouchableOpacity
           style={{
             backgroundColor: "black",
             padding: 16,
             alignItems: "center",
             marginTop: 48,
           }}
+          onPress={() => updatePassword()}
         >
           <Text style={{ color: "white", fontSize: 16 }}>UPDATE NOW</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </>
   );

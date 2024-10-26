@@ -14,6 +14,7 @@ import { BASE_URL } from "@/constants/constant";
 import { router } from "expo-router";
 import { IUser } from "@/constants/types";
 import Toast from "react-native-toast-message";
+import Eye from "@/components/Eye";
 
 function signin() {
   const [email, setEmail] = useState<string>("");
@@ -21,28 +22,34 @@ function signin() {
   const [isPhoneNumber, setIsPhoneNumber] = useState<boolean>(false);
   const [countryCodeDropDownExpanded, setCountryCodeExpanded] =
     useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const countryCodeOptions = ["+91", "+90"];
+  const countryCodeOptions = ["+91", "+44", "+1"];
   const [countryCode, setCountryCode] = useState<string>(countryCodeOptions[0]);
   const [loading, setLoading] = useState<boolean>(false);
 
   async function signInUser() {
     setLoading(true);
     if (email === "" || password === "") {
+      setError(true);
+      setErrorText("Email/Phone and password are required");
+      setLoading(false);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 
     const isEmail = emailRegex.test(email);
     const isPhone = phoneRegex.test(email);
 
     if (!isEmail && !isPhone) {
+      setError(true);
+      setErrorText("Invalid email or phone number");
       Toast.show({ text1: "Invalid email or phone number" });
       setLoading(false);
-
       return;
     }
 
@@ -71,6 +78,8 @@ function signin() {
 
       const data = await result.json();
       if (data.code !== 200) {
+        setError(true);
+        setErrorText(data.msg || data.message);
         Toast.show({ text1: data.msg || data.message });
         setLoading(false);
         return;
@@ -97,8 +106,14 @@ function signin() {
       const addressData = (await addressResult.json()).data[0];
       const addressText = `${addressData.addressLine1}${addressData.addressLine2 ? ", " + addressData.addressLine2 : ""}, ${addressData.city}, ${addressData.state}, ${addressData.zipCode}, ${addressData.country}//ID=${addressData.id}`;
 
-      // console.log(addressData);
-
+      let regionId: string;
+      if (countryCode === "+44") {
+        regionId = "1";
+      } else if (countryCode === "+1") {
+        regionId = "2";
+      } else {
+        regionId = "3";
+      }
       const u: IUser = {
         name: userDetails.fullName,
         email: userDetails.email,
@@ -107,7 +122,7 @@ function signin() {
         gender: userDetails.gender,
         password: password,
         address: addressText,
-        regionId: "1",
+        regionId,
       };
 
       await AsyncStorage.setItem("userDetails", JSON.stringify(u));
@@ -119,27 +134,18 @@ function signin() {
       }, 1000);
     } catch (error) {
       console.error("Error signing in user:", error);
+      setError(true);
+      setErrorText("Error signing in user");
       Toast.show({ text1: "Error signing in user" });
     } finally {
       setLoading(false);
     }
   }
+
   return (
     <View style={styles.body}>
       {loading ? (
-        <View
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: "transparent",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <View style={styles.loadingContainer}>
           <ActivityIndicator color="black" size="large" />
         </View>
       ) : (
@@ -153,14 +159,7 @@ function signin() {
       <View style={styles.form}>
         <Text style={styles.textSize12}> EMAIL ID / MOBILE NO. </Text>
 
-        <View
-          style={{
-            ...styles.input,
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.inputContainer}>
           {isPhoneNumber ? (
             <TouchableOpacity
               onPress={() => {
@@ -184,6 +183,8 @@ function signin() {
                 setIsPhoneNumber(true);
               }
               setEmail(e);
+              setError(false);
+              setErrorText("");
             }}
           />
         </View>
@@ -198,35 +199,51 @@ function signin() {
                   setCountryCodeExpanded(false);
                 }}
               >
-                <Text
-                  style={{
-                    ...styles.dropdownOptions,
-                    ...styles.textSize12,
-                    textAlign: "left",
-                  }}
-                >
-                  {val}
-                </Text>
+                <Text style={styles.dropdownOptions}>{val}</Text>
               </TouchableOpacity>
             ))}
           </View>
         ) : (
           <View />
         )}
-        <Text style={styles.textSize12}> PASSWORD </Text>
 
-        <TextInput
-          value={password}
-          style={styles.input}
-          onChangeText={(e) => setPassword(e)}
-        />
-        {/* <TouchableOpacity>
-          <Text>FORGOT PASSWORD</Text>
-        </TouchableOpacity> */}
+        <View style={styles.passwordContainer}>
+          <Text style={styles.textSize12}> PASSWORD </Text>
+          <View style={styles.passwordInputContainer}>
+            <TextInput
+              value={password}
+              style={styles.passwordInput}
+              secureTextEntry={!showPassword}
+              onChangeText={(e) => {
+                setPassword(e);
+                setError(false);
+                setErrorText("");
+              }}
+            />
+            <Eye
+              condition={showPassword}
+              func={() => setShowPassword(!showPassword)}
+              rightMargin={10}
+            />
+            {/* <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={() => setShowPassword(!showPassword)}
+            >
+              <Ionicons
+                name={showPassword ? "eye-outline" : "eye-off-outline"}
+                size={24}
+                color="black"
+              />
+            </TouchableOpacity> */}
+          </View>
+          {error && <Text style={styles.errorText}>{errorText}</Text>}
+        </View>
       </View>
+
       <TouchableOpacity onPress={signInUser} style={styles.buttonSignIn}>
         <Text style={{ ...styles.buttonText, marginBottom: 10 }}>SIGN IN</Text>
       </TouchableOpacity>
+
       <TouchableOpacity
         onPress={() => {
           router.push("/(app)/auth/signup");
@@ -234,20 +251,10 @@ function signin() {
       >
         <Text>CREATE ACCOUNT</Text>
       </TouchableOpacity>
-      {/* <Text>LOGIN WITH SOCIAL MEDIA</Text>
 
-      <TouchableOpacity
-        onPress={async () => {
-          // router.push("/(auth)/signin");
-        }}
-        style={styles.googleLogin}
-      >
-        <Text style={styles.text}>LOGIN WITH GOOGLE</Text>
-      </TouchableOpacity> */}
       <Text style={styles.textTnc}>
         By clicking on sign in you agree to our terms of use and privacy policy
       </Text>
-      {/* <Text style={styles.text}>SKIP </Text> */}
     </View>
   );
 }
@@ -262,8 +269,43 @@ const styles = StyleSheet.create({
     width: "100%",
     borderWidth: 0,
   },
+  loadingContainer: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "transparent",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  passwordContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+  passwordInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "black",
+    borderWidth: 1,
+    width: "100%",
+    marginVertical: 16,
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 8,
+  },
+  eyeIcon: {
+    padding: 8,
+  },
   dropdownOptions: {
     padding: 16,
+    fontSize: 12,
+    fontFamily: "Lato-Regular",
+    textAlign: "left",
   },
   dropdown: {
     position: "absolute",
@@ -278,15 +320,6 @@ const styles = StyleSheet.create({
     marginTop: 36,
     padding: 16,
   },
-  googleLogin: {
-    backgroundColor: "transparent",
-    borderColor: "#DEDEDE",
-    borderWidth: 1,
-    width: "60%",
-    marginTop: 36,
-    padding: 16,
-  },
-
   text: {
     color: "black",
     alignSelf: "center",
@@ -315,7 +348,6 @@ const styles = StyleSheet.create({
     width: "75%",
     fontFamily: "Lato-Regular",
   },
-
   form: {
     display: "flex",
     justifyContent: "flex-start",
@@ -323,13 +355,30 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     width: "80%",
   },
-
   input: {
     borderColor: "black",
     borderWidth: 1,
     width: "100%",
     marginVertical: 16,
     padding: 8,
+  },
+  inputContainer: {
+    borderColor: "black",
+    borderWidth: 1,
+    width: "100%",
+    marginVertical: 16,
+    padding: 8,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    fontFamily: "Lato-Regular",
+    marginTop: 5,
+    alignSelf: "flex-start",
+    width: "100%",
   },
 });
 

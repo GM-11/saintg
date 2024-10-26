@@ -32,18 +32,6 @@ export default function Index() {
         }}
       >
         <View style={styles.container}>
-          {/* <View style={styles.selectedContainer}>
-            <Text
-              style={styles.flag}
-            >{`${countryData[selectedCountry].flag}`}</Text>
-            <Text style={styles.textDropdown}>
-              {countryData[selectedCountry].countryName}
-            </Text>
-            <Text style={styles.textDropdown}>
-              ({countryData[selectedCountry].currency})
-            </Text>
-          </View> */}
-
           <Picker
             selectedValue={selectedCountry}
             style={styles.picker}
@@ -98,7 +86,8 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: "center",
-    top: -280,
+    width: "100%",
+    top: -200,
   },
   selectedContainer: {
     flexDirection: "row",

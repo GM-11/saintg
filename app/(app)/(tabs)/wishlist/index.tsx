@@ -34,7 +34,7 @@ function index() {
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
     try {
-      // console.log("fetching wishlist");
+      console.log("fetching wishlist");
       const result = await axios.get(`${BASE_URL}wishlist`, {
         headers: {
           "Content-Type": "application/json",
@@ -42,6 +42,12 @@ function index() {
         },
       });
       const data = result.data;
+      if (data.wishlist.length === 0) {
+        setLoading(false);
+        setData([]);
+
+        return;
+      }
 
       const regionData = await axios.get(
         `${BASE_URL}products/region/${user.regionId}`,
@@ -165,7 +171,16 @@ function index() {
     );
   } else {
     return (
-      <View>
+      <View
+        style={{
+          backgroundColor: "white",
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         {loading ? (
           <View
             style={{

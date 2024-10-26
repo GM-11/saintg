@@ -35,7 +35,7 @@ function manageAccount() {
   async function logOut() {
     // console.log("deleting account");
     await AsyncStorage.clear();
-    router.push("/auth");
+    router.replace("/auth");
   }
 
   return (

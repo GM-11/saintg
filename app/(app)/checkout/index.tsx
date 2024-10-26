@@ -552,15 +552,17 @@ function Item({
             justifyContent: "space-around",
           }}
         >
-          <Text style={{ fontSize: 12, color: "#555555" }}>{title}</Text>
-          <Text style={{ width: "60%" }}>{subtitle}</Text>
+          <Text style={{ fontSize: 12, color: "#555555", flexWrap: "wrap" }}>
+            {title}
+          </Text>
+          <Text style={{ width: "40%", flexWrap: "wrap" }}>{subtitle}</Text>
           <View
             style={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              width: "50%",
+              width: "40%",
             }}
           >
             <Text style={{ marginRight: 10 }}>Size </Text>
@@ -604,7 +606,7 @@ function Item({
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              width: "70%",
+              width: "40%",
             }}
           >
             <Text>Total</Text>
