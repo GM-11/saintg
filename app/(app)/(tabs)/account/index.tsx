@@ -161,11 +161,11 @@ function Tile({
         }}
       >
         <Image source={icon} />
-        <Text style={{ marginLeft: 28, fontSize: 20 }}>{title}</Text>
+        <Text style={{ marginLeft: 28, fontSize: 16 }}>{title}</Text>
       </View>
 
       <Link href={uri}>
-        <Text style={{ fontSize: 28 }}>{">"}</Text>
+        <Text style={{ fontSize: 20 }}>{">"}</Text>
       </Link>
     </View>
   );

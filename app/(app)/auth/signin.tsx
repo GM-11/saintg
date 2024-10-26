@@ -135,7 +135,7 @@ function signin() {
     } catch (error) {
       console.error("Error signing in user:", error);
       setError(true);
-      setErrorText("Error signing in user");
+      setErrorText(`Error signing in user: ${error}`);
       Toast.show({ text1: "Error signing in user" });
     } finally {
       setLoading(false);

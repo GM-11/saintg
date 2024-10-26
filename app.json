@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Saintg",
-    "slug": "saintg",
+    "name": "SaintG",
+    "slug": "SaintG",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/app_icon.png",
+    "icon": "./assets/AppIcon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/SplashScreen.png",
