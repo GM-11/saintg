@@ -94,6 +94,7 @@ function signin() {
       });
 
       const userDetails = (await userData.json()).data;
+      console.log(userDetails);
 
       const addressResult = await fetch(`${BASE_URL}address/`, {
         method: "GET",
@@ -103,9 +104,15 @@ function signin() {
         },
       });
 
-      const addressData = (await addressResult.json()).data[0];
-      const addressText = `${addressData.addressLine1}${addressData.addressLine2 ? ", " + addressData.addressLine2 : ""}, ${addressData.city}, ${addressData.state}, ${addressData.zipCode}, ${addressData.country}//ID=${addressData.id}`;
+      const a = await addressResult.json();
 
+      let addressText: string;
+      const addressData = a.data[0];
+      if (a.data.length === 0 || a.data === undefined) {
+        addressText = "";
+      } else {
+        addressText = `${addressData.addressLine1}${addressData.addressLine2 ? ", " + addressData.addressLine2 : ""}, ${addressData.city}, ${addressData.state}, ${addressData.zipCode}, ${addressData.country}//ID=${addressData.id}`;
+      }
       let regionId: string;
       if (countryCode === "+44") {
         regionId = "1";
@@ -249,7 +256,13 @@ function signin() {
           router.push("/(app)/auth/signup");
         }}
       >
-        <Text>CREATE ACCOUNT</Text>
+        <Text
+          style={{
+            marginTop: 10,
+          }}
+        >
+          CREATE ACCOUNT
+        </Text>
       </TouchableOpacity>
 
       <Text style={styles.textTnc}>
@@ -344,7 +357,8 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
     fontSize: 12,
-    lineHeight: 24,
+    marginTop: 10,
+    lineHeight: 20,
     width: "75%",
     fontFamily: "Lato-Regular",
   },

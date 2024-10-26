@@ -1,10 +1,11 @@
 {
   "expo": {
     "name": "SaintG",
-    "slug": "SaintG",
+    "slug": "saintg",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/AppIcon.png",
+    "forgroundImage": "./assets/AppIcon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/SplashScreen.png",
@@ -19,8 +20,9 @@
       }
     },
     "android": {
+      "icon": "./assets/AppIcon.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/AppIcon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.gm_11.saintg"

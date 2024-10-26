@@ -1,5 +1,6 @@
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
+import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Link, router, useLocalSearchParams } from "expo-router";
@@ -13,6 +14,7 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
+import SvgUri from "react-native-svg-uri";
 
 type t = {
   image: string;
@@ -26,6 +28,9 @@ type t = {
 };
 
 const convertApiResponseToT = (apiResponse: any[], regionData: any[]): t[] => {
+  if (regionData.length === 0) {
+    return [];
+  }
   const productIds: any[] = regionData.map((val: any) => val.product_id);
   return apiResponse
     .map((item) => {
@@ -88,7 +93,8 @@ function index() {
           },
         },
       );
-
+      console.log(regionData.data);
+      console.log(d);
       const convertedData = convertApiResponseToT(d, regionData.data);
       setData(convertedData);
       setShowResults(true);
@@ -116,13 +122,15 @@ function index() {
       >
         <Pressable onPress={() => router.back()}>
           {/* <Pressable onPress={() => setShowResults(true)}> */}
-          <Image
+          {/* <Image
             source={require("../../../assets/images/icons/forward-arrow.png")}
-          />
+          /> */}
+          <Feather name="arrow-left" size={24} color="black" />
         </Pressable>
         <TextInput
           style={{ width: "100%", paddingHorizontal: 10 }}
           value={search}
+          onSubmitEditing={fetchData}
           onChangeText={(val) => {
             setSearch(val);
             // setShowResults(true);
@@ -136,9 +144,10 @@ function index() {
             fetchData();
           }}
         >
-          <Image
-            source={require("../../../assets/images/icons/search.png")}
-            style={{ width: 20, height: 20 }}
+          <SvgUri
+            height={20}
+            width={20}
+            source={require("../../../assets/images/icons/search.svg")}
           />
         </Pressable>
       </View>

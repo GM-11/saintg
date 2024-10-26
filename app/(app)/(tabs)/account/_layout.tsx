@@ -1,38 +1,63 @@
 import React from "react";
 import { Link, router, Stack } from "expo-router";
 import { View, Text, Image, Pressable, SafeAreaView } from "react-native";
+import SvgUri from "react-native-svg-uri";
 
-function h(title: string) {
+function h() {
   return (
-    <View
-      style={{
-        backgroundColor: "white",
-        padding: 26,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}
-    >
-      <Text style={{ fontSize: 20, height: 50 }}>{title}</Text>
-
+    <SafeAreaView>
       <View
         style={{
+          paddingHorizontal: 24,
           display: "flex",
           flexDirection: "row",
-          gap: 20,
+          alignItems: "center",
+          backgroundColor: "white",
+          justifyContent: "space-between",
+          paddingTop: 40,
+          paddingBottom: 20,
         }}
       >
-        <Link href={"/search"}>
-          <Image
-            source={require("../../../../assets/images/icons/search.png")}
-          />
-        </Link>
-        <Image source={require("../../../../assets/images/icons/bell.png")} />
+        <Image
+          source={require("../../../../assets/images/saintg-logo-black.png")}
+          style={{
+            width: 100,
+            height: 50,
+            resizeMode: "contain",
+          }}
+        />
+
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            height: "100%",
+            alignItems: "center",
+            gap: 20,
+          }}
+        >
+          <Link
+            href={"/search"}
+            style={{
+              // backgroundColor: "red",
+              height: 30,
+              alignItems: "center",
+              width: 30,
+            }}
+          >
+            <SvgUri
+              height={20}
+              width={20}
+              source={require("../../../../assets/images/icons/search.svg")}
+            />
+          </Link>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
+import Feather from "@expo/vector-icons/Feather";
+
 function _h(title: string) {
   return (
     <SafeAreaView
@@ -52,9 +77,15 @@ function _h(title: string) {
             router.back();
           }}
         >
-          <Image
+          {/* <Image
             style={{ marginRight: 20, marginLeft: 15 }}
             source={require("../../../../assets/images/icons/forward-arrow.png")}
+          /> */}
+          <Feather
+            style={{ marginRight: 20, marginLeft: 15 }}
+            name="arrow-left"
+            size={24}
+            color="black"
           />
         </Pressable>
         <Text style={{ fontSize: 20, height: 50 }}>{title}</Text>
@@ -70,7 +101,7 @@ function _layout() {
         name="index"
         options={{
           header(props) {
-            return h("ACCOUNT");
+            return h();
           },
         }}
       />

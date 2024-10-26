@@ -174,8 +174,8 @@ function categoryListView() {
         data={data}
         title={"SHOP BY CURATION"}
         mainTitleStyle={{ textAlign: "left", marginHorizontal: 16 }}
-        imageHeight="400px"
-        imageWidth="200px"
+        viewWidth={200}
+        viewHeight={400}
         additionalStyles={{ marginHorizontal: 16, marginTop: 0 }}
         titleStyle={{ fontSize: 16, textAlign: "center", color: "white" }}
         subTitleStyle={{ fontSize: 14, textAlign: "center", color: "white" }}

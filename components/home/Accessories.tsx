@@ -52,8 +52,8 @@ function Accessories() {
       data={data}
       additionalStyles={{ margin: 12 }}
       title={"ALL ABOUT ACCESSORIES"}
-      imageHeight="40vh"
-      imageWidth="90vw"
+      viewWidth={200}
+      viewHeight={400}
       subTitleStyle={textStyles.subtitle}
       titleStyle={textStyles.title}
     />

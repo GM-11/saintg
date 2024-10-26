@@ -1,5 +1,6 @@
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
+import { AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import React from "react";
@@ -227,7 +228,7 @@ function OrderComponent({
             })
           }
         >
-          <Text style={{ fontSize: 28 }}>{">"}</Text>
+          <AntDesign name="right" size={24} color="black" />
         </Pressable>
       </View>
 

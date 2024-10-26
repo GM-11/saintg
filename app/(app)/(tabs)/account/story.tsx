@@ -1,6 +1,13 @@
 import textStyles from "@/styles/textStyles";
 import React, { useState } from "react";
-import { Text, ScrollView, Image, Pressable, TextInput } from "react-native";
+import {
+  Text,
+  ScrollView,
+  Image,
+  Pressable,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
 function story() {
   const [email, setEmail] = useState("");
@@ -16,7 +23,12 @@ function story() {
       }}
     >
       <Text
-        style={{ ...textStyles.font, marginVertical: 40, textAlign: "center" }}
+        style={{
+          ...textStyles.font,
+          marginVertical: 20,
+          textAlign: "center",
+          fontSize: 20,
+        }}
       >
         {" "}
         OUR STORY{" "}
@@ -27,7 +39,8 @@ function story() {
           fontSize: 16,
           lineHeight: 20,
           ...textStyles.font,
-          width: "90%",
+          width: "95%",
+          marginLeft: 12,
         }}
       >
         Open Fashion - Free Ecommerce UI Kit is a free download UI kit. You can
@@ -43,9 +56,9 @@ function story() {
         source={require("../../../../assets/images/our-story.png")}
       />
 
-      <Pressable>
-        <Text style={{ ...textStyles.font, fontSize: 16 }}>SIGN UP</Text>
-      </Pressable>
+      <Text style={{ ...textStyles.font, fontSize: 16, alignSelf: "center" }}>
+        SIGN UP
+      </Text>
 
       <Text
         ///@ts-ignore
@@ -72,11 +85,12 @@ function story() {
           width: "90%",
           padding: 12,
           marginTop: 24,
+          alignSelf: "center",
         }}
         placeholderTextColor={"grey"}
       />
 
-      <Pressable
+      <TouchableOpacity
         style={{
           backgroundColor: "black",
           width: "100%",
@@ -96,7 +110,7 @@ function story() {
         >
           SUBMIT
         </Text>
-      </Pressable>
+      </TouchableOpacity>
     </ScrollView>
   );
 }

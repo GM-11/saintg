@@ -2,19 +2,24 @@ import React from "react";
 import { Link, Redirect, router, Stack, Tabs } from "expo-router";
 import { View, Text, Pressable, Image, SafeAreaView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Feather from "@expo/vector-icons/Feather";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import SvgUri from "react-native-svg-uri";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 function tabHeader() {
   return (
     <SafeAreaView>
       <View
         style={{
-          padding: 24,
+          paddingHorizontal: 24,
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           backgroundColor: "white",
           justifyContent: "space-between",
-          paddingTop: 30,
+          paddingTop: 40,
         }}
       >
         <Image
@@ -44,11 +49,12 @@ function tabHeader() {
               width: 30,
             }}
           >
-            <Image
-              source={require("../../../assets/images/icons/search.png")}
+            <SvgUri
+              height={20}
+              width={20}
+              source={require("../../../assets/images/icons/search.svg")}
             />
           </Link>
-          {/* <Image source={require("../../../assets/images/icons/bell.png")} /> */}
         </View>
       </View>
     </SafeAreaView>
@@ -94,9 +100,10 @@ function _layout() {
             title: "Home",
             tabBarIcon(props) {
               return (
-                <Image
-                  source={require("../../../assets/images/navbar/home.png")}
-                />
+                // <Image
+                //   source={require("../../../assets/images/navbar/home.png")}
+                // />
+                <Feather name="home" size={24} color="black" />
               );
             },
             header(props) {
@@ -109,11 +116,7 @@ function _layout() {
           options={{
             title: "Categories",
             tabBarIcon(props) {
-              return (
-                <Image
-                  source={require("../../../assets/images/navbar/categories.png")}
-                />
-              );
+              return <Ionicons name="grid-outline" size={24} color="black" />;
             },
             header(props) {
               return tabHeader();
@@ -126,9 +129,10 @@ function _layout() {
             title: "Wishlist",
             tabBarIcon(props) {
               return (
-                <Image
-                  source={require("../../../assets/images/navbar/wishlist.png")}
-                />
+                <AntDesign name="hearto" size={24} color="black" />
+                // <Image
+                //   source={require("../../../assets/images/navbar/wishlist.png")}
+                // />
               );
             },
             header(props) {
@@ -142,9 +146,10 @@ function _layout() {
             title: "Cart",
             tabBarIcon(props) {
               return (
-                <Image
-                  source={require("../../../assets/images/navbar/cart.png")}
-                />
+                <Ionicons name="bag-outline" size={24} color="black" />
+                // <Image
+                //   source={require("../../../assets/images/navbar/cart.png")}
+                // />
               );
             },
             header(props) {
@@ -158,8 +163,10 @@ function _layout() {
             title: "Account",
             tabBarIcon(props) {
               return (
-                <Image
-                  source={require("../../../assets/images/navbar/account.png")}
+                <SvgUri
+                  source={require("../../../assets/images/account/person.svg")}
+                  width="23"
+                  height="23"
                 />
               );
             },

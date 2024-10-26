@@ -47,6 +47,7 @@ function index() {
   const [showSizeOverlay, setShowSizeOverlay] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [currency, setCurrency] = React.useState("GBP");
+  const [total, setTotal] = React.useState(0);
 
   const [items, setItems] = React.useState<item[]>([]);
 
@@ -103,9 +104,10 @@ function index() {
             size: 36,
           };
           d.push(p);
+          setTotal((prev) => prev + p.price * p.quantity);
         }
       });
-
+      console.log(d);
       setItems(d);
 
       // setItems(data.items);
@@ -215,6 +217,20 @@ function index() {
                   price={val.price}
                   image={val.image}
                   quantity={val.quantity}
+                  func={(newQuant: number) => {
+                    // let i = items[index];
+                    // i.quantity = newQuant;
+                    setItems((prevItems) => {
+                      prevItems[index].quantity = newQuant;
+                      setTotal(0);
+                      setTotal(
+                        (prev) =>
+                          prev +
+                          prevItems[index].price * prevItems[index].quantity,
+                      );
+                      return [...prevItems];
+                    });
+                  }}
                   size={val.size}
                   title={val.title}
                   subtitle={val.subtitle}
@@ -387,8 +403,7 @@ function index() {
               </View>
               <View style={{ flex: 1, alignItems: "flex-end" }}>
                 <Text style={{ marginTop: 8, fontWeight: 300 }}>
-                  {items.reduce((acc, val) => acc + val.price, 0)} {"/-"}{" "}
-                  {currency}
+                  {total} {"/-"} {currency}
                 </Text>
                 <Text style={{ marginTop: 8, fontWeight: 300 }}>
                   0.00 {"/-"} {currency}
@@ -420,7 +435,7 @@ function index() {
                 EST. TOTAL{" "}
               </Text>
               <Text style={{ fontSize: 16, letterSpacing: 3 }}>
-                ${items.reduce((a, b) => a + b.price, 0) + 5}
+                {total} {"/-"} {currency}
               </Text>
             </View>
           </View>
@@ -445,12 +460,12 @@ function index() {
             >
               <Text
                 style={{
-                  fontSize: 16,
+                  fontSize: 14,
                   letterSpacing: 3,
                   textAlign: "center",
                 }}
               >
-                ${items.reduce((a, b) => a + b.price, 0) + 5}
+                {total} {currency}
               </Text>
             </View>
             <Pressable
@@ -507,6 +522,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "@/constants/types";
 import { BASE_URL } from "@/constants/constant";
 import axios from "axios";
+import { AntDesign } from "@expo/vector-icons";
 
 function Item({
   image,
@@ -516,6 +532,7 @@ function Item({
   estimatedDelivery,
   title,
   subtitle,
+  func,
 }: {
   image: string;
   quantity: number;
@@ -524,11 +541,12 @@ function Item({
   estimatedDelivery: string[];
   title: string;
   subtitle: string;
+  func: (newQuant: number) => void;
 }) {
-  const sizes = ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
+  const sizes = ["36", "37", "38"];
   const numsLeft = 5;
   const [selectedSize, setSelectedSize] = useState(sizes[0]);
-  const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const [selectedQuantity, setSelectedQuantity] = useState(quantity);
 
   return (
     <View style={{ margin: 10 }}>
@@ -536,7 +554,7 @@ function Item({
         style={{
           display: "flex",
           flexDirection: "row",
-          height: 200,
+          minHeight: 200,
         }}
       >
         {/* <Text>{price}</Text> */}
@@ -546,16 +564,26 @@ function Item({
         <View
           style={{
             marginHorizontal: 10,
-            height: "100%",
             display: "flex",
+            // width: "40%",
             flexDirection: "column",
             justifyContent: "space-around",
           }}
         >
-          <Text style={{ fontSize: 12, color: "#555555", flexWrap: "wrap" }}>
+          <Text
+            style={{
+              fontSize: 12,
+              color: "#555555",
+              flexWrap: "wrap",
+              width: "40%",
+            }}
+          >
             {title}
           </Text>
-          <Text style={{ width: "40%", flexWrap: "wrap" }}>{subtitle}</Text>
+          <Text style={{ flexWrap: "wrap", width: "40%", marginTop: 16 }}>
+            {subtitle}
+          </Text>
+
           <View
             style={{
               display: "flex",
@@ -563,43 +591,80 @@ function Item({
               alignItems: "center",
               justifyContent: "space-between",
               width: "40%",
+              marginVertical: 10,
             }}
           >
-            <Text style={{ marginRight: 10 }}>Size </Text>
-            <Picker
-              selectedValue={selectedSize}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedSize(itemValue)
-              }
-            >
-              {sizes.map((val, index) => (
-                <Picker.Item key={index} label={val} value={val} />
-              ))}
-            </Picker>
+            <Text style={{ marginRight: 10 }}>Qty</Text>
+
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  borderWidth: 1,
+                  width: 100,
+                  borderColor: "black",
+                  backgroundColor: "white",
+                }}
+              >
+                <Picker
+                  selectedValue={selectedQuantity}
+                  onValueChange={(itemValue, itemIndex) => {
+                    func(itemValue);
+                    setSelectedQuantity(itemValue);
+                  }}
+                  style={{ flex: 1, height: 15 }}
+                >
+                  {Array(numsLeft)
+                    .fill(0)
+                    .map((_, i) => i + 1)
+                    .map((val, index) => (
+                      <Picker.Item
+                        key={index}
+                        label={val.toString()}
+                        value={val}
+                      />
+                    ))}
+                </Picker>
+              </View>
+            </View>
           </View>
+
           <View
             style={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              width: "50%",
+              width: "30%",
             }}
           >
-            <Text style={{ marginRight: 10 }}>Qty </Text>
-            <Picker
-              selectedValue={selectedQuantity}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedQuantity(itemValue)
-              }
-            >
-              {Array(numsLeft)
-                .fill(0)
-                .map((_, i) => i + 1)
-                .map((val, index) => (
-                  <Picker.Item key={index} label={val.toString()} value={val} />
-                ))}
-            </Picker>
+            <Text style={{ marginRight: 10 }}>Size</Text>
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  borderWidth: 1,
+                  width: 100,
+                  marginTop: 10,
+                  borderColor: "black",
+                  backgroundColor: "white",
+                }}
+              >
+                <Picker
+                  selectedValue={selectedSize}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedSize(itemValue)
+                  }
+                  style={{ flex: 1, height: 15 }}
+                >
+                  {sizes.map((val, index) => (
+                    <Picker.Item key={index} label={val} value={val} />
+                  ))}
+                </Picker>
+              </View>
+            </View>
           </View>
           <View
             style={{
@@ -607,10 +672,11 @@ function Item({
               flexDirection: "row",
               justifyContent: "space-between",
               width: "40%",
+              marginVertical: 20,
             }}
           >
             <Text>Total</Text>
-            <Text>{price}</Text>
+            <Text>{price * selectedQuantity}</Text>
           </View>
         </View>
       </View>

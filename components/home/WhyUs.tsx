@@ -1,4 +1,5 @@
 import { Image, StyleSheet, View } from "react-native";
+import SvgUri from "react-native-svg-uri";
 
 const shipping = require("../../assets/whyus/free_shipping.png");
 const handcrafted = require("../../assets/whyus/handcrafted.png");
@@ -7,12 +8,10 @@ const quality = require("../../assets/whyus/quality.png");
 const secure = require("../../assets/whyus/secure.png");
 const sustainability = require("../../assets/whyus/sustainability.png");
 
-
-
 export default function WhyChooseUs() {
   return (
     <View style={{ ...styles.mainContainer }}>
-      <Image source={quality} />
+      <Image width={20} source={quality} />
       <Image source={shipping} />
       <Image source={leather} />
       <Image source={sustainability} />

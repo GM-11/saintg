@@ -10,7 +10,9 @@ import {
   Pressable,
   FlatList,
   ImageSourcePropType,
+  ImageURISource,
 } from "react-native";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 function index() {
   const [userDetails, setUserDetails] = React.useState<any>(null);
@@ -20,6 +22,7 @@ function index() {
       if (res) {
         setUserDetails(JSON.parse(res));
       }
+      console.log(res);
     }
     getUserDetails();
   }, []);
@@ -31,28 +34,28 @@ function index() {
   const data: tileData[] = [
     {
       title: "Orders",
-      icon: require("../../../../assets/images/account/orders.png"),
+      icon: require("../../../../assets/images/account/orders.svg"),
       uri: "/(tabs)/account/orders",
     },
     {
       title: "Contact",
-      icon: require("../../../../assets/images/account/heart.png"),
+      icon: require("../../../../assets/images/account/contact.svg"),
       uri: "/(app)/(tabs)/account/contact",
     },
 
     {
       title: "Manage Addresses",
-      icon: require("../../../../assets/images/account/person.png"),
+      icon: require("../../../../assets/images/account/person.svg"),
       uri: "/(app)/(tabs)/account/addresses",
     },
     {
       title: "Coupons",
-      icon: require("../../../../assets/images/account/coupons.png"),
+      icon: require("../../../../assets/images/account/coupons.svg"),
       uri: "/(tabs)/account/coupons",
     },
     {
       title: "Checkout",
-      icon: require("../../../../assets/images/account/headphones.png"),
+      icon: require("../../../../assets/images/account/checkout.svg"),
       uri: "/(app)/checkout",
     },
     // {
@@ -62,17 +65,17 @@ function index() {
     // },
     {
       title: "Change Password",
-      icon: require("../../../../assets/images/account/settigns.png"),
+      icon: require("../../../../assets/images/account/settings.svg"),
       uri: "/(tabs)/account/changePassword",
     },
     {
       title: "Story",
-      icon: require("../../../../assets/images/account/logout.png"),
+      icon: require("../../../../assets/images/account/story.svg"),
       uri: "/(app)/(tabs)/account/story",
     },
     {
       title: "Delete Account",
-      icon: require("../../../../assets/images/account/person.png"),
+      icon: require("../../../../assets/images/account/delete_account.svg"),
       uri: "/(tabs)/account/manageAccount",
     },
   ];
@@ -113,7 +116,8 @@ function index() {
         </View>
 
         <Link href="/(tabs)/account/manageAccount">
-          <Text style={{ fontSize: 28, marginRight: 24 }}>{">"}</Text>
+          {/* <Text style={{ fontSize: 28, marginRight: 24 }}>{">"}</Text> */}
+          <AntDesign name="right" size={24} color="black" />
         </Link>
       </View>
 
@@ -131,6 +135,8 @@ function index() {
   );
 }
 
+import SvgUri from "react-native-svg-uri"; // Make sure to install react-native-svg-uri if needed
+
 export default index;
 
 function Tile({
@@ -143,13 +149,17 @@ function Tile({
   uri: Href<string>;
 }) {
   return (
-    <View
+    <Pressable
+      onPress={() => {
+        router.push(uri);
+      }}
       style={{
         display: "flex",
         width: "95%",
         flexDirection: "row",
         justifyContent: "space-between",
         height: 48,
+        alignItems: "center",
       }}
     >
       <View
@@ -160,13 +170,11 @@ function Tile({
           marginLeft: 24,
         }}
       >
-        <Image source={icon} />
+        <SvgUri source={icon as ImageURISource} width="20" height="20" />
         <Text style={{ marginLeft: 28, fontSize: 16 }}>{title}</Text>
       </View>
 
-      <Link href={uri}>
-        <Text style={{ fontSize: 20 }}>{">"}</Text>
-      </Link>
-    </View>
+      <AntDesign name="right" size={20} color="black" />
+    </Pressable>
   );
 }

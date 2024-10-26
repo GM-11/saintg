@@ -16,9 +16,9 @@ type props = {
     id?: string;
     image: { uri: string };
   }[];
-  imageWidth: string;
+  viewWidth: number;
   title?: string | null;
-  imageHeight: string;
+  viewHeight: number;
   titleStyle?: StyleProp<TextStyle>;
   subTitleStyle?: StyleProp<TextStyle>;
   additionalStyles?: {};
@@ -27,8 +27,8 @@ type props = {
 
 function CustomCarousel({
   data,
-  imageWidth,
-  imageHeight,
+  viewWidth,
+  viewHeight,
   title,
   titleStyle,
   subTitleStyle,
@@ -65,22 +65,29 @@ function CustomCarousel({
         data={data}
         renderItem={(val) => {
           return (
-            <ImageBackground
-              /// @ts-ignore
+            <View
               style={{
-                width: imageWidth,
-                height: imageHeight,
-                flexDirection: "column-reverse",
-                display: "flex",
+                height: viewHeight,
+                width: viewWidth,
                 ...additionalStyles,
               }}
-              source={{ uri: val.item.image.uri }}
             >
-              <View style={{ margin: 16 }}>
-                <Text style={titleStyle}>{val.item.title}</Text>
-                <Text style={subTitleStyle}>{val.item.subtitle}</Text>
-              </View>
-            </ImageBackground>
+              <ImageBackground
+                /// @ts-ignore
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  flexDirection: "column-reverse",
+                  display: "flex",
+                }}
+                source={{ uri: val.item.image.uri }}
+              >
+                <View style={{ margin: 16 }}>
+                  <Text style={titleStyle}>{val.item.title}</Text>
+                  <Text style={subTitleStyle}>{val.item.subtitle}</Text>
+                </View>
+              </ImageBackground>
+            </View>
           );
         }}
       />

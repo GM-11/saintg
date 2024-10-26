@@ -13,6 +13,7 @@ import {
   Pressable,
   StyleSheet,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -371,7 +372,7 @@ function productDetail() {
             justifyContent: "space-between",
           }}
         >
-          <Pressable
+          <TouchableOpacity
             style={{
               borderWidth: 1,
               borderColor: "black",
@@ -389,7 +390,7 @@ function productDetail() {
             }}
           >
             <Text style={{ fontSize: 12, letterSpacing: 4 }}>ADD TO CART</Text>
-          </Pressable>
+          </TouchableOpacity>
           <Pressable
             onPress={buyNow}
             style={{
@@ -824,7 +825,7 @@ function productDetail() {
           justifyContent: "space-between",
         }}
       >
-        <Pressable
+        <TouchableOpacity
           style={{
             borderWidth: 1,
             borderColor: "black",
@@ -836,10 +837,13 @@ function productDetail() {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={addInCart}
+          onPress={() => {
+            addInCart();
+            Toast.show({ text1: "Added to cart" });
+          }}
         >
           <Text style={{ fontSize: 12, letterSpacing: 4 }}>ADD TO CART</Text>
-        </Pressable>
+        </TouchableOpacity>
         <Pressable
           onPress={buyNow}
           style={{

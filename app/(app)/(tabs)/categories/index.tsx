@@ -4,6 +4,8 @@ import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import axios, { AxiosResponse } from "axios";
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 import React from "react";
 import {
   Text,
@@ -273,7 +275,7 @@ function SubListElement({ image, name }: { image: string; name: string }) {
             <Text style={{ fontSize: 12 }}>{name}</Text>
           </View>
         </View>
-        <Text>{">"}</Text>
+        <AntDesign name="right" size={16} color="black" />
       </Pressable>
     </View>
   );
@@ -337,7 +339,13 @@ function ListElement({
             </View>
           </View>
           <Pressable onPress={() => setSublistOpen(!sublistOpen)}>
-            <Text>{sublistOpen ? "A" : "V"}</Text>
+            <Text>
+              {sublistOpen ? (
+                <AntDesign name="up" size={16} color="black" />
+              ) : (
+                <AntDesign name="down" size={16} color="black" />
+              )}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -354,7 +362,7 @@ function ListElement({
             }}
           >
             <Text>SHOP ALL FOOTWEAR</Text>
-            <Text>{">"}</Text>
+            <AntDesign name="right" size={16} color="black" />
           </View>
 
           {subCats.map((val) => (

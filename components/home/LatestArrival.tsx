@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import CustomCarousel from "../CustomCarousel";
 
-const data = [
+const dummyData = [
   {
     id: "1",
     title: "NEW SEASON",
@@ -69,9 +69,9 @@ function LatestArrival({ data }: dataProps) {
         titleStyle={textStyles.title}
         subTitleStyle={textStyles.subtitle}
         title={"LATEST ARRIVAL"}
-        data={data}
-        imageHeight="20vh"
-        imageWidth="50%"
+        data={data.length < 2 ? dummyData : data}
+        viewWidth={200}
+        viewHeight={400}
         additionalStyles={{ margin: 16 }}
       />
     </View>

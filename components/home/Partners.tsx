@@ -9,6 +9,7 @@ import {
   Image,
   ImageSourcePropType,
 } from "react-native";
+import textStyles from "@/styles/textStyles";
 
 // const data = [
 //   {
@@ -40,9 +41,21 @@ function Partners({
     image: string;
   }[];
 }) {
+  console.log(data);
   return (
-    <>
-      <Text>PARTNERS</Text>
+    <View>
+      <Text
+        style={{
+          fontFamily: textStyles.title.fontFamily,
+          letterSpacing: textStyles.title.letterSpacing,
+          textAlign: "center",
+          color: "black",
+          fontSize: 16,
+          marginVertical: 32,
+        }}
+      >
+        PARTNERS
+      </Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -53,16 +66,17 @@ function Partners({
         }}
       >
         {data.map((item) => {
+          console.log(item);
           return (
             <Image
               key={data.indexOf(item)}
-              style={{ marginHorizontal: 12 }}
+              style={{ marginHorizontal: 12, width: 200, height: 100 }}
               source={{ uri: item.image }}
             />
           );
         })}
       </ScrollView>
-    </>
+    </View>
   );
 }
 

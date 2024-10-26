@@ -155,7 +155,7 @@ function Index() {
       <WhyChooseUs />
       <FeaturedCollection data={featuredCollection} />
       <TrendingNow data={trendingNow} />
-      {/* <Partners data={brands} /> */}
+      <Partners data={brands} />
       <BestDeals />
       <LatestArrival data={latestArrival} />
     </ScrollView>
