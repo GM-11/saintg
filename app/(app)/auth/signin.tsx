@@ -5,8 +5,8 @@ import {
   StyleSheet,
   Image,
   TextInput,
-  Pressable,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,8 +24,10 @@ function signin() {
 
   const countryCodeOptions = ["+91", "+90"];
   const [countryCode, setCountryCode] = useState<string>(countryCodeOptions[0]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function signInUser() {
+    setLoading(true);
     if (email === "" || password === "") {
       return;
     }
@@ -39,6 +41,7 @@ function signin() {
 
     if (!isEmail && !isPhone) {
       Toast.show({ text1: "Invalid email or phone number" });
+      setLoading(false);
 
       return;
     }
@@ -69,7 +72,7 @@ function signin() {
       const data = await result.json();
       if (data.code !== 200) {
         Toast.show({ text1: data.msg || data.message });
-
+        setLoading(false);
         return;
       }
 
@@ -116,10 +119,32 @@ function signin() {
       }, 1000);
     } catch (error) {
       console.error("Error signing in user:", error);
+      Toast.show({ text1: "Error signing in user" });
+    } finally {
+      setLoading(false);
     }
   }
   return (
     <View style={styles.body}>
+      {loading ? (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: "transparent",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ActivityIndicator color="black" size="large" />
+        </View>
+      ) : (
+        <View />
+      )}
       <Image
         style={{ alignSelf: "center", marginBottom: 30 }}
         source={require("../../../assets/images/saintg-logo-black.png")}
@@ -195,30 +220,30 @@ function signin() {
           style={styles.input}
           onChangeText={(e) => setPassword(e)}
         />
-        {/* <Pressable>
+        {/* <TouchableOpacity>
           <Text>FORGOT PASSWORD</Text>
-        </Pressable> */}
+        </TouchableOpacity> */}
       </View>
-      <Pressable onPress={signInUser} style={styles.buttonSignIn}>
+      <TouchableOpacity onPress={signInUser} style={styles.buttonSignIn}>
         <Text style={{ ...styles.buttonText, marginBottom: 10 }}>SIGN IN</Text>
-      </Pressable>
-      <Pressable
+      </TouchableOpacity>
+      <TouchableOpacity
         onPress={() => {
           router.push("/(app)/auth/signup");
         }}
       >
         <Text>CREATE ACCOUNT</Text>
-      </Pressable>
+      </TouchableOpacity>
       {/* <Text>LOGIN WITH SOCIAL MEDIA</Text>
 
-      <Pressable
+      <TouchableOpacity
         onPress={async () => {
           // router.push("/(auth)/signin");
         }}
         style={styles.googleLogin}
       >
         <Text style={styles.text}>LOGIN WITH GOOGLE</Text>
-      </Pressable> */}
+      </TouchableOpacity> */}
       <Text style={styles.textTnc}>
         By clicking on sign in you agree to our terms of use and privacy policy
       </Text>

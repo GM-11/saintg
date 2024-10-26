@@ -4,7 +4,7 @@ import {
   View,
   Image,
   StyleSheet,
-  Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
@@ -63,15 +63,15 @@ export default function Index() {
           EXPERIENCE TRUE LUXURY {"\n\n"} NOW ON YOUR MOBILE
         </Text>
 
-        <Pressable
+        <TouchableOpacity
           onPress={() => {
             router.push("/auth/signin");
           }}
           style={styles.buttonSignIn}
         >
           <Text style={styles.text}>SIGN IN</Text>
-        </Pressable>
-        <Pressable
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => {
             console.log(selectedCountry);
             router.push({
@@ -82,7 +82,7 @@ export default function Index() {
           style={styles.buttonCreate}
         >
           <Text style={styles.text}>CREATE ACCOUNT</Text>
-        </Pressable>
+        </TouchableOpacity>
         {/* <Text style={styles.textLater}>MAYBE LATER</Text> */}
       </ImageBackground>
     </View>

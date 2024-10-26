@@ -1,16 +1,15 @@
 {
   "expo": {
-    "name": "saintg",
+    "name": "Saintg",
     "slug": "saintg",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",
-    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/SplashScreen.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
@@ -37,7 +36,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "8e36e037-69e6-444f-8ef7-0ae7733786c1"
+        "projectId": "54dbbb81-32fd-45d5-8403-71779285407a"
       }
     }
   }
