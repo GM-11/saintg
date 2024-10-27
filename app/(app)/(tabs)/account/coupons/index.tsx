@@ -1,6 +1,8 @@
 import { router } from "expo-router";
 import React from "react";
 import { Pressable, Text, View, ScrollView } from "react-native";
+import Entypo from "@expo/vector-icons/Entypo";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const coups: couponData[] = [
   {
@@ -44,7 +46,13 @@ function coupons() {
           >
             <Text style={{ fontSize: 16 }}>EXCLUSIVE COUPONS FOR YOU</Text>
             <Pressable onPress={() => setShowExclusive(!showExclusive)}>
-              <Text>{showExclusive ? "X" : "V"}</Text>
+              <Text>
+                {showExclusive ? (
+                  <Entypo name="cross" size={24} color="black" />
+                ) : (
+                  <AntDesign name="down" size={24} color="black" />
+                )}
+              </Text>
             </Pressable>
           </View>
           {showExclusive ? (
@@ -67,7 +75,13 @@ function coupons() {
           >
             <Text style={{ fontSize: 16 }}>ALL COUPONS</Text>
             <Pressable onPress={() => setShowAll(!showAll)}>
-              <Text>{showAll ? "X" : "V"}</Text>
+              <Text>
+                {showAll ? (
+                  <Entypo name="cross" size={24} color="black" />
+                ) : (
+                  <AntDesign name="down" size={24} color="black" />
+                )}
+              </Text>
             </Pressable>
           </View>
           {showAll ? (
@@ -76,7 +90,9 @@ function coupons() {
                 return couponComponent(c);
               })}
             </>
-          ): <View/>}
+          ) : (
+            <View />
+          )}
         </View>
       </View>
     </ScrollView>
