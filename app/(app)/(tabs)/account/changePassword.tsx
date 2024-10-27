@@ -48,7 +48,6 @@ function changePassword() {
         }),
       });
 
-      console.log(response);
       if (!response.ok) {
         console.error("Error:", response);
       }

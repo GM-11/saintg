@@ -50,7 +50,6 @@ function Index() {
 
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
-    console.log(user);
 
     const response = await axios.get(`${BASE_URL}homePage/get?gender=MEN`, {
       headers: {
@@ -65,7 +64,6 @@ function Index() {
     const _featuredCollection = res.featuredCollection;
     const _trendingNow = res.trendingNow;
     const _brands = res.brands;
-    // // console.log(_brands);
 
     const l = _latestArrival.map((item: any) => {
       return {
@@ -79,7 +77,6 @@ function Index() {
     });
 
     const f = _featuredCollection.map((item: any) => {
-      // // console.log(item);
       return {
         id: item.id,
         title: item.category.category_name,
@@ -102,7 +99,6 @@ function Index() {
     });
 
     const b = _brands.map((item: any) => {
-      // // console.log("brand: ", item);
       return {
         id: item.brand_id,
         image: item.brand_image,
@@ -113,7 +109,6 @@ function Index() {
     setFeaturedCollection(f);
     setTrendingNow(t);
     setLatestArrival(l);
-    console.log(l);
     setBrands(b);
   }
 

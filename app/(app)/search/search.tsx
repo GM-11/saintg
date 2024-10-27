@@ -15,6 +15,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import SvgUri from "react-native-svg-uri";
+import Toast from "react-native-toast-message";
 
 type t = {
   image: string;
@@ -93,13 +94,11 @@ function index() {
           },
         },
       );
-      console.log(regionData.data);
-      console.log(d);
       const convertedData = convertApiResponseToT(d, regionData.data);
       setData(convertedData);
       setShowResults(true);
     } catch (error) {
-      // console.log(error);
+      Toast.show({ text1: "Something went wrong" });
     } finally {
       setLoading(false);
     }
@@ -140,14 +139,13 @@ function index() {
         />
         <Pressable
           onPress={() => {
-            // console.log("searching");
             fetchData();
           }}
         >
-          <SvgUri
+          <Image
             height={20}
             width={20}
-            source={require("../../../assets/images/icons/search.svg")}
+            source={require("../../../assets/images/icons/search.png")}
           />
         </Pressable>
       </View>

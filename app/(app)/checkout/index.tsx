@@ -69,8 +69,6 @@ function index() {
         },
       });
       const data = await result.json();
-      // console.log(data.data.items);
-      //
       const regionData = await axios.get(
         `${BASE_URL}products/region/${user.regionId}`,
         {
@@ -107,7 +105,6 @@ function index() {
           setTotal((prev) => prev + p.price * p.quantity);
         }
       });
-      console.log(d);
       setItems(d);
 
       // setItems(data.items);
@@ -128,7 +125,7 @@ function index() {
         style={{ width: "100%", marginVertical: 20 }}
       />
 
-      <View
+      {/* <View
         style={{
           paddingHorizontal: 20,
           paddingVertical: 10,
@@ -159,7 +156,7 @@ function index() {
         >
           <Text style={{ letterSpacing: 4, fontSize: 16 }}>CHANGE</Text>
         </Pressable>
-      </View>
+      </View> */}
 
       {items.length === 0 ? (
         <View
@@ -475,14 +472,12 @@ function index() {
                 backgroundColor: "black",
               }}
               onPress={async () => {
-                // // console.log(await result.json());
                 let itemsToPass: string[] = [];
                 for (let val of items) {
                   itemsToPass.push(
                     `${val.title}SEP${val.subtitle}SEP${val.price}SEP${val.size}SEP${val.image}SEP${val.estimatedDelivery}SEP${val.quantity}SEP`,
                   );
                 }
-                console.log(itemsToPass);
 
                 // const itemsToPass = items.map((val) =>
                 //   `

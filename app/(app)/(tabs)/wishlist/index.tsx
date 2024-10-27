@@ -34,7 +34,6 @@ function index() {
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
     try {
-      console.log("fetching wishlist");
       const result = await axios.get(`${BASE_URL}wishlist`, {
         headers: {
           "Content-Type": "application/json",
@@ -64,11 +63,6 @@ function index() {
       );
 
       data.forEach((item: any) => {
-        console.log(
-          (regionData.data as any[]).find(
-            (v) => v.product_id === item.product.product_id,
-          ).product_images[0].image_url,
-        );
         if (productIds.includes(item.product.product_id)) {
           const p: t = {
             id: item.product.product_id,

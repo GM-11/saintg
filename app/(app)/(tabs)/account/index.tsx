@@ -22,7 +22,6 @@ function index() {
       if (res) {
         setUserDetails(JSON.parse(res));
       }
-      console.log(res);
     }
     getUserDetails();
   }, []);
@@ -33,29 +32,29 @@ function index() {
   };
   const data: tileData[] = [
     {
-      title: "Orders",
-      icon: require("../../../../assets/images/account/orders.svg"),
+      title: " Orders",
+      icon: require("../../../../assets/images/account/orders.png"),
       uri: "/(tabs)/account/orders",
     },
     {
       title: "Contact",
-      icon: require("../../../../assets/images/account/contact.svg"),
+      icon: require("../../../../assets/images/account/contact.png"),
       uri: "/(app)/(tabs)/account/contact",
     },
 
     {
       title: "Manage Addresses",
-      icon: require("../../../../assets/images/account/person.svg"),
+      icon: require("../../../../assets/images/account/person.png"),
       uri: "/(app)/(tabs)/account/addresses",
     },
     {
       title: "Coupons",
-      icon: require("../../../../assets/images/account/coupons.svg"),
+      icon: require("../../../../assets/images/account/coupons.png"),
       uri: "/(tabs)/account/coupons",
     },
     {
       title: "Checkout",
-      icon: require("../../../../assets/images/account/checkout.svg"),
+      icon: require("../../../../assets/images/account/checkout.png"),
       uri: "/(app)/checkout",
     },
     // {
@@ -65,19 +64,19 @@ function index() {
     // },
     {
       title: "Change Password",
-      icon: require("../../../../assets/images/account/settings.svg"),
+      icon: require("../../../../assets/images/account/settings.png"),
       uri: "/(tabs)/account/changePassword",
     },
     {
       title: "Story",
-      icon: require("../../../../assets/images/account/story.svg"),
+      icon: require("../../../../assets/images/account/story.png"),
       uri: "/(app)/(tabs)/account/story",
     },
-    {
-      title: "Delete Account",
-      icon: require("../../../../assets/images/account/delete_account.svg"),
-      uri: "/(tabs)/account/manageAccount",
-    },
+    // {
+    //   title: "Delete Account",
+    //   icon: require("../../../../assets/images/account/delete_account.svg"),
+    //   uri: "/(tabs)/account/manageAccount",
+    // },
   ];
 
   return (
@@ -87,7 +86,7 @@ function index() {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          width: "95%",
+          width: "100%",
           justifyContent: "space-between",
           marginBottom: 24,
         }}
@@ -115,7 +114,7 @@ function index() {
           </View>
         </View>
 
-        <Link href="/(tabs)/account/manageAccount">
+        <Link href="/(tabs)/account/manageAccount" style={{ marginRight: 24 }}>
           {/* <Text style={{ fontSize: 28, marginRight: 24 }}>{">"}</Text> */}
           <AntDesign name="right" size={24} color="black" />
         </Link>
@@ -135,8 +134,6 @@ function index() {
   );
 }
 
-import SvgUri from "react-native-svg-uri"; // Make sure to install react-native-svg-uri if needed
-
 export default index;
 
 function Tile({
@@ -155,7 +152,7 @@ function Tile({
       }}
       style={{
         display: "flex",
-        width: "95%",
+        width: "100%",
         flexDirection: "row",
         justifyContent: "space-between",
         height: 48,
@@ -170,11 +167,17 @@ function Tile({
           marginLeft: 24,
         }}
       >
-        <SvgUri source={icon as ImageURISource} width="20" height="20" />
+        <Image source={icon} width={20} height={20} />
         <Text style={{ marginLeft: 28, fontSize: 16 }}>{title}</Text>
       </View>
 
-      <AntDesign name="right" size={20} color="black" />
+      <AntDesign
+        name="right"
+        size={20}
+        color="black"
+        style={{ marginRight: 24 }}
+        F
+      />
     </Pressable>
   );
 }

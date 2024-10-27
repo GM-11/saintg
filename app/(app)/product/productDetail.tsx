@@ -74,7 +74,6 @@ function productDetail() {
   }
 
   async function getProductDetails() {
-    console.log("a;ksdfj");
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
 
@@ -150,8 +149,6 @@ function productDetail() {
       },
     );
 
-    console.log(convertedProducts);
-
     setProduct(convertedProducts[parseInt(productId as string) - 1]);
 
     setShowMore(
@@ -184,7 +181,6 @@ function productDetail() {
         }),
       });
       const data = await result.json();
-      console.log(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

@@ -49,10 +49,10 @@ function tabHeader() {
               width: 30,
             }}
           >
-            <SvgUri
+            <Image
               height={20}
               width={20}
-              source={require("../../../assets/images/icons/search.svg")}
+              source={require("../../../assets/images/icons/search.png")}
             />
           </Link>
         </View>
@@ -163,11 +163,16 @@ function _layout() {
             title: "Account",
             tabBarIcon(props) {
               return (
-                <SvgUri
-                  source={require("../../../assets/images/account/person.svg")}
-                  width="23"
-                  height="23"
+                <MaterialCommunityIcons
+                  name="account-outline"
+                  size={30}
+                  color="black"
                 />
+                // <SvgUri
+                //   source={require("../../../assets/images/account/person.svg")}
+                //   width="23"
+                //   height="23"
+                // />
               );
             },
             header(props) {

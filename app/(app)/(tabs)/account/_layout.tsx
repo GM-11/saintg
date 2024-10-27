@@ -45,10 +45,10 @@ function h() {
               width: 30,
             }}
           >
-            <SvgUri
+            <Image
               height={20}
               width={20}
-              source={require("../../../../assets/images/icons/search.svg")}
+              source={require("../../../../assets/images/icons/search.png")}
             />
           </Link>
         </View>

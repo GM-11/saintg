@@ -41,7 +41,6 @@ function Partners({
     image: string;
   }[];
 }) {
-  console.log(data);
   return (
     <View>
       <Text
@@ -66,7 +65,6 @@ function Partners({
         }}
       >
         {data.map((item) => {
-          console.log(item);
           return (
             <Image
               key={data.indexOf(item)}

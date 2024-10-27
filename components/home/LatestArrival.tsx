@@ -62,7 +62,6 @@ type dataProps = {
 };
 
 function LatestArrival({ data }: dataProps) {
-  // console.log("adfjklsasfkdjlasd;fjkl", data);
   return (
     <View>
       <CustomCarousel

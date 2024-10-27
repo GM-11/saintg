@@ -13,6 +13,7 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 interface OTPVerificationProps {
   otpLength: number;
@@ -64,13 +65,10 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
       });
 
       const data = await result.json();
-      // console.log(data);
       if (data.code !== 200) {
-        // console.log("Error sending OTP");
+        Toast.show({ text1: "Something went wrong" });
         return;
       }
-
-      console.log(data);
 
       // const data = {
       //   token:
@@ -81,7 +79,6 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
         "userDetails",
         JSON.stringify({ ...userDetails, token: data.token }),
       );
-      // console.log("User details stored successfully");
       setTimeout(() => {
         router.replace("/");
       }, 1000);
@@ -111,7 +108,7 @@ const OTPOverlay: React.FC<OTPVerificationProps> = ({
 
       const data = await result.json();
       if (data.code !== 200) {
-        // console.log("Error resetting password");
+        Toast.show({ text1: "Something went wrong" });
         return;
       }
 

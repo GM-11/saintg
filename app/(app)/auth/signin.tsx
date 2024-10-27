@@ -94,7 +94,6 @@ function signin() {
       });
 
       const userDetails = (await userData.json()).data;
-      console.log(userDetails);
 
       const addressResult = await fetch(`${BASE_URL}address/`, {
         method: "GET",

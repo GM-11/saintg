@@ -10,9 +10,7 @@ export async function paypalHandler(
   user: IUser,
   data: any,
   currency: string,
-  amount: string,
 ): Promise<{ url: string; orderId: string; paymentId: string }> {
-  console.log("in paypal handler");
   const res2 = await fetch(`${BASE_URL}payment/create-order`, {
     method: "POST",
 
@@ -30,7 +28,6 @@ export async function paypalHandler(
 
   const orderData = await res2.json();
 
-  console.log(orderData);
 
   if (orderData.error) {
     return orderData.error;

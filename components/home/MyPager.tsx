@@ -54,38 +54,36 @@ const data = [
 
 function MyPager() {
   return (
-
     <View style={{ margin: 0, padding: 0 }}>
-    <FlatList
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      pagingEnabled
-      style={{
-        width: "100%",
-        margin: 0,
-      }}
-      data={data}
-      renderItem={(val) => (
-        <ImageBackground
-          ///@ts-ignore
-          style={{
-            width: 400,
-            height: 400,
-            flexDirection: "column-reverse",
-            display: "flex",
-          }}
-          source={val.item.image}
-        >
-          <View style={{ margin: 16 }}>
-            <Text style={textStyles.title}>{val.item.title}</Text>
-            <Text style={textStyles.subtitle}>{val.item.subtitle}</Text>
-          </View>
-        </ImageBackground>
-      )}
-    />
-  </View>
+      <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        style={{
+          width: "100%",
+          margin: 0,
+        }}
+        data={data}
+        renderItem={(val) => (
+          <ImageBackground
+            ///@ts-ignore
+            style={{
+              width: 400,
+              height: 400,
+              flexDirection: "column-reverse",
+              display: "flex",
+            }}
+            source={val.item.image}
+          >
+            <View style={{ margin: 16 }}>
+              <Text style={textStyles.title}>{val.item.title}</Text>
+              <Text style={textStyles.subtitle}>{val.item.subtitle}</Text>
+            </View>
+          </ImageBackground>
+        )}
+      />
+    </View>
 
-    
     // <CustomCarousel
     //   titleStyle={textStyles.title}
     //   subTitleStyle={textStyles.subtitle}

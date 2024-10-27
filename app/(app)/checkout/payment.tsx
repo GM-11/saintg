@@ -61,8 +61,6 @@ const ConfirmOrderScreen = () => {
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
 
-    console.log(user.token);
-
     if (user.address === "") {
       Toast.show({ text1: "Please add address" });
 
@@ -71,7 +69,6 @@ const ConfirmOrderScreen = () => {
 
     const addressId = user.address.substring(user.address.length - 1);
 
-    console.log(user.token);
     const result = await fetch(`${BASE_URL}order/create`, {
       method: "POST",
       headers: {
@@ -85,17 +82,12 @@ const ConfirmOrderScreen = () => {
     });
 
     const data = await result.json();
-    console.log(data);
-    console.log(data.orderId);
-
     if (data.error) {
       Toast.show({ text1: data.error });
       return;
     }
 
     try {
-      console.log("Processing payment...");
-
       let verify: Response | string;
       if (user.regionId === "3") {
         verify = await razorpayHandler(user, data);
@@ -143,7 +135,6 @@ const ConfirmOrderScreen = () => {
     let i: ProductItem[] = [];
 
     // for (let item of items as string[]) {
-    console.log(items);
     const parts = (items as string).split("SEP");
 
     const map: ProductItem = {

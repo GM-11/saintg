@@ -33,7 +33,6 @@ function manageAccount() {
   }, []);
 
   async function logOut() {
-    // console.log("deleting account");
     await AsyncStorage.clear();
     router.replace("/auth");
   }

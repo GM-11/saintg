@@ -61,11 +61,8 @@ function index() {
 
       if (result.status === 404) {
         return;
-        // console.log(result.statusText);
       }
       const data = result.data.data;
-      // console.log("Categories");
-      // console.log(data);
       let cats: catsType[] = [];
 
       data.forEach(
@@ -89,9 +86,6 @@ function index() {
       });
       const subcats = res.data.data;
 
-      // console.log("Subcategories");
-      // console.log(subcats);
-
       let womanCats: catsType[] = [];
       subcats.forEach(
         (val: {
@@ -110,7 +104,6 @@ function index() {
         },
       );
 
-      // console.log(womanCats);
       setCategories([...cats]);
 
       setSubCategories([...womanCats]);
@@ -123,7 +116,6 @@ function index() {
   }
 
   React.useEffect(() => {
-    // console.log("useEffect");
     getCategories();
   }, []);
 

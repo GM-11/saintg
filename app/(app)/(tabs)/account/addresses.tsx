@@ -47,11 +47,7 @@ const AddressForm = () => {
       tag: saveAddressAs,
     };
 
-    // console.log(body);
-
     const addressText = `${address}${addressLine2 ? ", " + addressLine2 : ""}, ${city}, ${state}, ${zipCode}, ${country}`;
-
-    // console.log(addressText);
 
     try {
       const result = await fetch(`${BASE_URL}address`, {
@@ -63,11 +59,9 @@ const AddressForm = () => {
         body: JSON.stringify(body),
       });
       const data = await result.json();
-      // console.log(data);
 
       user.address = `${addressText}//ID=${data.data.id}`;
       await AsyncStorage.setItem("userDetails", JSON.stringify(user));
-      // console.log(user.address);
     } catch (error) {
       console.error("Error adding address:", error);
     }

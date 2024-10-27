@@ -87,7 +87,6 @@ function signup() {
         body: JSON.stringify(body),
       });
       const data = await res.json();
-      console.log(data);
       Toast.show({ text1: data.message || data.msg });
 
       if (data.code !== 200) {

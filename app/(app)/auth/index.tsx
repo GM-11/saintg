@@ -61,7 +61,6 @@ export default function Index() {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            console.log(selectedCountry);
             router.push({
               pathname: "/auth/signup",
               params: { regionId: selectedCountry },

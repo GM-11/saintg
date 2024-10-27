@@ -57,8 +57,6 @@ function index() {
 
       let d: t[] = [];
       data.items.forEach((val: any) => {
-        console.log(val);
-
         if (productIds.includes(val.productId)) {
           const v: t = {
             title: val.productName,

@@ -24,7 +24,6 @@ export default async function razorpayHandler(
 
   const orderData = await res2.json();
 
-  console.log(orderData);
 
   if (orderData.error) {
     // Toast.show({ text1: orderData.error });
@@ -47,8 +46,6 @@ export default async function razorpayHandler(
     },
     theme: { color: "#F37254" },
   });
-  console.log(res);
-  console.log(data.orderId);
   const verify = await fetch(`${BASE_URL}payment/verify-payment`, {
     method: "POST",
     headers: {
