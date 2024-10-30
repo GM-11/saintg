@@ -9,6 +9,8 @@ import {
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
+import { IUser } from "@/constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Index() {
   const navigation = useNavigation();
@@ -18,6 +20,24 @@ export default function Index() {
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
+
+  async function maybeLater() {
+    const userDetails: IUser = {
+      name: "",
+      email: "",
+      phoneNumber: "",
+      gender: "",
+      password: "",
+      token: "",
+      address: "",
+      regionId: `${selectedCountry}`,
+    };
+
+    await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
+    setTimeout(() => {
+      router.replace("/");
+    }, 1000);
+  }
 
   return (
     <View style={styles.body}>
@@ -53,7 +73,10 @@ export default function Index() {
 
         <TouchableOpacity
           onPress={() => {
-            router.push("/auth/signin");
+            router.push({
+              pathname: "/auth/signin",
+              params: { regionId: selectedCountry },
+            });
           }}
           style={styles.buttonSignIn}
         >
@@ -70,7 +93,9 @@ export default function Index() {
         >
           <Text style={styles.text}>CREATE ACCOUNT</Text>
         </TouchableOpacity>
-        {/* <Text style={styles.textLater}>MAYBE LATER</Text> */}
+        <TouchableOpacity onPress={maybeLater}>
+          <Text style={styles.textLater}>MAYBE LATER</Text>
+        </TouchableOpacity>
       </ImageBackground>
     </View>
   );

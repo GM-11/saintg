@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -10,8 +10,8 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { BASE_URL } from "@/constants/constant";
-import { router } from "expo-router";
+import { BASE_URL, countryCodeOptions } from "@/constants/constant";
+import { router, useLocalSearchParams } from "expo-router";
 import { IUser } from "@/constants/types";
 import Toast from "react-native-toast-message";
 import Eye from "@/components/Eye";
@@ -26,9 +26,14 @@ function signin() {
   const [errorText, setErrorText] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const countryCodeOptions = ["+91", "+44", "+1"];
   const [countryCode, setCountryCode] = useState<string>(countryCodeOptions[0]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { regionId } = useLocalSearchParams<{ regionId: string }>();
+
+  useEffect(() => {
+    setCountryCode(countryCodeOptions[parseInt(regionId) - 1]);
+  }, []);
 
   async function signInUser() {
     setLoading(true);
@@ -252,7 +257,10 @@ function signin() {
 
       <TouchableOpacity
         onPress={() => {
-          router.push("/(app)/auth/signup");
+          router.push({
+            pathname: "/auth/signup",
+            params: { regionId },
+          });
         }}
       >
         <Text

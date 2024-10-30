@@ -11,16 +11,18 @@ import {
   FlatList,
   ImageSourcePropType,
   ImageURISource,
+  TouchableOpacity,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { IUser } from "@/constants/types";
 
 function index() {
-  const [userDetails, setUserDetails] = React.useState<any>(null);
+  const [userDetails, setUserDetails] = React.useState<IUser>();
   React.useEffect(() => {
     async function getUserDetails() {
       const res = await AsyncStorage.getItem("userDetails");
       if (res) {
-        setUserDetails(JSON.parse(res));
+        setUserDetails(JSON.parse(res) as IUser);
       }
     }
     getUserDetails();
@@ -81,55 +83,122 @@ function index() {
 
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          width: "100%",
-          justifyContent: "space-between",
-          marginBottom: 24,
-        }}
-      >
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          {/* <Image
-            style={{ height: 48, width: 48, borderRadius: 100, margin: 16 }}
-            source={{
-              uri: "https://static.dc.com/dc/files/default_images/Char_Profile_Batman_20190116_5c3fc4b40faec2.47318964.jpg",
+      {userDetails && userDetails.token ? (
+        <View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: "100%",
+              justifyContent: "space-between",
+              marginBottom: 24,
             }}
-          /> */}
-          <View style={{ marginLeft: 24 }}>
-            <Text style={{ fontSize: 14, fontWeight: 300, ...textStyles.font }}>
-              {userDetails ? userDetails.name : ""}
-            </Text>
-            <Text style={{ fontSize: 10, fontWeight: 300, ...textStyles.font }}>
-              {userDetails ? userDetails.email : ""}
-            </Text>
+          >
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              {/* <Image
+              style={{ height: 48, width: 48, borderRadius: 100, margin: 16 }}
+              source={{
+                uri: "https://static.dc.com/dc/files/default_images/Char_Profile_Batman_20190116_5c3fc4b40faec2.47318964.jpg",
+              }}
+            /> */}
+              <View style={{ marginLeft: 24 }}>
+                <Text
+                  style={{ fontSize: 14, fontWeight: 300, ...textStyles.font }}
+                >
+                  {userDetails ? userDetails.name : ""}
+                </Text>
+                <Text
+                  style={{ fontSize: 10, fontWeight: 300, ...textStyles.font }}
+                >
+                  {userDetails ? userDetails.email : ""}
+                </Text>
+              </View>
+            </View>
+
+            <Link
+              href="/(tabs)/account/manageAccount"
+              style={{ marginRight: 24 }}
+            >
+              {/* <Text style={{ fontSize: 28, marginRight: 24 }}>{">"}</Text> */}
+              <AntDesign name="right" size={24} color="black" />
+            </Link>
           </View>
-        </View>
-
-        <Link href="/(tabs)/account/manageAccount" style={{ marginRight: 24 }}>
-          {/* <Text style={{ fontSize: 28, marginRight: 24 }}>{">"}</Text> */}
-          <AntDesign name="right" size={24} color="black" />
-        </Link>
-      </View>
-
-      <FlatList
-        data={data}
-        renderItem={(val) => (
-          <Tile
-            icon={val.item.icon}
-            title={val.item.title}
-            uri={val.item.uri}
+          <FlatList
+            data={data}
+            renderItem={(val) => (
+              <Tile
+                icon={val.item.icon}
+                title={val.item.title}
+                uri={val.item.uri}
+              />
+            )}
           />
-        )}
-      />
+        </View>
+      ) : (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <TouchableOpacity
+            style={{
+              backgroundColor: "black",
+              width: "90%",
+              marginTop: 36,
+              padding: 16,
+            }}
+            onPress={() =>
+              router.push({
+                pathname: "/(app)/auth/signin",
+                params: { regionId: userDetails?.regionId },
+              })
+            }
+          >
+            <Text
+              style={{
+                color: "white",
+                alignSelf: "center",
+                textAlign: "center",
+                fontSize: 16,
+                fontFamily: "Lato-Regular",
+              }}
+            >
+              SIGN IN
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "black",
+              width: "90%",
+              marginTop: 36,
+              padding: 16,
+            }}
+            onPress={() =>
+              router.push({
+                pathname: "/auth/signup",
+                params: { regionId: userDetails?.regionId },
+              })
+            }
+          >
+            <Text
+              style={{
+                color: "white",
+                alignSelf: "center",
+                textAlign: "center",
+                fontSize: 16,
+                fontFamily: "Lato-Regular",
+              }}
+            >
+              SIGN UP
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }

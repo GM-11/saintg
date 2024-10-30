@@ -2,6 +2,7 @@ import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -9,6 +10,7 @@ import {
   Pressable,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -25,12 +27,21 @@ function index() {
   const [data, setItems] = useState<t[]>([]);
   const [loading, setLoading] = useState(true);
   const [currency, setCurrency] = useState("GBP");
+  const [userNotLoggedIn, setUserNotLoggedIn] = React.useState(false);
+  const [user, setUser] = React.useState<IUser>();
 
   async function getItems() {
     setLoading(true);
     const userDetails = await AsyncStorage.getItem("userDetails");
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
+
+    setUser(user);
+
+    if (user.token === "") {
+      setUserNotLoggedIn(true);
+      return;
+    }
 
     try {
       const result = await axios.get(`${BASE_URL}cart`, {
@@ -90,6 +101,72 @@ function index() {
   useEffect(() => {
     getItems();
   }, []);
+
+  if (userNotLoggedIn) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "white",
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            backgroundColor: "black",
+            width: "90%",
+            marginTop: 36,
+            padding: 16,
+          }}
+          onPress={() =>
+            router.push({
+              pathname: "/(app)/auth/signin",
+              params: { regionId: user?.regionId },
+            })
+          }
+        >
+          <Text
+            style={{
+              color: "white",
+              alignSelf: "center",
+              textAlign: "center",
+              fontSize: 16,
+              fontFamily: "Lato-Regular",
+            }}
+          >
+            SIGN IN
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "black",
+            width: "90%",
+            marginTop: 36,
+            padding: 16,
+          }}
+          onPress={() =>
+            router.push({
+              pathname: "/auth/signup",
+              params: { regionId: user?.regionId },
+            })
+          }
+        >
+          <Text
+            style={{
+              color: "white",
+              alignSelf: "center",
+              textAlign: "center",
+              fontSize: 16,
+              fontFamily: "Lato-Regular",
+            }}
+          >
+            SIGN UP
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   if (data.length === 0) {
     return (

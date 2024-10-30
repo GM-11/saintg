@@ -35,5 +35,7 @@ export default function sortProductsByRegion(data: any[], regionData: any[]) {
     }
   });
 
+  console.log(finalData)
+
   return finalData;
 }

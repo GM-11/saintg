@@ -12,7 +12,7 @@ import {
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
-import { BASE_URL } from "@/constants/constant";
+import { BASE_URL, countryCodeOptions } from "@/constants/constant";
 import OTPOverlay from "@/components/OTPoverlay";
 import axios from "axios";
 import Toast from "react-native-toast-message";
@@ -23,7 +23,7 @@ function signup() {
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [mobile, setMobile] = useState<string>("");
-  const countryCodeOptions = ["+44", "+1", "+91"];
+  // const countryCodeOptions = ["+44", "+1", "+91"];
   const [countryCode, setCountryCode] = useState<string>(countryCodeOptions[0]);
   const [selectedGender, setSelectedGender] = useState<string>(
     genderOPtions[0],

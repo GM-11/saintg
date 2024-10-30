@@ -50,13 +50,23 @@ function Index() {
 
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
+    console.log(user);
+    let gender: string;
+    if (user.gender === "Male") {
+      gender = "MEN";
+    } else {
+      gender = "WOMEN";
+    }
 
-    const response = await axios.get(`${BASE_URL}homePage/get?gender=MEN`, {
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": user.token,
+    const response = await axios.get(
+      `${BASE_URL}homePage/get?gender=${gender}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.token,
+        },
       },
-    });
+    );
 
     const res = JSON.parse(JSON.stringify(response.data.data));
 

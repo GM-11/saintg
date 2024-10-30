@@ -89,12 +89,13 @@ function categoryListView() {
       {
         headers: {
           "Content-Type": "application/json",
-          "x-access-token": user.token,
+          // "x-access-token": user.token,
         },
       },
     );
 
     const data = response.data.data;
+    console.log(data);
 
     const dataByRegion = await axios.get(
       `${BASE_URL}products/region/${user.regionId}`,
@@ -106,32 +107,9 @@ function categoryListView() {
       },
     );
 
-    // const finalData =
-
-    // dataByRegion.data.filter((val: any) => val.product_id === data.);
-
-    // let i: t[] = [];
-    // data.forEach((val: any) => {
-    //   const sizes = (val.product_size as { label: string }[]).map(
-    //     (val) => val.label,
-    //   );
-
-    //   console.log(val);
-
-    //   i.push({
-    //     title: val.product_name,
-    //     subtitle: val.description,
-    //     imageUri: val.product_images[0].image_url,
-    //     amount: 1,
-    //     price: 100,
-    //     originalPrice: 200,
-    //     discountPercentage: 50,
-    //     productId: parseInt(val.product_id),
-    //     sizes,
-    //   });
-    // });
-
     const finalData = sortProductsByRegion(data, dataByRegion.data);
+    console.log("finaldata");
+    console.log(finalData);
     setItems(finalData);
   }
 
