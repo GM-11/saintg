@@ -126,14 +126,14 @@ function index() {
               href="/(tabs)/account/manageAccount"
               style={{ marginRight: 24 }}
             >
-              {/* <Text style={{ fontSize: 28, marginRight: 24 }}>{">"}</Text> */}
               <AntDesign name="right" size={24} color="black" />
             </Link>
           </View>
           <FlatList
             data={data}
             renderItem={(val) => (
-              <Tile
+              <Tile              // originalPrice={item.originalPrice}
+
                 icon={val.item.icon}
                 title={val.item.title}
                 uri={val.item.uri}
@@ -245,7 +245,7 @@ function Tile({
         size={20}
         color="black"
         style={{ marginRight: 24 }}
-        F
+
       />
     </Pressable>
   );

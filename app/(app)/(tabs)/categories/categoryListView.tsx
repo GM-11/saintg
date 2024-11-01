@@ -136,7 +136,6 @@ function categoryListView() {
         <Text style={{ fontSize: 16 }}>
           {items.length} "{name}"
         </Text>
-        {/* <Text style={{ fontSize: 16 }}>{"O"}</Text> */}
       </View>
       {/* <View>
         <FlatList
@@ -195,9 +194,7 @@ function categoryListView() {
               productId={item.productId}
               imageUri={item.imageUri}
               currency={item.currency}
-              // originalPrice={item.originalPrice}
               sizes={item.sizes}
-              // discountPercentage={item.discountPercentage}
             />
           </Link>
         ))}

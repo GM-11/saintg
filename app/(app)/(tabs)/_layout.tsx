@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link, Redirect, router, Stack, Tabs } from "expo-router";
 import { View, Text, Pressable, Image, SafeAreaView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import SvgUri from "react-native-svg-uri";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { Picker } from "@react-native-picker/picker";
+import { GenderContext } from "@/contexts/genderForHome";
 
 function tabHeader() {
+  // const [gender, selectedGender] = useState("WOMEN");
+  const { gender, setGender } = useContext(GenderContext);
   return (
     <SafeAreaView>
       <View
@@ -31,31 +34,36 @@ function tabHeader() {
           }}
         />
 
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            height: "100%",
-            alignItems: "center",
-            gap: 20,
-          }}
-        >
-          <Link
-            href={"/search"}
+        <View style={{ width: "50%" }}>
+          <Picker
+            selectedValue={gender}
+            onValueChange={async (itemValue) => {
+              setGender(itemValue);
+            }}
             style={{
-              // backgroundColor: "red",
-              height: 30,
-              alignItems: "center",
-              width: 30,
+              color: "black"
             }}
           >
-            <Image
-              height={20}
-              width={20}
-              source={require("../../../assets/images/icons/search.png")}
-            />
-          </Link>
+            <Picker.Item label="WOMEN" value="WOMEN" />
+            <Picker.Item label="MEN" value="MEN" />
+          </Picker>
         </View>
+
+        <Link
+          href={"/search"}
+          style={{
+            right: 0,
+            height: 30,
+            alignItems: "center",
+            width: 30,
+          }}
+        >
+          <Image
+            height={20}
+            width={20}
+            source={require("../../../assets/images/icons/search.png")}
+          />
+        </Link>
       </View>
     </SafeAreaView>
   );
@@ -75,21 +83,6 @@ function _layout() {
     getUserDetails();
   }, []);
 
-  // React.useEffect(() => {
-  //   async function checkUserLoggedIn() {
-  //     try {
-  //       const userDetails = await AsyncStorage.getItem('userDetails');
-  //       if (userDetails !== null) {
-  //         setLoggedIn(true);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error checking user login status:', error);
-  //       setLoggedIn(false);
-  //     }
-  //   };
-
-  //   checkUserLoggedIn();
-  // }, []);
 
   if (userDetails !== null) {
     return (
@@ -98,11 +91,10 @@ function _layout() {
           name="index"
           options={{
             title: "Home",
+
             tabBarIcon(props) {
               return (
-                // <Image
-                //   source={require("../../../assets/images/navbar/home.png")}
-                // />
+
                 <Feather name="home" size={24} color="black" />
               );
             },
@@ -130,9 +122,7 @@ function _layout() {
             tabBarIcon(props) {
               return (
                 <AntDesign name="hearto" size={24} color="black" />
-                // <Image
-                //   source={require("../../../assets/images/navbar/wishlist.png")}
-                // />
+
               );
             },
             header(props) {

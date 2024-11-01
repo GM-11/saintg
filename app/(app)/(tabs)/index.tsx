@@ -11,7 +11,7 @@ import TopCategory from "@/components/home/TopCategory";
 import TrendingNow from "@/components/home/TrendingNow";
 import WhyChooseUs from "@/components/home/WhyUs";
 import { Link, Redirect, router } from "expo-router";
-import React from "react";
+import React, { useContext } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -23,6 +23,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IUser } from "@/constants/types";
 import axios from "axios";
 import { BASE_URL } from "@/constants/constant";
+import { GenderContext } from "@/contexts/genderForHome";
 function Index() {
   const tags = [
     "Trendy",
@@ -45,18 +46,16 @@ function Index() {
   const [trendingNow, setTrendingNow] = React.useState<any[]>([]);
   const [brands, setBrands] = React.useState<any[]>([]);
 
+  const { gender } = useContext(GenderContext);
+
   async function getData() {
     const userDetails = await AsyncStorage.getItem("userDetails");
 
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
     console.log(user);
-    let gender: string;
-    if (user.gender === "Male") {
-      gender = "MEN";
-    } else {
-      gender = "WOMEN";
-    }
+    console.log(gender);
+
 
     const response = await axios.get(
       `${BASE_URL}homePage/get?gender=${gender}`,
@@ -124,7 +123,7 @@ function Index() {
 
   React.useEffect(() => {
     getData();
-  }, []);
+  }, [gender]);
 
   return (
     <ScrollView style={styles.main}>
