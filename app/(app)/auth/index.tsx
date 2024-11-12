@@ -64,11 +64,11 @@ export default function Index() {
           </Picker>
         </View>
         <Image
-          style={{ alignSelf: "center" }}
+          style={{ alignSelf: "center", top: 100 }}
           source={require("../../../assets/images/saintg-logo-white.png")}
         />
         <Text style={styles.text}>
-          EXPERIENCE TRUE LUXURY {"\n\n"} NOW ON YOUR MOBILE
+          EXPERIENCE TRUE LUXURY {"\n"} NOW ON YOUR MOBILE
         </Text>
 
         <TouchableOpacity
