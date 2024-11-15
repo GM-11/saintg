@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Picker } from "@react-native-picker/picker";
 import OTPOverlay from "@/components/OTPoverlay";
@@ -16,7 +23,8 @@ const SignInScreen = () => {
   const [selectedGender] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [showError, setShowError] = useState<boolean>(false);
-  const [countryCodeDropDownExpanded, setCountryCodeExpanded] = useState<boolean>(false);
+  const [countryCodeDropDownExpanded, setCountryCodeExpanded] =
+    useState<boolean>(false);
 
   const handleSendOTP = async () => {
     if (mobileNumber.length !== 10) {
@@ -88,7 +96,9 @@ const SignInScreen = () => {
 
       <Text style={styles.label}>MOBILE NUMBER</Text>
       <View style={styles.inputContainer}>
-        <Text style={styles.countryCode}>{countryCodeOptions[selectedCountry - 1]}</Text>
+        <Text style={styles.countryCode}>
+          {countryCodeOptions[selectedCountry - 1]}
+        </Text>
         {countryCodeDropDownExpanded ? (
           <View
             style={{
@@ -108,7 +118,7 @@ const SignInScreen = () => {
               >
                 <Text
                   style={{
-                    padding: 16l,
+                    padding: 16,
                     color: "black",
                     textAlign: "left",
                     fontSize: 12,
@@ -150,7 +160,11 @@ const SignInScreen = () => {
         <View style={{ height: 100 }} />
       )}
 
-      {showError && <Text style={{ color: "red", fontSize: 14, marginTop: 10 }}>{error}</Text>}
+      {showError && (
+        <Text style={{ color: "red", fontSize: 14, marginTop: 10 }}>
+          {error}
+        </Text>
+      )}
 
       <TouchableOpacity
         style={{
