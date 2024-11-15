@@ -1,16 +1,10 @@
-import {
-  ImageBackground,
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { ImageBackground, Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function Index() {
   const navigation = useNavigation();
@@ -64,11 +58,20 @@ export default function Index() {
           </Picker>
         </View>
         <Image
-          style={{ alignSelf: "center", top: 100 }}
+          style={{ alignSelf: "center", marginBottom: 40, marginTop: 0 }}
           source={require("../../../assets/images/saintg-logo-white.png")}
         />
-        <Text style={styles.text}>
-          EXPERIENCE TRUE LUXURY {"\n"} NOW ON YOUR MOBILE
+        <Text
+          style={{
+            ...styles.text,
+            lineHeight: 48,
+            marginVertical: 30,
+            width: "65%",
+            letterSpacing: 2,
+            alignSelf: "center",
+          }}
+        >
+          EXPERIENCE TRUE LUXURY NOW ON YOUR MOBILE
         </Text>
 
         <TouchableOpacity
@@ -85,7 +88,7 @@ export default function Index() {
         <TouchableOpacity
           onPress={() => {
             router.push({
-              pathname: "/auth/signup",
+              pathname: "/(app)/auth/signup_mobile",
               params: { regionId: selectedCountry },
             });
           }}
@@ -93,8 +96,19 @@ export default function Index() {
         >
           <Text style={styles.text}>CREATE ACCOUNT</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={maybeLater}>
+        <TouchableOpacity
+          onPress={maybeLater}
+          style={{
+            display: "flex",
+            alignSelf: "center",
+            flexDirection: "row",
+            alignItems: "center",
+            width: "27%",
+            justifyContent: "space-between",
+          }}
+        >
           <Text style={styles.textLater}>MAYBE LATER</Text>
+          <AntDesign name="arrowright" size={18} color="white" />
         </TouchableOpacity>
       </ImageBackground>
     </View>
@@ -111,7 +125,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     width: "100%",
-    top: -200,
+    top: -125,
   },
   selectedContainer: {
     flexDirection: "row",
@@ -135,19 +149,19 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontWeight: "300",
-    fontSize: 16,
-    lineHeight: 24,
     fontFamily: "Lato-Regular",
   },
 
   buttonSignIn: {
-    backgroundColor: "black",
+    backgroundColor: "transparent",
+    borderColor: "white",
+    borderWidth: 1,
     marginHorizontal: 18,
     marginVertical: 8,
     padding: 16,
   },
   buttonCreate: {
-    backgroundColor: "transparent",
+    backgroundColor: "black",
     borderColor: "white",
     borderWidth: 1,
     marginHorizontal: 18,
