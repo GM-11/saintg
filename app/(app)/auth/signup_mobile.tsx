@@ -15,6 +15,8 @@ import OTPOverlay from "@/components/OTPoverlay";
 import { BASE_URL, countryCodeOptions } from "@/constants/constant";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
+import { IUser } from "@/constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignInScreen = () => {
   const [selectedCountry, setSelectedCountry] = useState(1);
@@ -25,11 +27,44 @@ const SignInScreen = () => {
   const [submitText, setSubmitText] = useState<string>("SEND OTP");
   const [selectedGender] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [body, setBody] = useState<any>({});
+
   const [showError, setShowError] = useState<boolean>(false);
   const [countryCodeDropDownExpanded, setCountryCodeExpanded] =
     useState<boolean>(false);
 
+  async function verifyOTP() {
+    const result = await fetch(`${BASE_URL}user/register/otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        otp: otpString,
+      }),
+    });
+    const data = await result.json();
+    if (data.code !== 200) {
+      Toast.show({ text1: "Something went wrong" });
+      return;
+    }
+
+    const userDetails = {
+      ...body,
+      regionId: selectedCountry,
+      token: data.token,
+    };
+
+    await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
+    setTimeout(() => {
+      router.replace("/(app)/(tabs)");
+    }, 1000);
+  }
+
   const handleSendOTP = async () => {
+    if (submitText === "SUBMIT") {
+    }
+
     if (mobileNumber.length !== 10) {
       setError("Please enter a valid mobile number");
       setShowError(true);
@@ -58,6 +93,7 @@ const SignInScreen = () => {
       setShowError(true);
       return;
     }
+    setBody(body);
     setShowOTPOtpOverlay(true);
     setSubmitText("SUBMIT");
   };
