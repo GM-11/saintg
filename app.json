@@ -8,7 +8,6 @@
     "forgroundImage": "./assets/AppIcon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "splash": {
       "image": "./assets/SplashScreen.png",
       "resizeMode": "cover",
@@ -18,13 +17,16 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.gm11.saintg",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["tez", "phonepe", "paytmmp"]
+        "LSApplicationQueriesSchemes": [
+          "tez",
+          "phonepe",
+          "paytmmp"
+        ]
       }
     },
     "android": {
       "icon": "./assets/AppIcon.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/AppIcon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.gm_11.saintg"
@@ -49,7 +51,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
