@@ -115,41 +115,107 @@ function index() {
     }
   }
 
+  const data = [
+    {
+      id: 1,
+      title: "WATCHES",
+      image: {
+        uri: "https://images.pexels.com/photos/2430953/pexels-photo-2430953.jpeg",
+      },
+    },
+    {
+      id: 2,
+      title: "CLOTHING",
+      image: {
+        uri: "https://images.pexels.com/photos/2430953/pexels-photo-2430953.jpeg", // Watches
+      },
+    },
+    {
+      id: 3,
+      title: "LINGERIE",
+      image: {
+        uri: "https://images.pexels.com/photos/2430953/pexels-photo-2430953.jpeg", // Watches
+      },
+    },
+    {
+      id: 4,
+      title: "HANDBAGS",
+      image: {
+        uri: "https://images.pexels.com/photos/2430953/pexels-photo-2430953.jpeg", // Watches
+      },
+    },
+    {
+      id: 5,
+      title: "EYE WEAR",
+      image: {
+        uri: "https://images.pexels.com/photos/2430953/pexels-photo-2430953.jpeg", // Watches
+      },
+    },
+    {
+      id: 6,
+      title: "LUXE BEAUTY",
+      image: {
+        uri: "https://images.pexels.com/photos/2430953/pexels-photo-2430953.jpeg", // Watches
+      },
+    },
+    {
+      id: 7,
+      title: "JEWELRY",
+      image: {
+        uri: "https://images.pexels.com/photos/2430953/pexels-photo-2430953.jpeg", // Watches
+      },
+    },
+    {
+      id: 8,
+      title: "INDIE LUXE",
+      image: {
+        uri: "https://images.pexels.com/photos/2430953/pexels-photo-2430953.jpeg", // Watches
+      },
+    },
+    {
+      id: 9,
+      title: "EDITOR'S PICK",
+      image: {
+        uri: "https://images.pexels.com/photos/2430953/pexels-photo-2430953.jpeg", // Watches
+      },
+    },
+  ];
+
   React.useEffect(() => {
     getCategories();
   }, []);
 
   return (
     <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
-      {/* <View>
-   <FlatList
-     horizontal
-     showsHorizontalScrollIndicator={false}
-     pagingEnabled
-     style={{
-       width: "100%",
-     }}
-     data={data}
-     renderItem={(val) => (
-       <ImageBackground
-         style={{
-           flexDirection: "column-reverse",
-           margin: 10,
-           display: "flex",
-           height: 100,
+      <View>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          style={{
+            width: "100%",
+          }}
+          data={data}
+          renderItem={(val) => (
+            <ImageBackground
+              style={{
+                flexDirection: "column-reverse",
+                margin: 10,
+                display: "flex",
+                height: 100,
 
-           width: 100,
-         }}
-         ///@ts-ignore
-         source={{ uri: val.item.image }}
-       >
-         <View style={{ margin: 16 }}>
-           <Text style={{ textAlign: "center" }}>{val.item.title}</Text>
-         </View>
-       </ImageBackground>
-     )}
-   />
- </View> */}
+                width: 110,
+              }}
+              source={val.item.image}
+              ///@ts-ignore
+            >
+              <View style={{ margin: 16 }}>
+                <Text style={{ textAlign: "center" }}>{val.item.title}</Text>
+              </View>
+            </ImageBackground>
+          )}
+        />
+      </View>
 
       <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 10 }}>
         SHOP BY CATEGORY

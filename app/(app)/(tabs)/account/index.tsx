@@ -23,6 +23,7 @@ function index() {
       const res = await AsyncStorage.getItem("userDetails");
       if (res) {
         setUserDetails(JSON.parse(res) as IUser);
+        console.log(userDetails);
       }
     }
     getUserDetails();
@@ -83,65 +84,72 @@ function index() {
 
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
-      {userDetails && userDetails.token ? (
-        <View>
+      {/* {userDetails && userDetails.token ? ( */}
+      <View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            width: "100%",
+            justifyContent: "space-between",
+            marginBottom: 24,
+          }}
+        >
           <View
             style={{
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              width: "100%",
-              justifyContent: "space-between",
-              marginBottom: 24,
             }}
           >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              {/* <Image
+            {/* <Image
               style={{ height: 48, width: 48, borderRadius: 100, margin: 16 }}
               source={{
                 uri: "https://static.dc.com/dc/files/default_images/Char_Profile_Batman_20190116_5c3fc4b40faec2.47318964.jpg",
               }}
             /> */}
-              <View style={{ marginLeft: 24 }}>
-                <Text
-                  style={{ fontSize: 14, fontWeight: 300, ...textStyles.font }}
-                >
-                  {userDetails ? userDetails.name : ""}
-                </Text>
-                <Text
-                  style={{ fontSize: 10, fontWeight: 300, ...textStyles.font }}
-                >
-                  {userDetails ? userDetails.email : ""}
-                </Text>
-              </View>
+            <View style={{ marginLeft: 24 }}>
+              <Text
+                style={{ fontSize: 14, fontWeight: 300, ...textStyles.font }}
+              >
+                {userDetails && userDetails.token !== ""
+                  ? userDetails.name
+                  : "Not Logged in"}
+              </Text>
+              <Text
+                style={{ fontSize: 10, fontWeight: 300, ...textStyles.font }}
+              >
+                {userDetails && userDetails.token !== ""
+                  ? userDetails.email
+                  : ""}
+              </Text>
             </View>
-
-            <Link
-              href="/(tabs)/account/manageAccount"
-              style={{ marginRight: 24 }}
-            >
-              <AntDesign name="right" size={24} color="black" />
-            </Link>
           </View>
-          <FlatList
-            data={data}
-            renderItem={(val) => (
-              <Tile              // originalPrice={item.originalPrice}
 
-                icon={val.item.icon}
-                title={val.item.title}
-                uri={val.item.uri}
-              />
-            )}
-          />
+          <Link
+            href={
+              userDetails && userDetails.token !== ""
+                ? "/(tabs)/account/manageAccount"
+                : "/(app)/auth/signup_mobile"
+            }
+            style={{ marginRight: 24 }}
+          >
+            <AntDesign name="right" size={24} color="black" />
+          </Link>
         </View>
-      ) : (
+        <FlatList
+          data={data}
+          renderItem={(val) => (
+            <Tile // originalPrice={item.originalPrice}
+              icon={val.item.icon}
+              title={val.item.title}
+              uri={val.item.uri}
+            />
+          )}
+        />
+      </View>
+      {/* ) : (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
@@ -197,8 +205,17 @@ function index() {
               SIGN UP
             </Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={async () => {
+              await AsyncStorage.clear();
+              router.replace("/auth");
+            }}
+          >
+            <Text> Delete Account</Text>
+          </TouchableOpacity>
         </View>
-      )}
+      )} */}
     </View>
   );
 }
@@ -245,7 +262,6 @@ function Tile({
         size={20}
         color="black"
         style={{ marginRight: 24 }}
-
       />
     </Pressable>
   );

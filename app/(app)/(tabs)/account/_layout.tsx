@@ -14,7 +14,7 @@ function h() {
           alignItems: "center",
           backgroundColor: "white",
           justifyContent: "space-between",
-          paddingTop: 40,
+          paddingTop: 10,
           paddingBottom: 20,
         }}
       >

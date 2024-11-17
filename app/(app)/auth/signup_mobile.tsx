@@ -9,9 +9,14 @@ import {
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Picker } from "@react-native-picker/picker";
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 import OTPOverlay from "@/components/OTPoverlay";
 import { BASE_URL, countryCodeOptions } from "@/constants/constant";
 import Toast from "react-native-toast-message";
+import { router } from "expo-router";
+import { IUser } from "@/constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignInScreen = () => {
   const [selectedCountry, setSelectedCountry] = useState(1);
@@ -19,28 +24,60 @@ const SignInScreen = () => {
   const [otpString, setOtpString] = useState<string>("");
 
   const [mobileNumber, setMobileNumber] = useState<string>("");
-  // const [countryCode, setCountryCode] = useState<string>(countryCodeOptions[selectedCountry]);
+  const [submitText, setSubmitText] = useState<string>("SEND OTP");
   const [selectedGender] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [body, setBody] = useState<any>({});
+
   const [showError, setShowError] = useState<boolean>(false);
   const [countryCodeDropDownExpanded, setCountryCodeExpanded] =
     useState<boolean>(false);
 
+  async function verifyOTP() {
+    const result = await fetch(`${BASE_URL}user/register/otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        otp: otpString,
+      }),
+    });
+    const data = await result.json();
+    if (data.code !== 200) {
+      Toast.show({ text1: "Something went wrong" });
+      return;
+    }
+
+    const userDetails = {
+      ...body,
+      regionId: selectedCountry,
+      token: data.token,
+    };
+
+    await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
+    setTimeout(() => {
+      router.replace("/(app)/(tabs)");
+    }, 1000);
+  }
+
   const handleSendOTP = async () => {
+    if (submitText === "SUBMIT") {
+    }
+
     if (mobileNumber.length !== 10) {
       setError("Please enter a valid mobile number");
       setShowError(true);
       return;
     }
     const body = {
-      fullName: "",
+      fullName: "x",
       phoneNumber: `${countryCodeOptions[selectedCountry - 1]}${mobileNumber}`,
-      email: "",
+      email: "x",
       gender: selectedGender == "men" ? "male" : "female",
-      password: "",
-      regionId: selectedCountry,
+      password: "x",
+      // regionId: selectedCountry,
     };
-
     const res = await fetch(`${BASE_URL}user/register`, {
       method: "POST",
       headers: {
@@ -49,17 +86,17 @@ const SignInScreen = () => {
       body: JSON.stringify(body),
     });
     const data = await res.json();
+    console.log(data);
     Toast.show({ text1: data.message || data.msg });
-
     if (data.code !== 200) {
       setError(data.message || data.msg || "Something went wrong");
       setShowError(true);
       return;
     }
+    setBody(body);
     setShowOTPOtpOverlay(true);
+    setSubmitText("SUBMIT");
   };
-
-  const handleCreateAccount = () => {};
 
   const handleSkip = () => {};
 
@@ -75,12 +112,12 @@ const SignInScreen = () => {
         <Picker
           selectedValue={selectedCountry}
           style={{
-            width: 250,
-            height: 30,
+            width: 300,
+            height: 60,
             color: "black",
           }}
           dropdownIconColor={"black"}
-          onValueChange={(itemValue) => setSelectedCountry(itemValue)}
+          onValueChange={(itemValue: number) => setSelectedCountry(itemValue)}
         >
           <Picker.Item label="🇬🇧 United Kingdom (GBP)" value={1} />
           <Picker.Item label="🇺🇸 United States (USD)" value={2} />
@@ -96,23 +133,23 @@ const SignInScreen = () => {
 
       <Text style={styles.label}>MOBILE NUMBER</Text>
       <View style={styles.inputContainer}>
-        <Text style={styles.countryCode}>
-          {countryCodeOptions[selectedCountry - 1]}
-        </Text>
+        <TouchableOpacity onPress={() => setCountryCodeExpanded(true)}>
+          <Text>{countryCodeOptions[selectedCountry - 1]}</Text>
+        </TouchableOpacity>
         {countryCodeDropDownExpanded ? (
           <View
             style={{
               position: "absolute",
               backgroundColor: "#dedede",
               width: "100%",
-              top: 350,
-              zIndex: 2,
+              zIndex: 1,
             }}
           >
             {countryCodeOptions.map((val) => (
               <TouchableOpacity
                 key={countryCodeOptions.indexOf(val)}
                 onPress={() => {
+                  setSelectedCountry(countryCodeOptions.indexOf(val) + 1);
                   setCountryCodeExpanded(false);
                 }}
               >
@@ -136,7 +173,7 @@ const SignInScreen = () => {
 
         <TextInput
           style={styles.input}
-          placeholder="Enter your mobile number"
+          placeholder="Enter your number"
           keyboardType="phone-pad"
           value={mobileNumber}
           onChangeText={setMobileNumber}
@@ -175,7 +212,7 @@ const SignInScreen = () => {
           marginHorizontal: 18,
           marginVertical: 8,
           padding: 16,
-          marginTop: 80,
+          marginTop: 20,
         }}
         onPress={handleSendOTP}
       >
@@ -189,17 +226,35 @@ const SignInScreen = () => {
             alignSelf: "center",
           }}
         >
-          SEND OTP
+          {submitText}
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleCreateAccount}>
-        <Text style={styles.linkText}>CREATE A NEW ACCOUNT</Text>
+      <TouchableOpacity
+        onPress={() => {
+          router.push({
+            pathname: "/(app)/auth/signin",
+            params: { regionId: selectedCountry },
+          });
+        }}
+      >
+        <Text
+          style={{
+            color: "black",
+            fontSize: 12,
+            fontFamily: "Lato-Regular",
+            letterSpacing: 3,
+            alignSelf: "center",
+          }}
+        >
+          {" "}
+          ALREADY HAVE ACCOUNT{" "}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.skipContainer} onPress={handleSkip}>
         <Text style={styles.skipText}>SKIP</Text>
-        <Text style={styles.arrow}>→</Text>
+        <AntDesign name="arrowright" size={16} color="black" />
       </TouchableOpacity>
     </View>
   );
@@ -243,9 +298,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: "100%",
   },
-  countryCode: {
-    marginRight: 10,
-  },
+
   input: {
     flex: 1,
     padding: 10,
@@ -264,11 +317,12 @@ const styles = StyleSheet.create({
   linkText: {
     color: "#000",
     marginBottom: 20,
+    letterSpacing: 2,
   },
   skipContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 100,
   },
   skipText: {
     color: "#000",

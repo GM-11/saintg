@@ -26,12 +26,7 @@ export default function RootLayout() {
     <GenderContextProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="search"
-          options={{
-            headerShown: false,
-          }}
-        />
+        <Stack.Screen name="search" options={{ headerShown: false }} />
         <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="wallet" options={{ headerShown: false }} />
         <Stack.Screen name="product" options={{ headerShown: false }} />

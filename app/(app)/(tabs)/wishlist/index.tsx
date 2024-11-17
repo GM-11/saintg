@@ -41,6 +41,7 @@ function index() {
 
     if (user.token === "") {
       setUserNotLoggedIn(true);
+      setLoading(false);
       return;
     }
     try {
@@ -103,71 +104,71 @@ function index() {
     getData();
   }, []);
 
-  if (userNotLoggedIn) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "white",
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: "black",
-            width: "90%",
-            marginTop: 36,
-            padding: 16,
-          }}
-          onPress={() =>
-            router.push({
-              pathname: "/(app)/auth/signin",
-              params: { regionId: user?.regionId },
-            })
-          }
-        >
-          <Text
-            style={{
-              color: "white",
-              alignSelf: "center",
-              textAlign: "center",
-              fontSize: 16,
-              fontFamily: "Lato-Regular",
-            }}
-          >
-            SIGN IN
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "black",
-            width: "90%",
-            marginTop: 36,
-            padding: 16,
-          }}
-          onPress={() =>
-            router.push({
-              pathname: "/auth/signup",
-              params: { regionId: user?.regionId },
-            })
-          }
-        >
-          <Text
-            style={{
-              color: "white",
-              alignSelf: "center",
-              textAlign: "center",
-              fontSize: 16,
-              fontFamily: "Lato-Regular",
-            }}
-          >
-            SIGN UP
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+  // if (userNotLoggedIn) {
+  //   return (
+  //     <View
+  //       style={{
+  //         flex: 1,
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         backgroundColor: "white",
+  //       }}
+  //     >
+  //       <TouchableOpacity
+  //         style={{
+  //           backgroundColor: "black",
+  //           width: "90%",
+  //           marginTop: 36,
+  //           padding: 16,
+  //         }}
+  //         onPress={() =>
+  //           router.push({
+  //             pathname: "/(app)/auth/signin",
+  //             params: { regionId: user?.regionId },
+  //           })
+  //         }
+  //       >
+  //         <Text
+  //           style={{
+  //             color: "white",
+  //             alignSelf: "center",
+  //             textAlign: "center",
+  //             fontSize: 16,
+  //             fontFamily: "Lato-Regular",
+  //           }}
+  //         >
+  //           SIGN IN
+  //         </Text>
+  //       </TouchableOpacity>
+  //       <TouchableOpacity
+  //         style={{
+  //           backgroundColor: "black",
+  //           width: "90%",
+  //           marginTop: 36,
+  //           padding: 16,
+  //         }}
+  //         onPress={() =>
+  //           router.push({
+  //             pathname: "/auth/signup",
+  //             params: { regionId: user?.regionId },
+  //           })
+  //         }
+  //       >
+  //         <Text
+  //           style={{
+  //             color: "white",
+  //             alignSelf: "center",
+  //             textAlign: "center",
+  //             fontSize: 16,
+  //             fontFamily: "Lato-Regular",
+  //           }}
+  //         >
+  //           SIGN UP
+  //         </Text>
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // }
 
   if (data.length !== 0) {
     return (

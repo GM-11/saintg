@@ -1,10 +1,11 @@
+import TopCategory from "@/components/home/TopCategory";
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Link, router, useLocalSearchParams } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FlatList,
   Text,
@@ -14,7 +15,7 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
-import SvgUri from "react-native-svg-uri";
+// import SvgUri from "react-native-svg-uri";
 import Toast from "react-native-toast-message";
 
 type t = {
@@ -65,6 +66,16 @@ function index() {
   const [showResults, setShowResults] = React.useState(false);
   const [data, setData] = React.useState<t[]>([]);
   const [loading, setLoading] = React.useState(false);
+  const [recentSearches, setRecentSearches] = React.useState<string[]>([]);
+
+  async function getRecentSearches() {
+    const recentSearches = await AsyncStorage.getItem("recentSearches");
+    const recentSearchesParsed = JSON.parse(recentSearches || "[]") as string[];
+    setRecentSearches(recentSearchesParsed);
+  }
+  useEffect(() => {
+    getRecentSearches();
+  }, []);
 
   async function fetchData() {
     try {
@@ -73,6 +84,11 @@ function index() {
       const userDetails = await AsyncStorage.getItem("userDetails");
       if (!userDetails) return;
       const user = JSON.parse(userDetails) as IUser;
+
+      await AsyncStorage.setItem(
+        "recentSearches",
+        JSON.stringify([...recentSearches, search]),
+      );
 
       const result = await axios.get(
         `${BASE_URL}products/search?keyword=${search}`,
@@ -113,10 +129,11 @@ function index() {
           width: "80%",
           padding: 10,
           margin: 20,
-          marginTop: 40,
+          marginTop: 0,
           display: "flex",
           justifyContent: "space-between",
           flexDirection: "row",
+          alignItems: "center",
         }}
       >
         <Pressable onPress={() => router.back()}>
@@ -172,25 +189,30 @@ function index() {
         SearchResult(search as string, data)
       ) : (
         <View>
-          {/* <Text
-            style={{
-              letterSpacing: 4,
-              color: "gray",
-              fontSize: 16,
-              marginTop: 20,
-              marginLeft: 20,
-            }}
-          >
-            RECENT SEARCH
-          </Text> */}
-          {/* <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={Array(10).fill("New Arrival")}
-            style={{ marginTop: 40 }}
-            renderItem={(val) => <TopCategory title={val.item} />}
-          /> */}
-
+          {recentSearches.length > 0 ? (
+            <View>
+              <Text
+                style={{
+                  letterSpacing: 4,
+                  color: "gray",
+                  fontSize: 16,
+                  marginTop: 20,
+                  marginLeft: 20,
+                }}
+              >
+                RECENT SEARCH
+              </Text>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={recentSearches}
+                style={{ marginTop: 40 }}
+                renderItem={(val) => <TopCategory title={val.item} />}
+              />
+            </View>
+          ) : (
+            <View />
+          )}
           <Text
             style={{
               letterSpacing: 4,

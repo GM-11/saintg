@@ -1,4 +1,11 @@
-import { ImageBackground, Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  ImageBackground,
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
@@ -29,7 +36,7 @@ export default function Index() {
 
     await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
     setTimeout(() => {
-      router.replace("/");
+      router.replace("/(app)/(tabs)");
     }, 1000);
   }
 
@@ -50,6 +57,7 @@ export default function Index() {
             selectedValue={selectedCountry}
             style={styles.picker}
             dropdownIconColor={"white"}
+            itemStyle={{ color: "white" }}
             onValueChange={(itemValue) => setSelectedCountry(itemValue)}
           >
             <Picker.Item label="🇬🇧 United Kingdom (GBP)" value={1} />
@@ -141,8 +149,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   picker: {
-    width: 250,
-    height: 30,
+    width: 300,
+    height: 50,
     color: "white",
   },
   text: {

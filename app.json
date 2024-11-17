@@ -3,9 +3,12 @@
     "name": "SaintG",
     "slug": "saintg",
     "version": "1.0.0",
+    "newArchEnabled": true,
     "orientation": "portrait",
     "icon": "./assets/AppIcon.png",
+    "targetSdkVersion": 34,
     "forgroundImage": "./assets/AppIcon.png",
+    "scheme": "",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/SplashScreen.png",

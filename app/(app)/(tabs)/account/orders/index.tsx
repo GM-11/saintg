@@ -1,5 +1,6 @@
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
+import textStyles from "@/styles/textStyles";
 import { AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
@@ -16,6 +17,7 @@ import {
 function ordersPage() {
   const [orders, setOrders] = React.useState<orderProps[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [userDetails, setUserDetails] = React.useState<IUser>();
 
   async function fetchOrders() {
     setLoading(true);
@@ -23,6 +25,8 @@ function ordersPage() {
     if (!userDetails) return;
 
     const user = JSON.parse(userDetails) as IUser;
+
+    setUserDetails(user);
 
     try {
       const response = await fetch(`${BASE_URL}order/user/orders`, {
@@ -76,6 +80,24 @@ function ordersPage() {
   React.useEffect(() => {
     fetchOrders();
   }, []);
+
+  if (userDetails && userDetails.token === "") {
+    return (
+      <View style={{ flex: 1, backgroundColor: "white", height: "100%" }}>
+        <Text
+          style={{
+            fontSize: 16,
+            color: "black",
+            fontFamily: "Lato-Regular",
+            marginTop: 20,
+            textAlign: "center",
+          }}
+        >
+          Please login to view your orders
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: "white", height: "100%" }}>

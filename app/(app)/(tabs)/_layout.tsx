@@ -1,17 +1,27 @@
 import React, { useContext, useState } from "react";
 import { Link, Redirect, router, Stack, Tabs } from "expo-router";
-import { View, Text, Pressable, Image, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Picker } from "@react-native-picker/picker";
+import Entypo from "@expo/vector-icons/Entypo";
+
 import { GenderContext } from "@/contexts/genderForHome";
 
 function tabHeader() {
   // const [gender, selectedGender] = useState("WOMEN");
   const { gender, setGender } = useContext(GenderContext);
+  const [showGender, setShowGender] = useState(false);
   return (
     <SafeAreaView>
       <View
@@ -22,7 +32,7 @@ function tabHeader() {
           alignItems: "center",
           backgroundColor: "white",
           justifyContent: "space-between",
-          paddingTop: 40,
+          paddingTop: 10,
         }}
       >
         <Image
@@ -34,23 +44,82 @@ function tabHeader() {
           }}
         />
 
-        <View style={{ width: "50%" }}>
-          <Picker
+        <View
+          style={{
+            minWidth: "35%",
+            display: "flex",
+            marginRight: 20,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            position: "fixed",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontFamily: "Lato-Regular",
+              letterSpacing: 1.2,
+              color: "black",
+            }}
+          >
+            {gender}
+          </Text>
+          <TouchableOpacity onPress={() => setShowGender(!showGender)}>
+            <Entypo name="chevron-thin-down" size={20} color="black" />
+          </TouchableOpacity>
+
+          {/* <Picker
             selectedValue={gender}
+            dropdownIconColor="transparent"
             onValueChange={async (itemValue) => {
               setGender(itemValue);
             }}
             style={{
-              color: "black"
+              color: "black",
             }}
           >
             <Picker.Item label="WOMEN" value="WOMEN" />
             <Picker.Item label="MEN" value="MEN" />
-          </Picker>
+          </Picker> */}
         </View>
-
+        {showGender ? (
+          <View
+            style={{
+              position: "absolute",
+              backgroundColor: "#dedede",
+              alignSelf: "center",
+              width: "40%",
+              zIndex: 1,
+              top: 50,
+              left: 130,
+              // right: 0,
+            }}
+          >
+            <TouchableOpacity
+              style={{ padding: 10 }}
+              onPress={() => {
+                setGender("MEN");
+                setShowGender(false);
+              }}
+            >
+              <Text> MEN </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ padding: 10 }}
+              onPress={() => {
+                setGender("WOMEN");
+                setShowGender(false);
+              }}
+            >
+              <Text> WOMEN </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View />
+        )}
         <Link
-          href={"/search"}
+          href="/(app)/search/search"
           style={{
             right: 0,
             height: 30,
@@ -83,20 +152,19 @@ function _layout() {
     getUserDetails();
   }, []);
 
-
   if (userDetails !== null) {
     return (
-      <Tabs screenOptions={{}}>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: "black",
+        }}
+      >
         <Tabs.Screen
           name="index"
           options={{
             title: "Home",
-
             tabBarIcon(props) {
-              return (
-
-                <Feather name="home" size={24} color="black" />
-              );
+              return <Feather name="home" size={24} color="black" />;
             },
             header(props) {
               return tabHeader();
@@ -120,10 +188,7 @@ function _layout() {
           options={{
             title: "Wishlist",
             tabBarIcon(props) {
-              return (
-                <AntDesign name="hearto" size={24} color="black" />
-
-              );
+              return <AntDesign name="hearto" size={24} color="black" />;
             },
             header(props) {
               return tabHeader();

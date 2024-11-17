@@ -45,6 +45,7 @@ function Index() {
   const [featuredCollection, setFeaturedCollection] = React.useState<any[]>([]);
   const [trendingNow, setTrendingNow] = React.useState<any[]>([]);
   const [brands, setBrands] = React.useState<any[]>([]);
+  const [allAccessories, setAllAccessories] = React.useState<any[]>([]);
 
   const { gender } = useContext(GenderContext);
 
@@ -55,7 +56,6 @@ function Index() {
     const user = JSON.parse(userDetails) as IUser;
     console.log(user);
     console.log(gender);
-
 
     const response = await axios.get(
       `${BASE_URL}homePage/get?gender=${gender}`,
@@ -73,6 +73,9 @@ function Index() {
     const _featuredCollection = res.featuredCollection;
     const _trendingNow = res.trendingNow;
     const _brands = res.brands;
+    const _allAccess = res.accessoriesSection;
+
+    // console.log(_allAccess);
 
     const l = _latestArrival.map((item: any) => {
       return {
@@ -115,9 +118,23 @@ function Index() {
       };
     });
 
+    // const a = _allAccess.map((item: any) => {
+    //   return {
+    //     id: item.id,
+    //     title: item.text,
+    //     image: { uri: item.imageUrl },
+    //   };
+    // });
+
+    const a = {
+      id: _allAccess.id,
+      title: _allAccess.text,
+      image: { uri: _allAccess.imageUrl },
+    };
     setFeaturedCollection(f);
     setTrendingNow(t);
     setLatestArrival(l);
+    setAllAccessories([a]);
     setBrands(b);
   }
 
@@ -132,7 +149,7 @@ function Index() {
           horizontal
           showsHorizontalScrollIndicator={false}
           data={tags}
-          style={{ marginTop: 40 }}
+          style={{ marginTop: 20 }}
           renderItem={(val) => (
             <Pressable
               onPress={() => {
@@ -146,13 +163,13 @@ function Index() {
             </Pressable>
           )}
         />
-        {/* <FlatList
+        <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
           data={Array(10).fill("New Arrival")}
           style={{ marginVertical: 40 }}
           renderItem={(val) => <TopCategory title={val.item} />}
-        /> */}
+        />
       </View>
 
       <MyPager />
@@ -160,6 +177,7 @@ function Index() {
       <FeaturedCollection data={featuredCollection} />
       <TrendingNow data={trendingNow} />
       <Partners data={brands} />
+      <AllAccess data={allAccessories} />
       <BestDeals />
       <LatestArrival data={latestArrival} />
     </ScrollView>

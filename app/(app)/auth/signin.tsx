@@ -141,7 +141,7 @@ function signin() {
       Toast.show({ text1: "User sign in successful" });
 
       setTimeout(() => {
-        router.replace("/");
+        router.replace("/(app)/(tabs)");
       }, 1000);
     } catch (error) {
       console.error("Error signing in user:", error);
@@ -177,16 +177,22 @@ function signin() {
                 setCountryCodeExpanded(true);
               }}
             >
-              <Text style={styles.textSize12}>{countryCode}</Text>
+              <Text style={{ ...styles.textSize12, paddingHorizontal: 4 }}>
+                {countryCode}
+              </Text>
             </TouchableOpacity>
           ) : (
             <View />
           )}
 
           <TextInput
-            style={{ width: "95%", margin: 2 }}
+            style={{
+              width: "100%",
+              margin: 2,
+              paddingHorizontal: 8,
+            }}
             value={email}
-            keyboardType="number-pad"
+            keyboardType="default"
             onChangeText={(e) => {
               if (e.match(/[^0-9]/)) {
                 setIsPhoneNumber(false);
@@ -223,7 +229,7 @@ function signin() {
           <View style={styles.passwordInputContainer}>
             <TextInput
               value={password}
-              style={styles.passwordInput}
+              style={{ ...styles.passwordInput, paddingVertical: 12 }}
               secureTextEntry={!showPassword}
               onChangeText={(e) => {
                 setPassword(e);
@@ -252,7 +258,7 @@ function signin() {
       </View>
 
       <TouchableOpacity onPress={signInUser} style={styles.buttonSignIn}>
-        <Text style={{ ...styles.buttonText, marginBottom: 10 }}>SIGN IN</Text>
+        <Text style={{ ...styles.buttonText }}>SIGN IN</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -286,6 +292,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
+    backgroundColor: "white",
     width: "100%",
     borderWidth: 0,
   },
@@ -336,9 +343,9 @@ const styles = StyleSheet.create({
   },
   buttonSignIn: {
     backgroundColor: "black",
-    width: "90%",
+    width: "80%",
+    paddingVertical: 16,
     marginTop: 36,
-    padding: 16,
   },
   text: {
     color: "black",
@@ -388,7 +395,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: "100%",
     marginVertical: 16,
-    padding: 8,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
