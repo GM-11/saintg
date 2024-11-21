@@ -129,7 +129,7 @@ function index() {
           width: "80%",
           padding: 10,
           margin: 20,
-          marginTop: 0,
+          marginTop: 20,
           display: "flex",
           justifyContent: "space-between",
           flexDirection: "row",

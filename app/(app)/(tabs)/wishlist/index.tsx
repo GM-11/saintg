@@ -1,20 +1,9 @@
-import SelectSizeOverlay from "@/components/SelectSizeOverlay";
 import { BASE_URL } from "@/constants/constant";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { router } from "expo-router";
 import React, { useEffect } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  Image,
-  Pressable,
-  ActivityIndicator,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, FlatList, Image, ActivityIndicator } from "react-native";
 
 type t = {
   image: string;
@@ -52,6 +41,7 @@ function index() {
         },
       });
       const data = result.data;
+      console.log(data);
       if (data.wishlist.length === 0) {
         setLoading(false);
         setData([]);

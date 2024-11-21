@@ -104,9 +104,9 @@ function index() {
         },
       );
 
-      setCategories([...cats]);
+      setCategories(cats);
 
-      setSubCategories([...womanCats]);
+      setSubCategories(womanCats);
     } catch (e) {
       // console.log(e);
       return;
@@ -227,7 +227,7 @@ function index() {
             image={val.image}
             name={val.name}
             subCats={subCategories}
-            key={womanCats.indexOf(val)}
+            key={`${val.name}-${val.image}`}
           />
         ))}
       </View>

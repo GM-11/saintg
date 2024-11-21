@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,14 +7,13 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Picker } from "@react-native-picker/picker";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 import OTPOverlay from "@/components/OTPoverlay";
 import { BASE_URL, countryCodeOptions } from "@/constants/constant";
 import Toast from "react-native-toast-message";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -32,6 +31,12 @@ const SignInScreen = () => {
   const [showError, setShowError] = useState<boolean>(false);
   const [countryCodeDropDownExpanded, setCountryCodeExpanded] =
     useState<boolean>(false);
+
+  const { regionId } = useLocalSearchParams<{ regionId: string }>();
+
+  useEffect(() => {
+    setSelectedCountry(parseInt(regionId));
+  }, []);
 
   async function verifyOTP() {
     const result = await fetch(`${BASE_URL}user/register/otp`, {
@@ -51,7 +56,7 @@ const SignInScreen = () => {
 
     const userDetails = {
       ...body,
-      regionId: selectedCountry,
+      regionId: parseInt(regionId),
       token: data.token,
     };
 
@@ -98,7 +103,23 @@ const SignInScreen = () => {
     setSubmitText("SUBMIT");
   };
 
-  const handleSkip = () => {};
+  const handleSkip = async () => {
+    const userDetails: IUser = {
+      name: "",
+      email: "",
+      phoneNumber: "",
+      gender: "",
+      password: "",
+      token: "",
+      address: "",
+      regionId: `${selectedCountry}`,
+    };
+
+    await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
+    setTimeout(() => {
+      router.replace("/(app)/(tabs)");
+    }, 1000);
+  };
 
   return (
     <View style={styles.container}>
@@ -234,7 +255,7 @@ const SignInScreen = () => {
         onPress={() => {
           router.push({
             pathname: "/(app)/auth/signin",
-            params: { regionId: selectedCountry },
+            params: { regionId },
           });
         }}
       >
@@ -247,8 +268,7 @@ const SignInScreen = () => {
             alignSelf: "center",
           }}
         >
-          {" "}
-          ALREADY HAVE ACCOUNT{" "}
+          ALREADY HAVE ACCOUNT
         </Text>
       </TouchableOpacity>
 

@@ -127,7 +127,25 @@ function index() {
             </View>
           </View>
 
-          <Link
+          <TouchableOpacity
+            style={{ marginRight: 24 }}
+            onPress={async () => {
+              if (userDetails && userDetails.token !== "") {
+                router.push({
+                  pathname: "/(tabs)/account/manageAccount",
+                });
+              } else {
+                await AsyncStorage.clear();
+                router.replace({
+                  pathname: "/(app)/auth/signup_mobile",
+                });
+              }
+            }}
+          >
+            <AntDesign name="right" size={24} color="black" />
+          </TouchableOpacity>
+
+          {/* <Link
             href={
               userDetails && userDetails.token !== ""
                 ? "/(tabs)/account/manageAccount"
@@ -136,7 +154,7 @@ function index() {
             style={{ marginRight: 24 }}
           >
             <AntDesign name="right" size={24} color="black" />
-          </Link>
+          </Link> */}
         </View>
         <FlatList
           data={data}

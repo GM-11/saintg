@@ -82,13 +82,16 @@ const ConfirmOrderScreen = () => {
     });
 
     const data = await result.json();
+    console.log(data);
     if (data.error) {
+      console.log(data.error);
       Toast.show({ text1: data.error });
       return;
     }
 
     try {
       let verify: Response | string;
+      console.log(typeof user.regionId);
       if (user.regionId === "3") {
         verify = await razorpayHandler(user, data);
         if (typeof verify === "string") {
@@ -109,9 +112,9 @@ const ConfirmOrderScreen = () => {
           user,
           data,
           currency,
-          productItems
-            .reduce((a, b) => a + b.price * parseInt(b.quantity), 0)
-            .toString(),
+          // productItems
+          //   .reduce((a, b) => a + b.price * parseInt(b.quantity), 0)
+          //   .toString(),
         );
         console.log(url);
         setWebView(url as string);
@@ -234,9 +237,9 @@ const ConfirmOrderScreen = () => {
                   />
                   <View style={styles.productDetails}>
                     <Text style={styles.productName}>{item.name}</Text>
-                    <Text style={styles.productDescription}>
+                    {/* <Text style={styles.productDescription}>
                       {item.description}
-                    </Text>
+                    </Text> */}
                     <Text style={styles.productSize}>Size: {item.size}</Text>
                     <Text style={styles.productSize}>
                       Quantity: {item.quantity}
@@ -313,6 +316,7 @@ const ConfirmOrderScreen = () => {
                   (a, b) => a + b.price * parseInt(b.quantity),
                   0,
                 )}
+                {"/-"} {currency}
               </Text>
             </View>
 
@@ -357,13 +361,13 @@ const styles = StyleSheet.create({
   },
   addressTitle: {
     fontSize: 14,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginBottom: 8,
     ...textStyles.font,
   },
   addressName: {
     fontSize: 16,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginBottom: 4,
     ...textStyles.font,
   },
@@ -398,7 +402,7 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 16,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     ...textStyles.font,
   },
   productDescription: {

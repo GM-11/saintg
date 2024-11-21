@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 type t = {
   title: string;
@@ -27,19 +28,18 @@ function index() {
   const [data, setItems] = useState<t[]>([]);
   const [loading, setLoading] = useState(true);
   const [currency, setCurrency] = useState("GBP");
-  const [userNotLoggedIn, setUserNotLoggedIn] = React.useState(false);
-  const [user, setUser] = React.useState<IUser>();
+  // const [user, setUser] = React.useState<IUser>();
 
   async function getItems() {
     setLoading(true);
     const userDetails = await AsyncStorage.getItem("userDetails");
+    console.log(userDetails);
     if (!userDetails) return;
     const user = JSON.parse(userDetails) as IUser;
 
-    setUser(user);
+    // setUser(user);
 
     if (user.token === "") {
-      setUserNotLoggedIn(true);
       setLoading(false);
       return;
     }
@@ -52,6 +52,8 @@ function index() {
         },
       });
       const data = result.data.data;
+
+      console.log(data);
 
       const regionData = await axios.get(
         `${BASE_URL}products/region/${user.regionId}`,
@@ -103,72 +105,6 @@ function index() {
     getItems();
   }, []);
 
-  // if (userNotLoggedIn) {
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         justifyContent: "center",
-  //         alignItems: "center",
-  //         backgroundColor: "white",
-  //       }}
-  //     >
-  //       <TouchableOpacity
-  //         style={{
-  //           backgroundColor: "black",
-  //           width: "90%",
-  //           marginTop: 36,
-  //           padding: 16,
-  //         }}
-  //         onPress={() =>
-  //           router.push({
-  //             pathname: "/(app)/auth/signin",
-  //             params: { regionId: user?.regionId },
-  //           })
-  //         }
-  //       >
-  //         <Text
-  //           style={{
-  //             color: "white",
-  //             alignSelf: "center",
-  //             textAlign: "center",
-  //             fontSize: 16,
-  //             fontFamily: "Lato-Regular",
-  //           }}
-  //         >
-  //           SIGN IN
-  //         </Text>
-  //       </TouchableOpacity>
-  //       <TouchableOpacity
-  //         style={{
-  //           backgroundColor: "black",
-  //           width: "90%",
-  //           marginTop: 36,
-  //           padding: 16,
-  //         }}
-  //         onPress={() =>
-  //           router.push({
-  //             pathname: "/auth/signup",
-  //             params: { regionId: user?.regionId },
-  //           })
-  //         }
-  //       >
-  //         <Text
-  //           style={{
-  //             color: "white",
-  //             alignSelf: "center",
-  //             textAlign: "center",
-  //             fontSize: 16,
-  //             fontFamily: "Lato-Regular",
-  //           }}
-  //         >
-  //           SIGN UP
-  //         </Text>
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // }
-
   if (data.length === 0) {
     return (
       <View
@@ -205,10 +141,33 @@ function index() {
                   justifyContent: "space-between",
                 }}
               >
-                <Text style={{ fontSize: 16 }}>{item.title}</Text>
-                <Text style={{ fontSize: 16 }}>{item.subtitle}</Text>
-                <View style={{ display: "flex", flexDirection: "row" }}>
-                  <Pressable
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "Lato-Regular",
+                    width: "30%",
+                  }}
+                >
+                  {item.title}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: "Lato-Regular",
+                    width: "30%",
+                  }}
+                >
+                  {item.subtitle}
+                </Text>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: 10,
+                  }}
+                >
+                  <TouchableOpacity
                     onPress={() => {
                       setItems((prev) => {
                         const newItems = [...prev];
@@ -217,12 +176,18 @@ function index() {
                       });
                     }}
                   >
-                    <Text style={{ fontSize: 16 }}>+</Text>
-                  </Pressable>
-                  <Text style={{ fontSize: 16, marginHorizontal: 8 }}>
+                    <AntDesign name="plus" size={20} color="black" />
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginHorizontal: 12,
+                      fontFamily: "Lato-Regular",
+                    }}
+                  >
                     {item.amount}
                   </Text>
-                  <Pressable
+                  <TouchableOpacity
                     onPress={() => {
                       setItems((prev) => {
                         const newItems = [...prev];
@@ -232,10 +197,16 @@ function index() {
                       });
                     }}
                   >
-                    <Text style={{ fontSize: 16 }}>{"-"}</Text>
-                  </Pressable>
+                    <AntDesign name="minus" size={20} color="black" />
+                  </TouchableOpacity>
                 </View>
-                <Text style={{ fontSize: 16, fontWeight: 600 }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 600,
+                    fontFamily: "Lato-Regular",
+                  }}
+                >
                   {item.price} {"/-"} {item.currency}
                 </Text>
               </View>
@@ -263,13 +234,26 @@ function index() {
           >
             <Text style={{ fontSize: 16 }}>Sub Total</Text>
 
-            <Text style={{ fontSize: 16, fontWeight: 600 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: 600,
+                fontFamily: "Lato-Regular",
+              }}
+            >
               {data.reduce((acc, item) => acc + item.price * item.amount, 0)}
               {"/-"} {currency}
             </Text>
           </View>
 
-          <Text style={{ lineHeight: 24, color: "grey", fontSize: 14 }}>
+          <Text
+            style={{
+              lineHeight: 24,
+              color: "grey",
+              fontSize: 14,
+              fontFamily: "Lato-Regular",
+            }}
+          >
             Shipping charges, taxes and discount codes are calculated at the
             time of accounting.
           </Text>

@@ -226,10 +226,25 @@ function Item({
             justifyContent: "space-between",
           }}
         >
-          <Text style={{ fontSize: 16, flexWrap: "wrap", maxWidth: "70%" }}>
+          <Text
+            style={{
+              fontSize: 16,
+              flexWrap: "wrap",
+              width: "15%",
+              fontFamily: "Lato-Regular",
+            }}
+          >
             {title}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: 300, maxWidth: "60%" }}>
+          <Text
+            style={{
+              fontSize: 12,
+              fontWeight: 300,
+              width: "15%",
+              color: "rgba(0, 0, 0, 0.5)",
+              fontFamily: "Lato-Regular",
+            }}
+          >
             {subtitle}
           </Text>
           <View style={{ display: "flex", flexDirection: "row" }}>

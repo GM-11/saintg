@@ -19,9 +19,8 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { GenderContext } from "@/contexts/genderForHome";
 
 function tabHeader() {
-  // const [gender, selectedGender] = useState("WOMEN");
-  const { gender, setGender } = useContext(GenderContext);
-  const [showGender, setShowGender] = useState(false);
+  const { gender, setGender, showGender, setShowGender } =
+    useContext(GenderContext);
   return (
     <SafeAreaView>
       <View
@@ -32,7 +31,7 @@ function tabHeader() {
           alignItems: "center",
           backgroundColor: "white",
           justifyContent: "space-between",
-          paddingTop: 10,
+          paddingTop: 30,
         }}
       >
         <Image
@@ -52,7 +51,6 @@ function tabHeader() {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            position: "fixed",
           }}
         >
           <Text
@@ -65,23 +63,14 @@ function tabHeader() {
           >
             {gender}
           </Text>
-          <TouchableOpacity onPress={() => setShowGender(!showGender)}>
-            <Entypo name="chevron-thin-down" size={20} color="black" />
-          </TouchableOpacity>
-
-          {/* <Picker
-            selectedValue={gender}
-            dropdownIconColor="transparent"
-            onValueChange={async (itemValue) => {
-              setGender(itemValue);
-            }}
-            style={{
-              color: "black",
+          <TouchableOpacity
+            onPress={() => {
+              setShowGender(true);
+              console.log(showGender);
             }}
           >
-            <Picker.Item label="WOMEN" value="WOMEN" />
-            <Picker.Item label="MEN" value="MEN" />
-          </Picker> */}
+            <Entypo name="chevron-thin-down" size={20} color="black" />
+          </TouchableOpacity>
         </View>
         {showGender ? (
           <View
@@ -91,9 +80,8 @@ function tabHeader() {
               alignSelf: "center",
               width: "40%",
               zIndex: 1,
-              top: 50,
+              top: 70,
               left: 130,
-              // right: 0,
             }}
           >
             <TouchableOpacity
@@ -139,8 +127,6 @@ function tabHeader() {
 }
 
 function _layout() {
-  const [loggedIn, setLoggedIn] = React.useState(true);
-
   const [userDetails, setUserDetails] = React.useState<any>();
 
   React.useEffect(() => {

@@ -5,8 +5,7 @@ import RazorpayCheckout from "react-native-razorpay";
 export default async function razorpayHandler(
   user: IUser,
   data: any,
-
-): Promise<Response | string> {
+): Promise<Response | string | any> {
   const res2 = await fetch(`${BASE_URL}payment/create-order`, {
     method: "POST",
 
@@ -23,7 +22,8 @@ export default async function razorpayHandler(
   });
 
   const orderData = await res2.json();
-
+  console.log("in razorpayhandler");
+  console.log(orderData);
 
   if (orderData.error) {
     // Toast.show({ text1: orderData.error });

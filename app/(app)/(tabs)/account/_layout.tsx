@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, router, Stack } from "expo-router";
 import { View, Text, Image, Pressable, SafeAreaView } from "react-native";
-import SvgUri from "react-native-svg-uri";
 
 function h() {
   return (
@@ -14,7 +13,7 @@ function h() {
           alignItems: "center",
           backgroundColor: "white",
           justifyContent: "space-between",
-          paddingTop: 10,
+          paddingTop: 30,
           paddingBottom: 20,
         }}
       >

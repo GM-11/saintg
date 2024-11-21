@@ -4,6 +4,8 @@ import { IUser } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { router, useLocalSearchParams } from "expo-router";
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 import React from "react";
 import {
   Image,
@@ -32,7 +34,7 @@ type productType = {
   colors: string[];
   estimatedDelivery: string[];
   productId: number;
-  size: string[];
+  size: { size_id: string; product_id: number }[];
   quantity: number;
 };
 
@@ -56,21 +58,27 @@ function productDetail() {
   const [showMoreInfo, setShowMoreInfo] = React.useState(true);
   const [product, setProduct] = React.useState<productType>();
   const [showMore, setShowMore] = React.useState<productType[]>();
+  const [selectedSizeId, setSelectedSizeId] = React.useState<number>();
 
   const { searchKeyWord, productId, price, currency } = useLocalSearchParams();
 
   async function buyNow() {
-    addInCart();
-    // if (!product) return;
-    // const item = `
-    //   ${product.title}SEP${product.subtitle}SEP${product.price}SEP${selectedSize}SEP${product.image}SEP${product.estimatedDelivery}SEP${product.quantity}SEP`;
+    const userDetails = await AsyncStorage.getItem("userDetails");
+    if (!userDetails) return;
+    const user = JSON.parse(userDetails) as IUser;
 
-    router.push({
-      pathname: "/(app)/checkout/",
-      // params: {
-      //   items: [item],
-      // },
-    });
+    if (user.token === "") {
+      router.push({
+        pathname: "/(app)/auth/signin",
+        params: { regionId: user.regionId },
+      });
+    } else {
+      console.log("here");
+      addInCart();
+      router.push({
+        pathname: "/(app)/checkout/",
+      });
+    }
   }
 
   async function getProductDetails() {
@@ -87,6 +95,8 @@ function productDetail() {
         },
       },
     );
+
+    console.log(response.data.data);
 
     const today = new Date();
     const afterSevenDays = new Date(today);
@@ -142,14 +152,21 @@ function productDetail() {
           estimatedDelivery: [todayString, afterSevenDaysString],
           productId: product.product_id,
           size: product.product_size.map(
-            (size: { label: string }) => size.label,
+            (s: { size_id: string; product_id: string }) => {
+              return {
+                size_id: s.size_id,
+                product_id: s.product_id,
+              };
+            },
           ),
           quantity: 1,
         };
       },
     );
 
-    setProduct(convertedProducts[parseInt(productId as string) - 1]);
+    console.log(convertedProducts[0]);
+
+    setProduct(convertedProducts[0]);
 
     setShowMore(
       convertedProducts.filter(
@@ -178,11 +195,13 @@ function productDetail() {
           // color: selectedColor,
           // size: selectedSize,
           quantity: 1,
+          productSizeId: selectedSizeId,
         }),
       });
-      const data = await result.json();
+
+      console.log(result);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error adding in cart:", error);
     }
   }
 
@@ -249,18 +268,26 @@ function productDetail() {
         source={{ uri: product.image }}
       />
 
-      <View style={{ margin: 20 }}>
+      <View style={{ marginVertical: 20, marginHorizontal: 12 }}>
         <Text
           style={{
             letterSpacing: 4,
             fontSize: 16,
             marginBottom: 8,
             fontWeight: 600,
+            fontFamily: "Lato-Regular",
           }}
         >
           {product.title}
         </Text>
-        <Text style={{ fontSize: 16, marginBottom: 8 }}>
+        <Text
+          style={{
+            fontSize: 12,
+            marginBottom: 8,
+            fontFamily: "Lato-Regular",
+            color: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
           {product.subtitle}
         </Text>
         <View
@@ -269,7 +296,13 @@ function productDetail() {
             flexDirection: "row",
           }}
         >
-          <Text style={{ fontSize: 16, fontWeight: 600 }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: 600,
+              fontFamily: "Lato-Regular",
+            }}
+          >
             {product.price} {"/-"} {product.currency}
           </Text>
           {/* <Text
@@ -330,33 +363,44 @@ function productDetail() {
         >
           <Text style={{ marginRight: 12 }}>Size</Text>
 
-          {product.size.map((size: string) => (
-            <Pressable
-              key={size}
-              onPress={() => setSelectedSize(size)}
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: 100,
-                backgroundColor: selectedSize === size ? "gray" : "white",
-                margin: 5,
-                borderColor: "gray",
-                padding: 1,
-                borderWidth: 2,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
+          {product.size.map(
+            ({
+              size_id,
+              product_id,
+            }: {
+              size_id: string;
+              product_id: number;
+            }) => (
+              <Pressable
+                key={size_id}
+                onPress={() => {
+                  setSelectedSize(size_id);
+                  setSelectedSizeId(product_id);
+                }}
                 style={{
-                  color: selectedSize === size ? "white" : "black",
+                  width: 30,
+                  height: 30,
+                  borderRadius: 100,
+                  backgroundColor: selectedSize === size_id ? "gray" : "white",
+                  margin: 5,
+                  borderColor: "gray",
+                  padding: 1,
+                  borderWidth: 2,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                {size}
-              </Text>
-            </Pressable>
-          ))}
+                <Text
+                  style={{
+                    color: selectedSize === size_id ? "white" : "black",
+                  }}
+                >
+                  {size_id}
+                </Text>
+              </Pressable>
+            ),
+          )}
         </View>
 
         <View
@@ -405,7 +449,13 @@ function productDetail() {
           </Pressable>
         </View>
 
-        <Text style={{ fontWeight: 700, marginVertical: 16 }}>
+        <Text
+          style={{
+            fontWeight: 700,
+            marginVertical: 16,
+            fontFamily: "Lato-Regular",
+          }}
+        >
           Estimated Delivery Between {product.estimatedDelivery[0]} -
           {product.estimatedDelivery[1]}
         </Text>
@@ -416,12 +466,14 @@ function productDetail() {
         style={styles.details}
       >
         <Text style={styles.title}>DETAILS & DESCRIPTION</Text>
-        <Text style={{ color: "white" }}>{showDetails ? "A" : "V"}</Text>
+        <AntDesign name={showDetails ? "up" : "down"} size={16} color="white" />
       </Pressable>
 
       {showDetails ? (
         <View style={{ paddingHorizontal: 16, paddingVertical: 24 }}>
-          <Text style={{ fontSize: 16, lineHeight: 24 }}>
+          <Text
+            style={{ fontSize: 16, lineHeight: 24, fontFamily: "Lato-Regular" }}
+          >
             We work with monitoring programmes to ensure compliance with safety,
             health and quality standards for our products.
           </Text>
@@ -435,7 +487,7 @@ function productDetail() {
         style={styles.details}
       >
         <Text style={styles.title}>PRODUCT SPECIFICATIONS</Text>
-        <Text style={{ color: "white" }}>{showSpecs ? "A" : "V"}</Text>
+        <AntDesign name={showSpecs ? "up" : "down"} size={16} color="white" />
       </Pressable>
 
       {showSpecs ? (
@@ -448,7 +500,9 @@ function productDetail() {
           }}
         >
           <View style={{ flex: 1 }}>
-            <Text style={{ marginTop: 8 }}>Material</Text>
+            <Text style={{ marginTop: 8, fontFamily: "Lato-Regular" }}>
+              Material
+            </Text>
             {/* <Text style={{ marginTop: 8 }}>Sole Material</Text>
             <Text style={{ marginTop: 8 }}>Heel Height</Text>
             <Text style={{ marginTop: 8 }}>Heel Type</Text>
@@ -457,7 +511,9 @@ function productDetail() {
             <Text style={{ marginTop: 8 }}>Pack Contains</Text> */}
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ marginTop: 8 }}>: {product.specs.material}</Text>
+            <Text style={{ marginTop: 8, fontFamily: "Lato-Regular" }}>
+              : {product.specs.material}
+            </Text>
             {/* <Text style={{ marginTop: 8 }}>: {product.specs.saleMaterial}</Text>
             <Text style={{ marginTop: 8 }}>
               : {product.specs.HeelHeight.join(" - ")} Inches
@@ -473,7 +529,7 @@ function productDetail() {
       )}
       <Pressable onPress={() => setShowCare(!showCare)} style={styles.details}>
         <Text style={styles.title}>CARE & MAINTENANCE</Text>
-        <Text style={{ color: "white" }}>{showCare ? "A" : "V"}</Text>
+        <AntDesign name={showCare ? "up" : "down"} size={16} color="white" />
       </Pressable>
       {showCare ? (
         <View
@@ -493,7 +549,9 @@ function productDetail() {
             }}
           >
             <Image source={require("../../../assets/images/icons/bell.png")} />
-            <Text style={{ marginLeft: 16 }}>Do Not Bleach</Text>
+            <Text style={{ marginLeft: 16, fontFamily: "Lato-Regular" }}>
+              Do Not Bleach
+            </Text>
           </View>
           <View
             style={{
@@ -504,7 +562,9 @@ function productDetail() {
             }}
           >
             <Image source={require("../../../assets/images/icons/bell.png")} />
-            <Text style={{ marginLeft: 16 }}>Do Not Tumble Dry</Text>
+            <Text style={{ marginLeft: 16, fontFamily: "Lato-Regular" }}>
+              Do Not Tumble Dry
+            </Text>
           </View>
           <View
             style={{
@@ -515,7 +575,9 @@ function productDetail() {
             }}
           >
             <Image source={require("../../../assets/images/icons/bell.png")} />
-            <Text style={{ marginLeft: 16 }}>Do Not Wash</Text>
+            <Text style={{ marginLeft: 16, fontFamily: "Lato-Regular" }}>
+              Do Not Wash
+            </Text>
           </View>
           <View
             style={{
@@ -526,7 +588,9 @@ function productDetail() {
             }}
           >
             <Image source={require("../../../assets/images/icons/bell.png")} />
-            <Text style={{ marginLeft: 16 }}>Door To Door Delivery</Text>
+            <Text style={{ marginLeft: 16, fontFamily: "Lato-Regular" }}>
+              Door To Door Delivery
+            </Text>
           </View>
         </View>
       ) : (
@@ -536,8 +600,12 @@ function productDetail() {
         onPress={() => setShowShipping(!showShipping)}
         style={styles.details}
       >
-        <Text style={styles.title}>SHIPPING & EXCHANGE</Text>
-        <Text style={{ color: "white" }}>{showShipping ? "A" : "V"}</Text>
+        <Text style={styles.title}>{"SHIPPING & EXCHANGE"}</Text>
+        <AntDesign
+          name={showShipping ? "up" : "down"}
+          size={16}
+          color="white"
+        />
       </Pressable>
 
       {showShipping ? (
@@ -553,11 +621,25 @@ function productDetail() {
             <Image source={require("../../../assets/images/icons/bell.png")} />
           </View>
           <View style={{ flex: 7 }}>
-            <Text style={{ fontSize: 14 }}>Shipped With Care</Text>
-            <Text style={{ color: "gray", marginTop: 4 }}>
+            <Text style={{ fontSize: 14, fontFamily: "Lato-Regular" }}>
+              Shipped With Care
+            </Text>
+            <Text
+              style={{
+                color: "gray",
+                marginTop: 4,
+                fontFamily: "Lato-Regular",
+              }}
+            >
               Estimated Delivery By
             </Text>
-            <Text style={{ color: "gray", marginTop: 4 }}>
+            <Text
+              style={{
+                color: "gray",
+                marginTop: 4,
+                fontFamily: "Lato-Regular",
+              }}
+            >
               {product.estimatedDelivery.join("-")}
             </Text>
           </View>
@@ -571,7 +653,11 @@ function productDetail() {
         style={styles.details}
       >
         <Text style={styles.title}>MORE INFORMATION</Text>
-        <Text style={{ color: "white" }}>{showMoreInfo ? "A" : "V"}</Text>
+        <AntDesign
+          name={showMoreInfo ? "up" : "down"}
+          size={16}
+          color="white"
+        />
       </Pressable>
 
       {showMoreInfo ? (
@@ -584,20 +670,38 @@ function productDetail() {
           }}
         >
           <View style={{ flex: 1 }}>
-            <Text style={{ marginTop: 8 }}>Manufactured By</Text>
-            <Text style={{ marginTop: 8 }}>Manufacturer Address</Text>
-            <Text style={{ marginTop: 8 }}>Customer Care No.</Text>
-            <Text style={{ marginTop: 8 }}>Email ID</Text>
-            <Text style={{ marginTop: 8 }}>Marketed By</Text>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
+              Manufactured By
+            </Text>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
+              Manufacturer Address
+            </Text>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
+              Customer Care No.
+            </Text>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
+              Email ID
+            </Text>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
+              Marketed By
+            </Text>
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ marginTop: 8 }}>: {product.manufacturer}</Text>
-            <Text style={{ marginTop: 8 }}>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
+              : {product.manufacturer}
+            </Text>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
               : {product.manufacturerAddress}
             </Text>
-            <Text style={{ marginTop: 8 }}>: {product.customerCareNo}</Text>
-            <Text style={{ marginTop: 8 }}>: {product.email}</Text>
-            <Text style={{ marginTop: 8 }}>: {product.marketedBy}</Text>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
+              : {product.customerCareNo}
+            </Text>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
+              : {product.email}
+            </Text>
+            <Text style={{ marginTop: 12, fontFamily: "Lato-Regular" }}>
+              : {product.marketedBy}
+            </Text>
           </View>
         </View>
       ) : (
@@ -764,12 +868,14 @@ function productDetail() {
                 source={{ uri: val.item.image }}
                 style={{ width: 200, height: 200 }}
               />
-              <Text style={{ fontWeight: 300, marginVertical: 2 }}>
+              <Text
+                style={{ fontWeight: 300, marginVertical: 2, width: "50%" }}
+              >
                 {val.item.title}
               </Text>
-              <Text style={{ fontWeight: 300, marginVertical: 2 }}>
+              {/* <Text style={{ fontWeight: 300, marginVertical: 2 }}>
                 {val.item.subtitle}
-              </Text>
+              </Text> */}
               <View
                 style={{
                   display: "flex",
@@ -871,7 +977,12 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: "space-between",
   },
-  title: { color: "white", fontSize: 16, letterSpacing: 2 },
+  title: {
+    color: "white",
+    fontSize: 16,
+    letterSpacing: 2,
+    fontFamily: "Lato-Regular",
+  },
 });
 
 // function detailsView({

@@ -399,19 +399,51 @@ function index() {
                 </Text>
               </View>
               <View style={{ flex: 1, alignItems: "flex-end" }}>
-                <Text style={{ marginTop: 8, fontWeight: 300 }}>
+                <Text
+                  style={{
+                    marginTop: 8,
+                    fontWeight: 300,
+                    fontFamily: "Lato-Regular",
+                  }}
+                >
                   {total} {"/-"} {currency}
                 </Text>
-                <Text style={{ marginTop: 8, fontWeight: 300 }}>
+                <Text
+                  style={{
+                    marginTop: 8,
+                    fontWeight: 300,
+                    fontFamily: "Lato-Regular",
+                  }}
+                >
                   0.00 {"/-"} {currency}
                 </Text>
-                <Text style={{ marginTop: 8, fontWeight: 300 }}>
+                <Text
+                  style={{
+                    marginTop: 8,
+                    fontWeight: 300,
+                    fontFamily: "Lato-Regular",
+                  }}
+                >
                   0.00 {"/-"} {currency}
                 </Text>
-                <Text style={{ marginTop: 8, fontWeight: 300 }}>
+                <Text
+                  style={{
+                    marginTop: 8,
+                    fontWeight: 300,
+                    fontFamily: "Lato-Regular",
+                  }}
+                >
                   5 {"/-"} {currency}
                 </Text>
-                <Text style={{ marginTop: 8, fontWeight: 300 }}>FREE</Text>
+                <Text
+                  style={{
+                    marginTop: 8,
+                    fontWeight: 300,
+                    fontFamily: "Lato-Regular",
+                  }}
+                >
+                  FREE
+                </Text>
               </View>
             </View>
 
@@ -427,11 +459,23 @@ function index() {
                 justifyContent: "space-between",
               }}
             >
-              <Text style={{ fontSize: 16, letterSpacing: 3 }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  letterSpacing: 3,
+                  fontFamily: "Lato-Regular",
+                }}
+              >
                 {" "}
                 EST. TOTAL{" "}
               </Text>
-              <Text style={{ fontSize: 16, letterSpacing: 3 }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  letterSpacing: 3,
+                  fontFamily: "Lato-Regular",
+                }}
+              >
                 {total} {"/-"} {currency}
               </Text>
             </View>
@@ -457,12 +501,13 @@ function index() {
             >
               <Text
                 style={{
-                  fontSize: 14,
+                  fontSize: 12,
                   letterSpacing: 3,
                   textAlign: "center",
+                  fontFamily: "Lato-Regular",
                 }}
               >
-                {total} {currency}
+                {total + 5} {currency}
               </Text>
             </View>
             <Pressable
@@ -497,6 +542,7 @@ function index() {
                   letterSpacing: 3,
                   color: "white",
                   textAlign: "center",
+                  fontFamily: "Lato-Regular",
                 }}
               >
                 PROCEED TO BUY
@@ -568,15 +614,12 @@ function Item({
           <Text
             style={{
               fontSize: 12,
-              color: "#555555",
               flexWrap: "wrap",
               width: "40%",
+              fontFamily: "Lato-Regular",
             }}
           >
             {title}
-          </Text>
-          <Text style={{ flexWrap: "wrap", width: "40%", marginTop: 16 }}>
-            {subtitle}
           </Text>
 
           <View
@@ -585,7 +628,7 @@ function Item({
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              width: "40%",
+              width: "30%",
               marginVertical: 10,
             }}
           >

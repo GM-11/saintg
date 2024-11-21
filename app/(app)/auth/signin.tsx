@@ -43,7 +43,8 @@ function signin() {
       setLoading(false);
       return;
     }
-
+    console.log(email);
+    console.log(countryCode);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 
@@ -137,7 +138,8 @@ function signin() {
       };
 
       await AsyncStorage.setItem("userDetails", JSON.stringify(u));
-
+      console.log("signing");
+      console.log(u);
       Toast.show({ text1: "User sign in successful" });
 
       setTimeout(() => {
@@ -189,7 +191,8 @@ function signin() {
             style={{
               width: "100%",
               margin: 2,
-              paddingHorizontal: 8,
+              paddingHorizontal: 10,
+              paddingVertical: 4,
             }}
             value={email}
             keyboardType="default"
@@ -229,7 +232,11 @@ function signin() {
           <View style={styles.passwordInputContainer}>
             <TextInput
               value={password}
-              style={{ ...styles.passwordInput, paddingVertical: 12 }}
+              style={{
+                ...styles.passwordInput,
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+              }}
               secureTextEntry={!showPassword}
               onChangeText={(e) => {
                 setPassword(e);
@@ -264,7 +271,7 @@ function signin() {
       <TouchableOpacity
         onPress={() => {
           router.push({
-            pathname: "/auth/signup",
+            pathname: "/(app)/auth/signup_mobile",
             params: { regionId },
           });
         }}
@@ -319,7 +326,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     width: "100%",
-    marginVertical: 16,
+    marginVertical: 12,
   },
   passwordInput: {
     flex: 1,
@@ -395,6 +402,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: "100%",
     marginVertical: 16,
+    paddingVertical: 4,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
