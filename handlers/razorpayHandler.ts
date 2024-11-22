@@ -44,7 +44,7 @@ export default async function razorpayHandler(
       contact: user.phoneNumber,
       name: "SaintG",
     },
-    theme: { color: "#F37254" },
+    theme: { color: "#000000" },
   });
   const verify = await fetch(`${BASE_URL}payment/verify-payment`, {
     method: "POST",

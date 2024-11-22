@@ -17,14 +17,14 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.gm11.saintg",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": [
-          "tez",
-          "phonepe",
-          "paytmmp"
-        ]
+        "LSApplicationQueriesSchemes": ["tez", "phonepe", "paytmmp"],
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
       }
     },
     "android": {
+      "usesCleartextTraffic": true,
       "icon": "./assets/AppIcon.png",
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
