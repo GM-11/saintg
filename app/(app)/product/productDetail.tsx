@@ -139,12 +139,12 @@ function productDetail() {
           manufacturer:
             product.product_more_info.find(
               (info: { label: string; content: string }) =>
-                info.label === "Manufactured By",
-            )?.content || "not available",
-          manufacturerAddress: "not available",
-          customerCareNo: "not available",
-          email: "not available",
-          marketedBy: "not available",
+                info.label === "Manufactured By".toUpperCase(),
+            )?.content || "not available".toUpperCase(),
+          manufacturerAddress: "not available".toUpperCase(),
+          customerCareNo: "not available".toUpperCase(),
+          email: "not available".toUpperCase(),
+          marketedBy: "not available".toUpperCase(),
           specs: specs,
           colors: product.product_colors.map(
             (color: { color_code: string }) => color.color_code,
@@ -252,13 +252,13 @@ function productDetail() {
           marginRight: 24,
         }}
       >
-        <Text style={{ color: "gray", fontSize: 18, marginRight: 10 }}>
-          Add to Wishlist
+        <Text style={{ color: "gray", fontSize: 12, marginRight: 10 }}>
+          ADD TO WISHLIST
         </Text>
         <Pressable onPress={addInWishlist}>
           <Image
             source={require("../../../assets/images/account/heart.png")}
-            style={{ width: 20, height: 20, marginVertical: 20 }}
+            style={{ width: 15, height: 15, marginVertical: 20 }}
           />
         </Pressable>
       </View>
@@ -271,24 +271,25 @@ function productDetail() {
       <View style={{ marginVertical: 20, marginHorizontal: 12 }}>
         <Text
           style={{
-            letterSpacing: 4,
+            letterSpacing: 1,
             fontSize: 16,
             marginBottom: 8,
             fontWeight: 600,
             fontFamily: "Lato-Regular",
           }}
         >
-          {product.title}
+          {product.title.toUpperCase()}
         </Text>
         <Text
           style={{
-            fontSize: 12,
+            fontSize: 10,
             marginBottom: 8,
+            lineHeight: 14,
             fontFamily: "Lato-Regular",
             color: "rgba(0, 0, 0, 0.5)",
           }}
         >
-          {product.subtitle}
+          {product.subtitle.toUpperCase()}
         </Text>
         <View
           style={{
@@ -443,6 +444,7 @@ function productDetail() {
               alignItems: "center",
             }}
           >
+            {/* MAKE THIS HOVER */}
             <Text style={{ color: "white", fontSize: 12, letterSpacing: 4 }}>
               BUY NOW
             </Text>
@@ -472,7 +474,12 @@ function productDetail() {
       {showDetails ? (
         <View style={{ paddingHorizontal: 16, paddingVertical: 24 }}>
           <Text
-            style={{ fontSize: 16, lineHeight: 24, fontFamily: "Lato-Regular" }}
+            style={{
+              fontSize: 16,
+              lineHeight: 24,
+              fontFamily: "Lato-Regular",
+              textTransform: "uppercase",
+            }}
           >
             We work with monitoring programmes to ensure compliance with safety,
             health and quality standards for our products.
@@ -979,7 +986,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "white",
-    fontSize: 16,
+    fontSize: 12,
     letterSpacing: 2,
     fontFamily: "Lato-Regular",
   },

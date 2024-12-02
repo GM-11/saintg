@@ -266,6 +266,7 @@ const SignInScreen = () => {
             fontFamily: "Lato-Regular",
             letterSpacing: 3,
             alignSelf: "center",
+            marginTop: 15,
           }}
         >
           ALREADY HAVE ACCOUNT

@@ -5,7 +5,15 @@ import { router } from "expo-router";
 export default function Tag({ title }: { title: string }) {
   return (
     <View style={styles.mainContainer}>
-      <Text>{title}</Text>
+      <Text
+        style={{
+          fontFamily: "Lato-Regular",
+          fontSize: 12,
+          textTransform: "capitalize",
+        }}
+      >
+        #{title}
+      </Text>
     </View>
   );
 }
@@ -15,7 +23,9 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderWidth: 1,
     borderColor: "#DEDEDE",
+
+    fontFamily: "Lato-Regular",
     padding: 10,
-    marginHorizontal: 8,
+    marginHorizontal: 4,
   },
 });

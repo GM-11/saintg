@@ -121,7 +121,7 @@ function index() {
   }
 
   return (
-    <View style={{ backgroundColor: "white", flex: 1 }}>
+    <View style={{ backgroundColor: "white", flex: 1, paddingTop: 10 }}>
       <View
         style={{
           borderBottomColor: "gray",
@@ -336,7 +336,7 @@ function SearchResult(search: string, data: t[]) {
           height: "100%",
         }}
       >
-        <Text>No Results Found</Text>
+        <Text>NO RESULTS FOUND FOR {search}</Text>
       </View>
     );
   } else {

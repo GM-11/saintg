@@ -278,7 +278,9 @@ function signin() {
       >
         <Text
           style={{
-            marginTop: 10,
+            marginTop: 20,
+            marginBottom: 20,
+            fontFamily: "Lato-Regular",
           }}
         >
           CREATE ACCOUNT

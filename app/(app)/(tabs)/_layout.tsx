@@ -13,7 +13,6 @@ import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Picker } from "@react-native-picker/picker";
 import Entypo from "@expo/vector-icons/Entypo";
 
 import { GenderContext } from "@/contexts/genderForHome";
@@ -31,7 +30,7 @@ function tabHeader() {
           alignItems: "center",
           backgroundColor: "white",
           justifyContent: "space-between",
-          paddingTop: 30,
+          paddingTop: 40,
         }}
       >
         <Image
@@ -40,15 +39,18 @@ function tabHeader() {
             width: 100,
             height: 50,
             resizeMode: "contain",
+            left: 0,
+            right: 6,
+            marginRight: 20,
           }}
         />
 
         <View
           style={{
-            minWidth: "35%",
+            width: "27%",
             display: "flex",
-            marginRight: 20,
             flexDirection: "row",
+            right: 20,
             justifyContent: "space-between",
             alignItems: "center",
           }}
@@ -72,40 +74,7 @@ function tabHeader() {
             <Entypo name="chevron-thin-down" size={20} color="black" />
           </TouchableOpacity>
         </View>
-        {showGender ? (
-          <View
-            style={{
-              position: "absolute",
-              backgroundColor: "#dedede",
-              alignSelf: "center",
-              width: "40%",
-              zIndex: 1,
-              top: 70,
-              left: 130,
-            }}
-          >
-            <TouchableOpacity
-              style={{ padding: 10 }}
-              onPress={() => {
-                setGender("MEN");
-                setShowGender(false);
-              }}
-            >
-              <Text> MEN </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ padding: 10 }}
-              onPress={() => {
-                setGender("WOMEN");
-                setShowGender(false);
-              }}
-            >
-              <Text> WOMEN </Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View />
-        )}
+
         <Link
           href="/(app)/search/search"
           style={{
@@ -122,6 +91,40 @@ function tabHeader() {
           />
         </Link>
       </View>
+      {showGender ? (
+        <View
+          style={{
+            position: "absolute",
+            backgroundColor: "white",
+            alignSelf: "center",
+            width: "40%",
+            zIndex: 1,
+            top: 80,
+            left: 160,
+          }}
+        >
+          <TouchableOpacity
+            style={{ padding: 10 }}
+            onPress={() => {
+              setGender("MEN");
+              setShowGender(false);
+            }}
+          >
+            <Text> MEN </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ padding: 10 }}
+            onPress={() => {
+              setGender("WOMEN");
+              setShowGender(false);
+            }}
+          >
+            <Text> WOMEN </Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View />
+      )}
     </SafeAreaView>
   );
 }

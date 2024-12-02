@@ -108,8 +108,6 @@ function categoryListView() {
     );
 
     const finalData = sortProductsByRegion(data, dataByRegion.data);
-    console.log("finaldata");
-    console.log(finalData);
     setItems(finalData);
   }
 
@@ -133,8 +131,9 @@ function categoryListView() {
           justifyContent: "space-between",
         }}
       >
-        <Text style={{ fontSize: 16 }}>
-          {items.length} "{name}"
+        <Text style={{ fontSize: 16, fontFamily: "Lato-Regular" }}>
+          {items.length} PRODUCT FOUND FOR YOUR SEARCH RESULT "
+          {name.toString().toUpperCase()}"
         </Text>
       </View>
       {/* <View>
@@ -147,17 +146,6 @@ function categoryListView() {
         />
       </View> */}
 
-      <CustomCarousel
-        data={data}
-        title={"SHOP BY CURATION"}
-        mainTitleStyle={{ textAlign: "left", marginHorizontal: 16 }}
-        viewWidth={200}
-        viewHeight={400}
-        additionalStyles={{ marginHorizontal: 16, marginTop: 0 }}
-        titleStyle={{ fontSize: 16, textAlign: "center", color: "white" }}
-        subTitleStyle={{ fontSize: 14, textAlign: "center", color: "white" }}
-      />
-
       <Text
         style={{
           textAlign: "left",
@@ -169,7 +157,7 @@ function categoryListView() {
           marginVertical: 32,
         }}
       >
-        Shop all {name}
+        SHOP ALL {name.toString().toUpperCase()}
       </Text>
 
       <View>
@@ -199,6 +187,17 @@ function categoryListView() {
           </Link>
         ))}
       </View>
+
+      <CustomCarousel
+        data={data}
+        title={"SHOP BY CURATION"}
+        mainTitleStyle={{ textAlign: "left", marginHorizontal: 16 }}
+        viewWidth={200}
+        viewHeight={400}
+        additionalStyles={{ marginHorizontal: 16, marginTop: 0 }}
+        titleStyle={{ fontSize: 16, textAlign: "center", color: "white" }}
+        subTitleStyle={{ fontSize: 14, textAlign: "center", color: "white" }}
+      />
     </ScrollView>
   );
 }
@@ -228,24 +227,26 @@ function Item({
         >
           <Text
             style={{
-              fontSize: 16,
+              fontSize: 12,
               flexWrap: "wrap",
-              width: "15%",
+              width: "35%",
               fontFamily: "Lato-Regular",
             }}
           >
-            {title}
+            {title.toUpperCase()}
           </Text>
           <Text
             style={{
-              fontSize: 12,
+              fontSize: 8,
+              marginVertical: 6,
               fontWeight: 300,
-              width: "15%",
+              width: "35%",
               color: "rgba(0, 0, 0, 0.5)",
               fontFamily: "Lato-Regular",
+              flexWrap: "wrap",
             }}
           >
-            {subtitle}
+            {subtitle.toUpperCase().substring(0, 30)}...
           </Text>
           <View style={{ display: "flex", flexDirection: "row" }}>
             {sizes.map((val) => (

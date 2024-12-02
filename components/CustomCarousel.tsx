@@ -40,7 +40,7 @@ function CustomCarousel({
       {title ? (
         <Text
           style={{
-            fontFamily: textStyles.title.fontFamily,
+            fontFamily: "Lato-Regular",
             letterSpacing: textStyles.title.letterSpacing,
             textAlign: "center",
             color: "black",

@@ -265,7 +265,7 @@ function index() {
               justifyContent: "center",
             }}
           >
-            <Text> No items in wishlist </Text>
+            <Text> NO ITEMS IN WISHLIST </Text>
           </View>
         )}
       </View>

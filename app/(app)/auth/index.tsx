@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     width: "100%",
-    top: -125,
+    top: -100,
   },
   selectedContainer: {
     flexDirection: "row",
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderWidth: 1,
     marginHorizontal: 18,
-    marginVertical: 8,
+    marginVertical: 20,
     padding: 16,
   },
 

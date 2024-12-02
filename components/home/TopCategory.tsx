@@ -13,7 +13,16 @@ export default function TopCategory({ title }: { title: string }) {
             style={styles.image}
           />
         </View>
-        <Text style={{ width: 50, textAlign: "center" }}>{title}</Text>
+        <Text
+          style={{
+            width: 50,
+            textAlign: "center",
+            fontSize: 10,
+            fontFamily: "Lato-Regular",
+          }}
+        >
+          {title}
+        </Text>
       </View>
     </Pressable>
   );

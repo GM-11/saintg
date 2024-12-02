@@ -200,24 +200,41 @@ function index() {
             <ImageBackground
               style={{
                 flexDirection: "column-reverse",
-                margin: 10,
+                margin: 6,
                 display: "flex",
                 height: 100,
 
-                width: 110,
+                width: 90,
               }}
               source={val.item.image}
               ///@ts-ignore
             >
               <View style={{ margin: 16 }}>
-                <Text style={{ textAlign: "center" }}>{val.item.title}</Text>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    color: "white",
+                    fontSize: 10,
+                    fontFamily: "Lato-Regular",
+                  }}
+                >
+                  {val.item.title.toUpperCase()}
+                </Text>
               </View>
             </ImageBackground>
           )}
         />
       </View>
 
-      <Text style={{ fontSize: 16, letterSpacing: 1.6, margin: 10 }}>
+      <Text
+        style={{
+          fontSize: 16,
+          letterSpacing: 1.6,
+          margin: 10,
+          marginVertical: 20,
+          fontFamily: "Lato-Regular",
+        }}
+      >
         SHOP BY CATEGORY
       </Text>
 
@@ -225,7 +242,7 @@ function index() {
         {categories.map((val) => (
           <ListElement
             image={val.image}
-            name={val.name}
+            name={val.name.toUpperCase()}
             subCats={subCategories}
             key={`${val.name}-${val.image}`}
           />
@@ -291,13 +308,13 @@ function SubListElement({ image, name }: { image: string; name: string }) {
         flexDirection: "row",
         width: "60%",
         marginHorizontal: 16,
-        alignItems: "center",
+        alignItems: "flex-end",
       }}
     >
       <ImageBackground
         style={{
-          width: 75,
-          height: 75,
+          width: 64,
+          height: 64,
           flexDirection: "column-reverse",
           display: "flex",
         }}
@@ -330,7 +347,9 @@ function SubListElement({ image, name }: { image: string; name: string }) {
           }}
         >
           <View>
-            <Text style={{ fontSize: 12 }}>{name}</Text>
+            <Text style={{ fontSize: 12, fontFamily: "Lato-Regular" }}>
+              {name.toUpperCase()}
+            </Text>
           </View>
         </View>
         <AntDesign name="right" size={16} color="black" />
@@ -359,13 +378,13 @@ function ListElement({
           flexDirection: "row",
           width: "100%",
           marginHorizontal: 16,
-          alignItems: "center",
+          alignItems: "flex-end",
         }}
       >
         <Image
           style={{
-            width: 100,
-            height: 100,
+            width: 64,
+            height: 64,
             flexDirection: "column-reverse",
             display: "flex",
             marginRight: 10,
@@ -392,7 +411,9 @@ function ListElement({
             }}
           >
             <View>
-              <Text style={{ fontSize: 16 }}>{name}</Text>
+              <Text style={{ fontSize: 12, fontFamily: "Lato-Regular" }}>
+                {name.toUpperCase()}
+              </Text>
               {/* <Text style={{ fontSize: 12 }}>{subtitle}</Text> */}
             </View>
           </View>
@@ -408,20 +429,29 @@ function ListElement({
         </View>
       </View>
       {sublistOpen ? (
-        <View style={{ marginLeft: 110 }}>
-          <View
+        <View style={{ marginLeft: 64 }}>
+          {/* <View
             style={{
               borderBottomColor: "grey",
               borderBottomWidth: 1,
               display: "flex",
+              alignItems: "flex-end",
               flexDirection: "row",
               justifyContent: "space-between",
-              marginRight: 60,
+              marginRight: 80,
             }}
           >
-            <Text>SHOP ALL FOOTWEAR</Text>
+            <Text
+              style={{
+                fontFamily: "Lato-Regular",
+                fontSize: 12,
+                marginVertical: 10,
+              }}
+            >
+              SHOP ALL FOOTWEAR
+            </Text>
             <AntDesign name="right" size={16} color="black" />
-          </View>
+          </View> */}
 
           {subCats.map((val) => (
             <SubListElement

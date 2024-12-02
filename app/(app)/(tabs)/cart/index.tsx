@@ -119,7 +119,7 @@ function index() {
         {loading ? (
           <ActivityIndicator size="large" color="black" />
         ) : (
-          <Text>No items in cart</Text>
+          <Text>NO ITEMS IN CART</Text>
         )}
       </View>
     );
@@ -252,6 +252,7 @@ function index() {
               color: "grey",
               fontSize: 14,
               fontFamily: "Lato-Regular",
+              textTransform: "capitalize",
             }}
           >
             Shipping charges, taxes and discount codes are calculated at the

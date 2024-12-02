@@ -166,8 +166,8 @@ function Index() {
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
-          data={Array(10).fill("New Arrival")}
-          style={{ marginVertical: 40 }}
+          data={Array(10).fill("NEW ARRIVAL")}
+          style={{ marginTop: 40, marginBottom: 20 }}
           renderItem={(val) => <TopCategory title={val.item} />}
         />
       </View>
